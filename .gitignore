@@ -1,0 +1,13 @@
+# Bỏ qua các file video dung lượng lớn (tránh bị GitHub chặn)
+*.mp4
+*.mkv
+*.avi
+*.zip
+
+# Bỏ qua thư mục log
+log_momo.txt
+*.log
+
+# Bỏ qua các file rác của hệ điều hành
+.DS_Store
+Thumbs.db
