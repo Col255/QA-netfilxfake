@@ -24,9 +24,9 @@ Một số trang và thao tác chỉ dùng được sau khi đăng nhập đúng
 
 ## 📋 Yêu cầu hệ thống
 
-- Windows (các bước dưới đây dùng XAMPP).
+- 💻 Hệ điều hành Windows.
 - <img src="https://cdn.simpleicons.org/xampp/F37623" alt="XAMPP" width="22"> XAMPP có Apache và MySQL/MariaDB.
-- Trình duyệt web.
+- 🌐 Trình duyệt web (Chrome, Edge, Firefox,...).
 - <img src="https://cdn.simpleicons.org/postman/FF6C37" alt="Postman" width="22"> Postman nếu cần gửi các request trong collection.
 
 ## 🟧 Cài đặt và chạy với XAMPP
