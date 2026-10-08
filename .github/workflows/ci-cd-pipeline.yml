@@ -2,7 +2,7 @@ name: QA Pipeline - Qodana Scan & Docker Version Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, week2 ]
   pull_request:
     branches: [ main ]
 
