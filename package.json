@@ -1,0 +1,25 @@
+{
+  "name": "qa-netflix-fake",
+  "version": "1.0.0",
+  "description": "Netfix2 là website xem phim trực tuyến viết bằng PHP, kết nối MySQL/MariaDB. Dự án có các trang dành cho khách xem phim, người dùng và quản trị viên. Mã nguồn website nằm trong `netfix2/`; repository cũng có file SQL khởi tạo dữ liệu và Postman Collection để gửi thử các request.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Col255/QA-netfilxfake.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Col255/QA-netfilxfake/issues"
+  },
+  "homepage": "https://github.com/Col255/QA-netfilxfake#readme",
+  "devDependencies": {
+    "codeceptjs": "^4.2.0",
+    "playwright": "^1.64.0"
+  }
+}

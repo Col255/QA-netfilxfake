@@ -1,0 +1,10 @@
+version: "1.0"
+linter: jetbrains/qodana-php:latest
+include:
+  - name: PhpDeprecationInspection
+  - name: PhpSecurityInspection
+exclude:
+  - name: All
+    paths:
+      - netfix2/uploads
+      - netfix2/images

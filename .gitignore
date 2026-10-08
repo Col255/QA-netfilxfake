@@ -11,3 +11,8 @@ log_momo.txt
 # Bỏ qua các file rác của hệ điều hành
 .DS_Store
 Thumbs.db
+
+# Bỏ qua thư viện và file rác
+node_modules/
+output/
+package-lock.json
