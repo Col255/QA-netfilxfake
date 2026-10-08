@@ -1,0 +1,91 @@
+{
+	"id": "netfix2-qa-environment-id",
+	"name": "Netfix2 - QA Environment",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "http://localhost/netfix2",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "port",
+			"value": "80",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "admin_user",
+			"value": "admin",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "admin_pass",
+			"value": "admin123",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "user_email",
+			"value": "tuan@gmail.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "user_pass",
+			"value": "123456",
+			"type": "secret",
+			"enabled": true
+		},
+		{
+			"key": "new_user",
+			"value": "tester_qa_01",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "new_email",
+			"value": "tester_qa_01@gmail.com",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "movie_id",
+			"value": "1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "episode_id",
+			"value": "1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "search_keyword",
+			"value": "Doremon",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "movie_genre",
+			"value": "Hoạt Hình",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "package_id",
+			"value": "1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "payment_method",
+			"value": "momo",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment"
+}
