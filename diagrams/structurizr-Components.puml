@@ -1,0 +1,51 @@
+@startuml
+title <size:24>Component View: Netfix2 Streaming Platform - Netfix2 Web Application</size>\n<size:24>C4 Level 3: Component Diagram for Netfix2 Web Application</size>
+
+set separator none
+left to right direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+System(MoMoPaymentGateway, "MoMo Payment Gateway", $descr="Processes digital payments via MoMo e-wallet QR code and API.", $tags="", $link="")
+System(VNPayGateway, "VNPay Gateway", $descr="Processes online banking and QR payments via VNPay.", $tags="", $link="")
+
+System_Boundary("Netfix2StreamingPlatform_boundary", "Netfix2 Streaming Platform", $tags="") {
+  Container_Boundary("Netfix2StreamingPlatform.Netfix2WebApplication_boundary", "Netfix2 Web Application", $tags="") {
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.VIPPaymentController, "VIP & Payment Controller", $techn="PHP / cURL", $descr="Handles VIP packages, order creation, payment gateway callbacks, and subscription renewals.", $tags="", $link="")
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.AdminDashboardController, "Admin Dashboard Controller", $techn="PHP / MySQLi", $descr="Provides admin CRUD for movies/episodes, customer management, order approval, and analytics reports.", $tags="", $link="")
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Database Connection (db.php)", $techn="PHP MySQLi", $descr="Manages MySQL connection pool and UTF-8 charset configuration.", $tags="", $link="")
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.AuthProfileController, "Auth & Profile Controller", $techn="PHP Sessions / MySQLi", $descr="Handles registration, authentication, session state, and user profiles.", $tags="", $link="")
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.MovieCatalogController, "Movie & Catalog Controller", $techn="PHP / MySQLi", $descr="Manages movie listings, categories, subgenres, search filters, and detail pages.", $tags="", $link="")
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.StreamingEpisodeController, "Streaming & Episode Controller", $techn="PHP / HTML5 Video", $descr="Delivers video stream sources, checks VIP access permissions, and handles view counters.", $tags="", $link="")
+    Component(Netfix2StreamingPlatform.Netfix2WebApplication.EngagementController, "Engagement Controller", $techn="PHP / MySQLi", $descr="Processes user comments and logs watch history records.", $tags="", $link="")
+  }
+
+  ContainerDb(Netfix2StreamingPlatform.Netfix2MySQLDatabase, "Netfix2 MySQL Database", $techn="MySQL / MariaDB (netfixvn)", $descr="Stores users, movies, episodes, comments, watch history, and VIP orders.", $tags="", $link="")
+  Container(Netfix2StreamingPlatform.LocalMediaStorage, "Local Media Storage", $techn="File System (Uploads/)", $descr="Stores uploaded video files (mp4) and movie thumbnail posters.", $tags="", $link="")
+}
+
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.AuthProfileController, Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Queries user credentials and updates profiles using", $techn="", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.MovieCatalogController, Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Queries movie catalog, filters, and metadata using", $techn="", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.StreamingEpisodeController, Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Validates VIP rights and updates view count using", $techn="", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.EngagementController, Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Inserts comments and tracks watch history using", $techn="", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.VIPPaymentController, Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Creates and updates VIP order status using", $techn="", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.AdminDashboardController, Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, "Performs CRUD queries and aggregates statistics using", $techn="", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.DatabaseConnectiondbphp, Netfix2StreamingPlatform.Netfix2MySQLDatabase, "Executes SQL queries and transactions via", $techn="MySQL Protocol / TCP 3306", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.StreamingEpisodeController, Netfix2StreamingPlatform.LocalMediaStorage, "Serves video stream files from", $techn="File I/O", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.AdminDashboardController, Netfix2StreamingPlatform.LocalMediaStorage, "Uploads thumbnail images and video files to", $techn="File I/O", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.VIPPaymentController, MoMoPaymentGateway, "Initiates payment requests and receives IPN/return callbacks from", $techn="HTTPS / REST", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication.VIPPaymentController, VNPayGateway, "Initiates payment requests and receives return callbacks from", $techn="HTTPS / REST", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml

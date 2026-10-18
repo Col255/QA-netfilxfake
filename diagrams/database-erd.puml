@@ -1,0 +1,129 @@
+@startuml netfixvn_erd
+!theme plain
+skinparam linetype ortho
+skinparam roundcorner 10
+skinparam classFontSize 12
+skinparam classAttributeIconSize 0
+
+entity "users" as users {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * username : varchar(50) <<UK>>
+  * email : varchar(100) <<UK>>
+  * password : varchar(255)
+  is_admin : tinyint(1) [0]
+  is_vip : tinyint(4) [0]
+  vip_expires_at : datetime
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "movies" as movies {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * title : varchar(255)
+  thumbnail : varchar(255)
+  description : text
+  duration : int(11)
+  episode_count : int(11)
+  * genre : enum('Movie','Series','Cartoon','Cinema')
+  sub_genre : varchar(255)
+  year : int(11)
+  language : varchar(50)
+  country : varchar(50)
+  actors : text
+  director : varchar(100)
+  status : enum('active','inactive') ['active']
+  video_path : varchar(255)
+  is_vip : tinyint(4) [0]
+  view_count : int(11) [0]
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "episodes" as episodes {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * **movie_id** : int(11) <<FK>>
+  * episode_number : int(11)
+  title : varchar(255)
+  * video_path : varchar(255)
+  is_vip : tinyint(1) [0]
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "comments" as comments {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * **movie_id** : int(11) <<FK>>
+  * **user_id** : int(11) <<FK>>
+  * comment_text : text
+  * created_at : timestamp
+}
+
+entity "watch_history" as watch_history {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * **user_id** : int(11) <<FK, UK>>
+  * **movie_id** : int(11) <<FK, UK>>
+  * viewed_at : timestamp
+  * last_watched_at : timestamp
+  watch_date : datetime
+}
+
+entity "vip_orders" as vip_orders {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * **user_id** : int(11) <<FK>>
+  * package_name : varchar(255)
+  * price : decimal(10,2)
+  * payment_method : varchar(255)
+  * status : varchar(50) ['Pending']
+  order_date : datetime
+  order_status : varchar(50) ['active']
+}
+
+entity "orders" as orders {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * **user_id** : int(11) <<FK>>
+  * package_name : varchar(255)
+  * amount : decimal(10,2)
+  * order_date : timestamp
+  status : varchar(50) ['completed']
+  transaction_id : varchar(255)
+}
+
+entity "subscriptions" as subscriptions {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * **user_id** : int(11) <<FK>>
+  * package_name : varchar(255)
+  * amount : decimal(10,2)
+  payment_method : varchar(100)
+  * start_date : datetime
+  * end_date : datetime
+  * status : enum('pending','completed','cancelled','refunded')
+  transaction_id : varchar(255)
+  * created_at : timestamp
+}
+
+entity "genres" as genres {
+  * **id** : int(11) <<PK, AI>>
+  --
+  * name : varchar(100) <<UK>>
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+users ||--o{ vip_orders : "places (1:N)"
+users ||--o{ comments : "writes (1:N)"
+users ||--o{ watch_history : "tracks (1:N)"
+users ||--o{ orders : "legacy (1:N)"
+users ||--o{ subscriptions : "subscription (1:N)"
+
+movies ||--o{ episodes : "has episodes (1:N)"
+movies ||--o{ comments : "receives (1:N)"
+movies ||--o{ watch_history : "viewed in (1:N)"
+@enduml
