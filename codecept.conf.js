@@ -3,9 +3,11 @@ exports.config = {
     output: './output',
     helpers: {
         Playwright: {
-            url: 'http://localhost/netfix2',
-            show: true, // true: Hiện cửa sổ trình duyệt khi test; false: Chạy ngầm
-            browser: 'chromium'
+            url: process.env.BASE_URL || 'http://localhost/netfix2',
+            show: !process.env.CI, // Local: Hiện cửa sổ trình duyệt; GitHub Actions (CI): Tự động chạy ngầm (headless)
+            browser: 'chromium',
+            waitForNavigation: 'domcontentloaded',
+            waitForTimeout: 5000
         }
     },
     include: {

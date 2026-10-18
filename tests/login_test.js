@@ -13,8 +13,10 @@ Scenario('Test 1: Đăng nhập thành công với tài khoản hợp lệ', ({ 
     I.click('Đăng nhập');
     I.wait(2);
 
-    // Kiểm tra chuyển hướng thành công về trang chủ
+    // Kiểm tra chuyển hướng thành công về trang chủ và đã có session đăng nhập thật sự
     I.seeInCurrentUrl('/index.php');
+    I.dontSeeElement('.error');
+    I.see('Đăng xuất');
 });
 
 Scenario('Test 2: Đăng nhập thất bại khi sai mật khẩu', ({ I }) => {

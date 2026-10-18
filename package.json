@@ -4,7 +4,7 @@
   "description": "Netfix2 là website xem phim trực tuyến viết bằng PHP, kết nối MySQL/MariaDB. Dự án có các trang dành cho khách xem phim, người dùng và quản trị viên. Mã nguồn website nằm trong `netfix2/`; repository cũng có file SQL khởi tạo dữ liệu và Postman Collection để gửi thử các request.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx codeceptjs run --steps"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,8 @@
   "devDependencies": {
     "codeceptjs": "^4.2.0",
     "playwright": "^1.64.0"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0"
   }
 }
