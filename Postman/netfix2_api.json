@@ -1,595 +1,2052 @@
 {
-    "info": {
-        "_postman_id": "netfix2-qa-testing-collection",
-        "name": "Netfix2 - Backend API Testing",
-        "description": "Toàn bộ API và Backend Endpoints của dự án Netfix2 phục vụ môn Kiểm thử phần mềm",
-        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-    },
-    "item": [
-        {
-            "name": "1. Authentication & User",
-            "item": [
-                {
-                    "name": "Đăng ký tài khoản (Register)",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "pm.test(\"Status code is 200 or 302\", function () {",
-                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
-                                    "});"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "username",
-                                    "value": "testuser01",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "email",
-                                    "value": "testuser01@gmail.com",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "password",
-                                    "value": "123456",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "confirm_password",
-                                    "value": "123456",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/register.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "register.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Đăng nhập Client (Login)",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "pm.test(\"Status code is 200 or 302\", function () {",
-                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
-                                    "});"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "email",
-                                    "value": "tuan@gmail.com",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "password",
-                                    "value": "123456",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/login.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "login.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Đăng nhập Admin (Admin Login)",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "pm.test(\"Admin login status is valid\", function () {",
-                                    "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
-                                    "});"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "username",
-                                    "value": "admin",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "password",
-                                    "value": "admin123",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/admin_login.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "admin_login.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Đổi mật khẩu (Change Password)",
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "current_password",
-                                    "value": "123456",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "new_password",
-                                    "value": "654321",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "confirm_password",
-                                    "value": "654321",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/change_password.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "change_password.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Đăng xuất (Logout)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/logout.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "logout.php"
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "2. Movies & Search",
-            "item": [
-                {
-                    "name": "Trang chủ / Danh sách phim",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "pm.test(\"Status code is 200\", function () {",
-                                    "    pm.response.to.have.status(200);",
-                                    "});"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/index.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "index.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Lọc phim theo thể loại (Genres)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/movies.php?genre=Hành Động",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "movies.php"
-                            ],
-                            "query": [
-                                {
-                                    "key": "genre",
-                                    "value": "Hành Động"
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Tìm kiếm phim (Search)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/search.php?query=Doremon",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "search.php"
-                            ],
-                            "query": [
-                                {
-                                    "key": "query",
-                                    "value": "Doremon"
-                                }
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Chi tiết tập phim (Watch)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/watch.php?id=1&episode=1",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "watch.php"
-                            ],
-                            "query": [
-                                {
-                                    "key": "id",
-                                    "value": "1"
-                                },
-                                {
-                                    "key": "episode",
-                                    "value": "1"
-                                }
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "3. Interactions & API",
-            "item": [
-                {
-                    "name": "API Đếm lượt xem (View Counter)",
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "exec": [
-                                    "pm.test(\"Status code is 200\", function () {",
-                                    "    pm.response.to.have.status(200);",
-                                    "});"
-                                ],
-                                "type": "text/javascript"
-                            }
-                        }
-                    ],
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "movie_id",
-                                    "value": "1",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "episode_id",
-                                    "value": "1",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/api/view_counter.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "api",
-                                "view_counter.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Gửi bình luận phim (Comments)",
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "movie_id",
-                                    "value": "1",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "comment_text",
-                                    "value": "Phim rất hay, chất lượng tốt!",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/comments.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "comments.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Lịch sử xem phim (Watch History)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/watch_history.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "watch_history.php"
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "4. VIP Packages & Payment",
-            "item": [
-                {
-                    "name": "Bảng giá gói VIP (Pricing)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/pricing.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "pricing.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Xử lý thanh toán (Process Payment)",
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "urlencoded",
-                            "urlencoded": [
-                                {
-                                    "key": "package_id",
-                                    "value": "1",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "payment_method",
-                                    "value": "momo",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/process_payment.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "process_payment.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Lịch sử đơn hàng VIP (Order History)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/order_history.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "order_history.php"
-                            ]
-                        }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "5. Admin Management",
-            "item": [
-                {
-                    "name": "Thêm phim mới (Add Movie)",
-                    "request": {
-                        "method": "POST",
-                        "header": [],
-                        "body": {
-                            "mode": "formdata",
-                            "formdata": [
-                                {
-                                    "key": "title",
-                                    "value": "Phim Test Postman",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "description",
-                                    "value": "Mô tả phim test",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "genre",
-                                    "value": "Hành Động",
-                                    "type": "text"
-                                },
-                                {
-                                    "key": "year",
-                                    "value": "2025",
-                                    "type": "text"
-                                }
-                            ]
-                        },
-                        "url": {
-                            "raw": "{{base_url}}/add_movie.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "add_movie.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Quản lý phim (Manage Movies)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/manage_movies.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "manage_movies.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Quản lý đơn hàng (Orders)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/orders.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "orders.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Quản lý khách hàng (Customers)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/customers.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "customers.php"
-                            ]
-                        }
-                    }
-                },
-                {
-                    "name": "Báo cáo thống kê (Statistics)",
-                    "request": {
-                        "method": "GET",
-                        "header": [],
-                        "url": {
-                            "raw": "{{base_url}}/statistics.php",
-                            "host": [
-                                "{{base_url}}"
-                            ],
-                            "path": [
-                                "statistics.php"
-                            ]
-                        }
-                    }
-                }
-            ]
-        }
-    ],
-    "variable": [
-        {
-            "key": "base_url",
-            "value": "http://localhost/netfix2",
-            "type": "string"
-        }
+  "info": {
+    "_postman_id": "a9e5b721-39c4-4d89-9a2c-netfix2qa2026",
+    "name": "Presentation - Netfix2 QA API Testing",
+    "description": "Postman Collection cho đồ án môn Kiểm thử phần mềm (QA) - Hệ thống Netfix2 Streaming Platform. Áp dụng chuẩn hóa theo khuôn mẫu Presentation của giảng viên (Cấu trúc phân cấp RESTful/Controller, Collection Bearer Auth, Dynamic URL variables, Response Contract Mocks và Bộ Automated Test Assertions).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "5740349"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
     ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "bearerToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "api",
+      "description": "Nhóm toàn bộ các Endpoint API và xử lý nghiệp vụ của hệ thống Netfix2 theo kiến trúc phân tầng",
+      "item": [
+        {
+          "name": "auth",
+          "description": "Các Endpoint xác thực, phân quyền người dùng và quản lý phiên làm việc",
+          "item": [
+            {
+              "name": "/register.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 (Success) or 302 (Redirect)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is within acceptable QA SLA (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Content-Type is text/html\", function () {",
+                      "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/html\");",
+                      "});",
+                      "",
+                      "pm.test(\"Response does not contain fatal PHP error\", function () {",
+                      "    pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "{{new_user}}",
+                      "description": "Tên tài khoản người dùng mới",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "{{new_email}}",
+                      "description": "Email đăng ký",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{user_pass}}",
+                      "description": "Mật khẩu",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "{{user_pass}}",
+                      "description": "Xác nhận lại mật khẩu",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                },
+                "description": "Endpoint đăng ký tài khoản khách hàng mới vào hệ thống"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Đăng ký thành công",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "username",
+                          "value": "tester_qa_01",
+                          "type": "text"
+                        },
+                        {
+                          "key": "email",
+                          "value": "tester_qa_01@gmail.com",
+                          "type": "text"
+                        },
+                        {
+                          "key": "password",
+                          "value": "123456",
+                          "type": "text"
+                        },
+                        {
+                          "key": "confirm_password",
+                          "value": "123456",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/register.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "register.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><div class=\"success\">Đăng ký thành công! Vui lòng đăng nhập.</div></body></html>"
+                }
+              ]
+            },
+            {
+              "name": "/login.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 (Login Form/Render) or 302 (Redirect on Success)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Check login redirection or error message\", function () {",
+                      "    if (pm.response.code === 302) {",
+                      "        pm.expect(pm.response.headers.get(\"Location\")).to.include(\"index.php\");",
+                      "    } else {",
+                      "        pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{user_email}}",
+                      "description": "Username hoặc Email (Backend PHP yêu cầu name=\"identifier\")",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{user_pass}}",
+                      "description": "Mật khẩu người dùng",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                },
+                "description": "Đăng nhập người dùng thông thường (Client Login)"
+              },
+              "response": [
+                {
+                  "name": "302 Found - Chuyển hướng về trang chủ sau khi đăng nhập",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "identifier",
+                          "value": "tuan@gmail.com",
+                          "type": "text"
+                        },
+                        {
+                          "key": "password",
+                          "value": "123456",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/login.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "login.php"
+                      ]
+                    }
+                  },
+                  "status": "Found",
+                  "code": 302,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Location",
+                      "value": "index.php"
+                    },
+                    {
+                      "key": "Set-Cookie",
+                      "value": "PHPSESSID=session_demo_id; path=/"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!-- Redirecting to index.php -->"
+                }
+              ]
+            },
+            {
+              "name": "/admin_login.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302 (Admin Redirect)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Admin authentication verification\", function () {",
+                      "    if (pm.response.code === 302) {",
+                      "        pm.expect(pm.response.headers.get(\"Location\")).to.include(\"admin_dashboard.php\");",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{admin_user}}",
+                      "description": "Tài khoản quản trị viên (name=\"identifier\")",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{admin_pass}}",
+                      "description": "Mật khẩu quản trị viên",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin_login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin_login.php"
+                  ]
+                },
+                "description": "Đăng nhập tài khoản Quản trị viên (Admin)"
+              },
+              "response": [
+                {
+                  "name": "302 Found - Chuyển hướng sang Admin Dashboard",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "identifier",
+                          "value": "admin",
+                          "type": "text"
+                        },
+                        {
+                          "key": "password",
+                          "value": "admin123",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/admin_login.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "admin_login.php"
+                      ]
+                    }
+                  },
+                  "status": "Found",
+                  "code": 302,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Location",
+                      "value": "admin_dashboard.php"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!-- Redirecting to admin_dashboard.php -->"
+                }
+              ]
+            },
+            {
+              "name": "/change_password.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302 (Redirect to Profile/Login)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "current_password",
+                      "value": "123456",
+                      "description": "Mật khẩu hiện tại",
+                      "type": "text"
+                    },
+                    {
+                      "key": "new_password",
+                      "value": "654321",
+                      "description": "Mật khẩu mới",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_new_password",
+                      "value": "654321",
+                      "description": "Xác nhận mật khẩu mới (name=\"confirm_new_password\")",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/change_password.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "change_password.php"
+                  ]
+                },
+                "description": "Thao tác đổi mật khẩu của người dùng hiện tại"
+              },
+              "response": [
+                {
+                  "name": "302 Found - Chuyển hướng sau khi xử lý đổi mật khẩu",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "current_password",
+                          "value": "123456",
+                          "type": "text"
+                        },
+                        {
+                          "key": "new_password",
+                          "value": "654321",
+                          "type": "text"
+                        },
+                        {
+                          "key": "confirm_new_password",
+                          "value": "654321",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/change_password.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "change_password.php"
+                      ]
+                    }
+                  },
+                  "status": "Found",
+                  "code": 302,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Location",
+                      "value": "profile.php?tab=settings&status=success"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!-- Redirect to profile.php -->"
+                }
+              ]
+            },
+            {
+              "name": "/logout.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 302 (Redirect to Login) or 200\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Logout redirect target is login.php\", function () {",
+                      "    if (pm.response.code === 302) {",
+                      "        pm.expect(pm.response.headers.get(\"Location\")).to.include(\"login.php\");",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/logout.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "logout.php"
+                  ]
+                },
+                "description": "Đăng xuất tài khoản và hủy phiên làm việc (Session)"
+              },
+              "response": [
+                {
+                  "name": "302 Found - Hủy session và chuyển hướng về đăng nhập",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{baseUrl}}/logout.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "logout.php"
+                      ]
+                    }
+                  },
+                  "status": "Found",
+                  "code": 302,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Location",
+                      "value": "login.php"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!-- Redirecting to login.php -->"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "movies",
+          "description": "Quản lý duyệt phim, phân loại theo thể loại, tìm kiếm và chi tiết phim/tập phim",
+          "item": [
+            {
+              "name": "/index.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Home page HTML contains Netfix brand\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Netfix\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/index.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "index.php"
+                  ]
+                },
+                "description": "Lấy trang chủ và danh mục danh sách phim hiển thị"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Trang chủ danh sách phim",
+                  "originalRequest": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "{{baseUrl}}/index.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "index.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><head><title>NetfixVN</title></head><body><h1>NetfixVN Movies Catalog</h1></body></html>"
+                }
+              ]
+            },
+            {
+              "name": "genres",
+              "description": "Lọc danh sách phim theo thể loại",
+              "item": [
+                {
+                  "name": "/movies.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Page returns movie genre category layout\", function () {",
+                          "    pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/movies.php?genre={{movie_genre}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "movies.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "genre",
+                          "value": "{{movie_genre}}",
+                          "description": "Tên thể loại cần lọc (ví dụ: Hành Động, Hoạt Hình, Tình Cảm)"
+                        }
+                      ]
+                    },
+                    "description": "Lọc danh sách phim theo thể loại (Genre)"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Danh sách phim lọc theo thể loại",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/movies.php?genre=Hành Động",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "movies.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "genre",
+                              "value": "Hành Động"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Thể loại: Hành Động</h2><div class=\"movie-grid\"></div></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "search",
+              "description": "Tìm kiếm phim theo từ khóa",
+              "item": [
+                {
+                  "name": "/search.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Search query is reflected in response\", function () {",
+                          "    var keyword = pm.variables.get(\"search_keyword\") || \"Doremon\";",
+                          "    pm.expect(pm.response.text()).to.include(keyword);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/search.php?query={{search_keyword}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "search.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "query",
+                          "value": "{{search_keyword}}",
+                          "description": "Từ khóa tìm kiếm phim"
+                        }
+                      ]
+                    },
+                    "description": "Tìm kiếm phim theo từ khóa (tiêu đề, đạo diễn, diễn viên)"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Kết quả tìm kiếm phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/search.php?query=Doremon",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "search.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "query",
+                              "value": "Doremon"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Kết quả tìm kiếm cho: Doremon</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "{id}",
+              "description": "Chi tiết phim và trình chiếu video theo Movie ID và Episode ID",
+              "item": [
+                {
+                  "name": "/watch.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Watch page loads video element or movie details\", function () {",
+                          "    pm.expect(pm.response.text()).to.include(\"video\");",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/watch.php?id={{movie_id}}&episode={{episode_id}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "watch.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "id",
+                          "value": "{{movie_id}}",
+                          "description": "ID của phim"
+                        },
+                        {
+                          "key": "episode",
+                          "value": "{{episode_id}}",
+                          "description": "ID của tập phim"
+                        }
+                      ]
+                    },
+                    "description": "Xem chi tiết tập phim, giao diện phát video và danh sách tập"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Trình phát video và chi tiết tập phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/watch.php?id=1&episode=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "watch.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "id",
+                              "value": "1"
+                            },
+                            {
+                              "key": "episode",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><div class=\"video-player\"><video controls></video></div></body></html>"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "interactions",
+          "description": "Tương tác người dùng: API đếm lượt xem, bình luận phim và lịch sử xem",
+          "item": [
+            {
+              "name": "view-counter",
+              "description": "API cập nhật lượt xem phim",
+              "item": [
+                {
+                  "name": "/api/view_counter.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"View counter API returns JSON success response\", function () {",
+                          "    var jsonData = pm.response.json();",
+                          "    pm.expect(jsonData).to.have.property(\"success\");",
+                          "    if (jsonData.success) {",
+                          "        pm.expect(jsonData.movie_id).to.be.a(\"number\");",
+                          "    }",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/api/view_counter.php?id={{movie_id}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "api",
+                        "view_counter.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "id",
+                          "value": "{{movie_id}}",
+                          "description": "ID của phim cần tăng lượt xem"
+                        }
+                      ]
+                    },
+                    "description": "API endpoint tự động tăng lượt xem (view_count) của phim khi phát video"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Cập nhật lượt xem thành công (JSON)",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/api/view_counter.php?id=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "api",
+                            "view_counter.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "id",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "{\n  \"success\": true,\n  \"movie_id\": 1\n}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "comments",
+              "description": "Gửi bình luận phim và quản trị bình luận",
+              "item": [
+                {
+                  "name": "/watch.php (Submit Comment)",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "comment_text",
+                          "value": "Phim rất hay, chất lượng âm thanh hình ảnh tuyệt vời!",
+                          "description": "Nội dung bình luận",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/watch.php?id={{movie_id}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "watch.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "id",
+                          "value": "{{movie_id}}",
+                          "description": "ID của phim"
+                        }
+                      ]
+                    },
+                    "description": "Người dùng gửi bình luận mới cho bộ phim"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Bình luận thành công",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "comment_text",
+                              "value": "Phim rất hay!",
+                              "type": "text"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/watch.php?id=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "watch.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "id",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><div class=\"comment-item\">Phim rất hay!</div></body></html>"
+                    }
+                  ]
+                },
+                {
+                  "name": "/comments.php (Admin Manage Comments)",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 (Authorized) or 302 (Redirect)\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/comments.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "comments.php"
+                      ]
+                    },
+                    "description": "Quản trị viên xem toàn bộ danh sách bình luận trên hệ thống"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Danh sách quản trị bình luận",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/comments.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "comments.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Bình Luận</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "watch-history",
+              "description": "Lịch sử xem phim của người dùng",
+              "item": [
+                {
+                  "name": "/watch_history.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/watch_history.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "watch_history.php"
+                      ]
+                    },
+                    "description": "Xem lịch sử các bộ phim người dùng đã theo dõi"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Lịch sử xem phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/watch_history.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "watch_history.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Lịch sử xem phim</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "vip",
+          "description": "Gói thành viên VIP, xử lý thanh toán trực tuyến MoMo và lịch sử đơn hàng",
+          "item": [
+            {
+              "name": "pricing",
+              "description": "Bảng giá và các gói VIP hiện có",
+              "item": [
+                {
+                  "name": "/pricing.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK or 302 (Redirect)\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Pricing page renders VIP content or prompts login\", function () {",
+                          "    var body = pm.response.text();",
+                          "    var isValid = body.includes(\"VIP\") || body.includes(\"login\") || body.includes(\"Đăng Nhập\") || body.includes(\"Netfix\");",
+                          "    pm.expect(isValid).to.be.true;",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/pricing.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "pricing.php"
+                      ]
+                    },
+                    "description": "Lấy bảng giá chi tiết các gói đăng ký VIP"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Bảng giá gói VIP",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/pricing.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "pricing.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Bảng Giá Gói VIP NetfixVN</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "payment",
+              "description": "Xử lý thanh toán mua gói VIP",
+              "item": [
+                {
+                  "name": "/process_payment.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302 (Gateway Redirect)\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 2000ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/x-www-form-urlencoded"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "body": {
+                      "mode": "urlencoded",
+                      "urlencoded": [
+                        {
+                          "key": "package_id",
+                          "value": "{{package_id}}",
+                          "description": "ID gói VIP (1: 1 tháng, 2: 3 tháng, 3: 6 tháng)",
+                          "type": "text"
+                        },
+                        {
+                          "key": "payment_method",
+                          "value": "{{payment_method}}",
+                          "description": "Phương thức thanh toán (Momo / Chuyển khoản ngân hàng)",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/process_payment.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "process_payment.php"
+                      ]
+                    },
+                    "description": "Xử lý khởi tạo đơn hàng VIP và kết nối cổng thanh toán MoMo"
+                  },
+                  "response": [
+                    {
+                      "name": "302 Found - Chuyển hướng tới cổng thanh toán",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/x-www-form-urlencoded"
+                          }
+                        ],
+                        "body": {
+                          "mode": "urlencoded",
+                          "urlencoded": [
+                            {
+                              "key": "package_id",
+                              "value": "1",
+                              "type": "text"
+                            },
+                            {
+                              "key": "payment_method",
+                              "value": "Momo",
+                              "type": "text"
+                            }
+                          ]
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/process_payment.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "process_payment.php"
+                          ]
+                        }
+                      },
+                      "status": "Found",
+                      "code": 302,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Location",
+                          "value": "https://test-payment.momo.vn/v2/gateway/pay"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!-- Redirect to MoMo Payment Gateway -->"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "orders",
+              "description": "Lịch sử đơn hàng đăng ký VIP của người dùng",
+              "item": [
+                {
+                  "name": "/order_history.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/order_history.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "order_history.php"
+                      ]
+                    },
+                    "description": "Theo dõi lịch sử đơn hàng và trạng thái kích hoạt VIP"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Lịch sử đơn hàng VIP",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/order_history.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "order_history.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Lịch Sử Đơn Hàng VIP</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "admin",
+          "description": "Các chức năng quản trị viên: Thêm phim, quản lý phim, đơn hàng, khách hàng và thống kê",
+          "item": [
+            {
+              "name": "movies",
+              "description": "Quản lý kho phim",
+              "item": [
+                {
+                  "name": "/add_movie.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 2000ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "title",
+                          "value": "Phim Test QA Tự Động 2026",
+                          "description": "Tên phim",
+                          "type": "text"
+                        },
+                        {
+                          "key": "description",
+                          "value": "Mô tả phim dùng cho kịch bản kiểm thử Postman QA",
+                          "description": "Mô tả nội dung",
+                          "type": "text"
+                        },
+                        {
+                          "key": "genre",
+                          "value": "Hành Động",
+                          "description": "Thể loại chính",
+                          "type": "text"
+                        },
+                        {
+                          "key": "sub_genre",
+                          "value": "Kịch tính",
+                          "description": "Thể loại phụ",
+                          "type": "text"
+                        },
+                        {
+                          "key": "year",
+                          "value": "2026",
+                          "description": "Năm phát hành",
+                          "type": "text"
+                        },
+                        {
+                          "key": "duration",
+                          "value": "120",
+                          "description": "Thời lượng (phút)",
+                          "type": "text"
+                        },
+                        {
+                          "key": "language",
+                          "value": "Tiếng Việt",
+                          "description": "Ngôn ngữ",
+                          "type": "text"
+                        },
+                        {
+                          "key": "country",
+                          "value": "Việt Nam",
+                          "description": "Quốc gia sản xuất",
+                          "type": "text"
+                        },
+                        {
+                          "key": "status",
+                          "value": "active",
+                          "description": "Trạng thái hiển thị",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/add_movie.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "add_movie.php"
+                      ]
+                    },
+                    "description": "Thêm một bộ phim mới vào cơ sở dữ liệu hệ thống"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Form thêm phim hoặc xác nhận",
+                      "originalRequest": {
+                        "method": "POST",
+                        "url": {
+                          "raw": "{{baseUrl}}/add_movie.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "add_movie.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Thêm Phim Mới</h2></body></html>"
+                    }
+                  ]
+                },
+                {
+                  "name": "/manage_movies.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302 (Admin Session Check)\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/manage_movies.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "manage_movies.php"
+                      ]
+                    },
+                    "description": "Xem và quản lý danh sách toàn bộ các phim hiện có trong hệ thống"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Danh sách quản lý phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/manage_movies.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "manage_movies.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Phim</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "orders",
+              "description": "Quản lý các đơn hàng đăng ký VIP của khách hàng",
+              "item": [
+                {
+                  "name": "/orders.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/orders.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "orders.php"
+                      ]
+                    },
+                    "description": "Xem và phê duyệt các đơn hàng đăng ký VIP của khách hàng"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Quản lý đơn hàng",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/orders.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "orders.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Đơn Hàng VIP</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "customers",
+              "description": "Quản lý tài khoản khách hàng người dùng",
+              "item": [
+                {
+                  "name": "/customers.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/customers.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "customers.php"
+                      ]
+                    },
+                    "description": "Xem danh sách khách hàng và quản lý trạng thái tài khoản VIP"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Quản lý khách hàng",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/customers.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "customers.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Khách Hàng</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "statistics",
+              "description": "Báo cáo thống kê số liệu kinh doanh và lượt xem",
+              "item": [
+                {
+                  "name": "/statistics.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/statistics.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "statistics.php"
+                      ]
+                    },
+                    "description": "Báo cáo số liệu tổng quan doanh thu, số lượng người dùng và lượt xem"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Báo cáo thống kê",
+                      "originalRequest": {
+                        "method": "GET",
+                        "url": {
+                          "raw": "{{baseUrl}}/statistics.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "statistics.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Báo Cáo Thống Kê</h2></body></html>"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

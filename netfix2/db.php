@@ -1,10 +1,11 @@
 <?php
-$host = 'localhost';
-$dbname = 'netfixvn';
-$username = 'root';
-$password = ''; // Nếu bạn chưa đặt mật khẩu cho root
+$host = getenv('DB_HOST') ?: 'localhost';
+$dbname = getenv('DB_NAME') ?: 'netfixvn';
+$username = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : ''; // Mặc định rỗng cho XAMPP local
+$port = (int)(getenv('DB_PORT') ?: 3306);
 
-$conn = new mysqli($host, $username, $password, $dbname);
+$conn = new mysqli($host, $username, $password, $dbname, $port);
 if ($conn->connect_error) {
     die("Kết nối thất bại: " . $conn->connect_error);
 }

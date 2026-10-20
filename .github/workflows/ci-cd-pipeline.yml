@@ -1,0 +1,141 @@
+name: QA Pipeline - Qodana, CodeceptJS E2E & Docker Hub
+
+on:
+  push:
+    branches: [ main, week2 ]
+  pull_request:
+    branches: [ main, week2 ]
+
+jobs:
+  # =========================================================================
+  # BƯỚC 1: KIỂM THỬ TĨNH (STATIC ANALYSIS) BẰNG PHP LINT & QODANA
+  # =========================================================================
+  code-quality-scan:
+    name: 1. Static Code Analysis (PHP Lint & Qodana)
+    runs-on: ubuntu-latest
+    env:
+      QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Kiểm tra cú pháp toàn bộ file PHP (Không cần Token)
+        run: |
+          echo "Đang kiểm tra cú pháp (Syntax Check) toàn bộ mã nguồn PHP trong netfix2/..."
+          find netfix2 -type f -name "*.php" -exec php -l {} +
+
+      - name: Qodana Scan (Chạy khi đã cấu hình QODANA_TOKEN)
+        if: env.QODANA_TOKEN != ''
+        uses: JetBrains/qodana-action@v2025.1
+        with:
+          args: --fail-threshold,50
+
+      - name: Thông báo nếu chưa gắn QODANA_TOKEN
+        if: env.QODANA_TOKEN == ''
+        run: |
+          echo "::warning title=Chưa có QODANA_TOKEN::Bỏ qua bước Qodana Cloud vì chưa thêm QODANA_TOKEN vào GitHub Secrets. Đã dùng PHP Syntax Lint để thay thế tạm thời."
+
+  # =========================================================================
+  # BƯỚC 2: KIỂM THỬ ĐỘNG TỰ ĐỘNG (E2E AUTOMATION TEST) BẰNG CODECEPTJS
+  # =========================================================================
+  e2e-automation-test:
+    name: 2. CodeceptJS E2E Testing (PHP + MySQL)
+    needs: code-quality-scan
+    runs-on: ubuntu-latest
+
+    # Khởi tạo container MySQL thật và nạp dữ liệu test
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: netfixvn
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Cài đặt PHP 8.2 và MySQLi Extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mysqli, pdo, pdo_mysql, mbstring
+
+      - name: Import Database mẫu (database/netfixvn.sql) vào MySQL
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -uroot -proot netfixvn < database/netfixvn.sql
+
+      - name: Khởi chạy Web Server PHP (chạy ngầm)
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: netfixvn
+          DB_USER: root
+          DB_PASS: root
+        run: |
+          php -S 127.0.0.1:8000 -t . > php-server.log 2>&1 &
+          sleep 2
+          curl -I http://127.0.0.1:8000/netfix2/login.php
+
+      - name: Cài đặt Node.js & Thư viện CodeceptJS + Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cài đặt Dependencies và Trình duyệt Chromium
+        run: |
+          npm install
+          npx playwright install --with-deps chromium
+
+      - name: Chạy Kiểm thử Tự động CodeceptJS
+        env:
+          CI: 'true'
+          BASE_URL: 'http://127.0.0.1:8000/netfix2'
+        run: |
+          npx codeceptjs run --steps
+
+      - name: Lưu ảnh chụp màn hình lỗi (nếu Test Fail) để gắn vào Jira Bug
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeceptjs-failure-screenshots
+          path: output/
+
+  # =========================================================================
+  # BƯỚC 3: ĐÓNG GÓI & ĐẨY LÊN DOCKER HUB (CHỈ CHẠY KHI BƯỚC 1 & 2 ĐỀU PASS)
+  # =========================================================================
+  docker-build-and-push:
+    name: 3. Build & Push Versioned Docker Image
+    needs: [code-quality-scan, e2e-automation-test]
+    if: success() && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Đăng nhập Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build và Push Docker Image có gắn Version
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:v1.0.${{ github.run_number }}

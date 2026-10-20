@@ -11,3 +11,28 @@ log_momo.txt
 # Bỏ qua các file rác của hệ điều hành
 .DS_Store
 Thumbs.db
+
+# Bỏ qua thư viện và file rác
+node_modules/
+output/
+package-lock.json
+
+#.claude và .gemini
+.claude/
+.gemini
+.claude-workspace
+
+# Bỏ qua file backup và script build Postman nội bộ
+*.original.json
+Postman/build_postman.js
+Postman/export_excel.js
+Postman/export_test_case_list.js
+
+
+# excel
+*.xlsx
+*.xls
+*.xlsm
+
+# Thư mục backup cấu hình local
+backup_before_update/
