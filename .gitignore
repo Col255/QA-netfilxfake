@@ -28,11 +28,5 @@ Postman/build_postman.js
 Postman/export_excel.js
 Postman/export_test_case_list.js
 
-
-# excel
-*.xlsx
-*.xls
-*.xlsm
-
 # Thư mục backup cấu hình local
 backup_before_update/
