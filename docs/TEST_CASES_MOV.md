@@ -44,12 +44,30 @@
 
 ## 3. MA TRẬN TEST CASE CHI TIẾT (Detailed Test Case Matrix)
 
-| Test Case ID | Module / Endpoint | Tên Test Case (Title) | Điều kiện tiên quyết (Preconditions) | Các bước thực hiện (Steps) | Dữ liệu kiểm thử (Test Data) | Kết quả mong đợi (Expected Result) | Mức ưu tiên (Priority) | Loại test (Type) |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **MOV_TC01** | `/index.php` | Khám phá trang chủ thành công, hiển thị đầy đủ danh mục phim | Web server Apache và MySQL đang chạy. | 1. Gửi request `GET /index.php`<br>2. Kiểm tra status code và thời gian phản hồi.<br>3. Kiểm tra các khối nội dung HTML. | Headers: `Accept: text/html` | - HTTP Status: `200 OK`<br>- Response time < 1500ms<br>- Chứa slider Top Movies (`#top-movies-slide`), danh mục Phim Mới, Phim Bộ, Hoạt Hình<br>- Không chứa lỗi PHP Notice/Warning/Fatal. | **P1 (High)** | Positive |
-| **MOV_TC02** | `/movies.php` | Lấy toàn bộ danh sách phim mặc định | CSDL `netfixvn` có dữ liệu bảng `movies`. | 1. Gửi request `GET /movies.php`<br>2. Kiểm tra danh sách hiển thị. | Headers: `Accept: text/html` | - HTTP Status: `200 OK`<br>- Hiển thị danh sách thẻ phim (`.movie-item`)<br>- Tên phim, ảnh poster thumbnail hiển thị đầy đủ. | **P1 (High)** | Positive |
-| **MOV_TC03** | `/movies.php` | Lọc phim hợp lệ theo Thể loại và Quốc gia | Trong CSDL có phim thỏa mãn điều kiện. | 1. Gửi request `GET /movies.php?genre=Cartoon&country=Japan`<br>2. Kiểm tra danh sách phim trả về. | Query: `genre=Cartoon`, `country=Japan` | - HTTP Status: `200 OK`<br>- Danh sách trả về chỉ chứa phim hoạt hình Nhật Bản (ví dụ: *Doraemon*, *Pokemon*)<br>- Không lẫn phim thể loại khác. | **P1 (High)** | Positive |
-| **MOV_TC04** | `/movies.php` | Lọc phim với thể loại không tồn tại | Web server đang chạy. | 1. Gửi request `GET /movies.php?genre=UnknownGenre123`<br>2. Kiểm tra phản hồi giao diện. | Query: `genre=UnknownGenre123` | - HTTP Status: `200 OK`<br>- Giao diện hiển thị thông báo "Không có phim nào phù hợp" hoặc danh sách rỗng<br>- Không crash ứng dụng, không lỗi cú pháp SQL. | **P2 (Medium)** | Negative |
+### 📌 Phân rã kiểm thử Task KAN-22: Thiết kế Test Cases cho Discovery Homepage & Catalog Filter
+* **Jira Task Key:** `KAN-22`
+* **Parent Story:** `KAN-21` (`[KAN-21] Kiểm thử API Khám phá Trang chủ & Lọc Danh mục Phim`)
+* **Phạm vi kiểm thử:** `GET /index.php`, `GET /movies.php`
+* **Kỹ thuật áp dụng:**
+  - **Equivalence Partitioning (EP):** 
+    - Thể loại hợp lệ: `Cartoon`, `Series`, `Movie`, `Cinema`
+    - Thể loại không tồn tại: `UnknownGenre123`, `NonExistent`
+    - Quốc gia hợp lệ: `Japan`, `USA`, `China`, `Korea`, `Vietnam`
+    - Quốc gia không tồn tại: `Atlantis`
+  - **Boundary Value Analysis (BVA):** Số lượng item hiển thị trong Slider (`limit=10`), danh mục phim mới (`limit=7`).
+  - **SLA Constraint:** Thời gian phản hồi < 1500ms cho toàn bộ view HTML.
+* **Ma trận truy vết (Traceability Matrix):**
+  - `KAN-22-TC01` $\rightarrow$ `MOV_TC01`: Khám phá trang chủ, Top slider & các khối nội dung.
+  - `KAN-22-TC02` $\rightarrow$ `MOV_TC02`: Lấy danh sách phim mặc định trên `/movies.php`.
+  - `KAN-22-TC03` $\rightarrow$ `MOV_TC03`: Lọc danh mục phim theo Thể loại và Quốc gia.
+  - `KAN-22-TC04` $\rightarrow$ `MOV_TC04`: Xử lý êm dịu khi lọc danh mục không có dữ liệu (Negative).
+
+| Test Case ID | Jira Task | Module / Endpoint | Tên Test Case (Title) | Điều kiện tiên quyết (Preconditions) | Các bước thực hiện (Steps) | Dữ liệu kiểm thử (Test Data) | Kết quả mong đợi (Expected Result) | Mức ưu tiên (Priority) | Loại test (Type) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MOV_TC01** | `KAN-22` | `/index.php` | Khám phá trang chủ thành công, hiển thị đầy đủ danh mục phim | Web server Apache và MySQL đang chạy. | 1. Gửi request `GET /index.php`<br>2. Kiểm tra status code và thời gian phản hồi.<br>3. Kiểm tra các khối nội dung HTML. | Headers: `Accept: text/html` | - HTTP Status: `200 OK`<br>- Response time < 1500ms<br>- Chứa slider Top Movies (`#top-movies-slide`), danh mục Phim Mới, Series, Hoạt Hình<br>- Không chứa lỗi PHP Notice/Warning/Fatal. | **P1 (High)** | Positive |
+| **MOV_TC02** | `KAN-22` | `/movies.php` | Lấy toàn bộ danh sách phim mặc định | CSDL `netfixvn` có dữ liệu bảng `movies`. | 1. Gửi request `GET /movies.php`<br>2. Kiểm tra danh sách hiển thị. | Headers: `Accept: text/html` | - HTTP Status: `200 OK`<br>- Hiển thị danh sách thẻ phim (`.movie-item`)<br>- Tên phim, ảnh poster thumbnail hiển thị đầy đủ. | **P1 (High)** | Positive |
+| **MOV_TC03** | `KAN-22` | `/movies.php` | Lọc phim hợp lệ theo Thể loại và Quốc gia | Trong CSDL có phim thỏa mãn điều kiện. | 1. Gửi request `GET /movies.php?genre=Cartoon&country=Japan`<br>2. Kiểm tra danh sách phim trả về. | Query: `genre=Cartoon`, `country=Japan` | - HTTP Status: `200 OK`<br>- Danh sách trả về chỉ chứa phim hoạt hình Nhật Bản (ví dụ: *Doraemon*, *Pokemon*)<br>- Không lẫn phim thể loại khác. | **P1 (High)** | Positive |
+| **MOV_TC04** | `KAN-22` | `/movies.php` | Lọc phim với thể loại không tồn tại | Web server đang chạy. | 1. Gửi request `GET /movies.php?genre=UnknownGenre123`<br>2. Kiểm tra phản hồi giao diện. | Query: `genre=UnknownGenre123` | - HTTP Status: `200 OK`<br>- Giao diện hiển thị thông báo "Không có phim trong danh mục này." (`.no-content`)<br>- Không crash ứng dụng, không lỗi cú pháp SQL. | **P2 (Medium)** | Negative |
 | **MOV_TC05** | `/search.php` | Tìm kiếm phim với từ khóa chính xác | Phim "Doraemon" tồn tại trong CSDL. | 1. Gửi request `GET /search.php?q=Doraemon`<br>2. Kiểm tra kết quả tìm kiếm. | Query: `q=Doraemon` | - HTTP Status: `200 OK`<br>- Response chứa ít nhất 1 kết quả có tiêu đề chứa từ khóa "Doraemon"<br>- Link điều hướng trỏ đúng về `/watch.php?id={id}`. | **P1 (High)** | Positive |
 | **MOV_TC06** | `/search.php` | Tìm kiếm không phân biệt chữ hoa, chữ thường | Phim "pokemon" tồn tại trong CSDL. | 1. Gửi request `GET /search.php?q=POKEMON`<br>2. So sánh kết quả với khi tìm `pokemon`. | Query: `q=POKEMON` | - HTTP Status: `200 OK`<br>- Trả về kết quả chính xác phim *Pokemon* (Case-insensitive matching hoạt động đúng). | **P2 (Medium)** | Positive |
 | **MOV_TC07** | `/search.php` | Tìm kiếm với từ khóa là chuỗi rỗng hoặc khoảng trắng | Web server đang chạy. | 1. Gửi request `GET /search.php?q=%20%20`<br>2. Kiểm tra kết quả. | Query: `q=  ` | - HTTP Status: `200 OK`<br>- Không gây lỗi database<br>- Hiển thị toàn bộ danh sách hoặc thông báo yêu cầu nhập từ khóa tìm kiếm. | **P2 (Medium)** | Edge |
