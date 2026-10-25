@@ -29,36 +29,36 @@
   ],
   "item": [
     {
-      "name": "01. Discovery & Catalog",
-      "description": "Các kịch bản kiểm thử trang chủ khám phá, hiển thị slider phim nổi bật và lọc danh mục phim",
+      "name": "01. Discovery & Catalog [KAN-23]",
+      "description": "[KAN-23] Các kịch bản kiểm thử tự động trang chủ khám phá, hiển thị slider phim nổi bật và lọc danh mục phim (/index.php, /movies.php)",
       "item": [
         {
-          "name": "MOV_TC01 - Khám phá trang chủ (/index.php)",
+          "name": "KAN-23-TC01: MOV_TC01 - Khám phá trang chủ (/index.php)",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "pm.test(\"[KAN-23] Status code is 200 OK\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
                   "",
-                  "pm.test(\"Response time SLA is below 1500ms\", function () {",
+                  "pm.test(\"[KAN-23] Response time SLA is below 1500ms\", function () {",
                   "    pm.expect(pm.response.responseTime).to.be.below(1500);",
                   "});",
                   "",
-                  "pm.test(\"Content-Type contains text/html\", function () {",
+                  "pm.test(\"[KAN-23] Content-Type contains text/html\", function () {",
                   "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/html\");",
                   "});",
                   "",
-                  "pm.test(\"Homepage contains Top Movies Slider and Main Navigation\", function () {",
+                  "pm.test(\"[KAN-23] Homepage contains Top Movies Slider and Main Navigation\", function () {",
                   "    const html = pm.response.text();",
                   "    pm.expect(html).to.include(\"top-movies-slide\");",
                   "    pm.expect(html).to.include(\"NetfixVN\");",
                   "});",
                   "",
-                  "pm.test(\"Response does not leak PHP Errors or Warnings\", function () {",
+                  "pm.test(\"[KAN-23] Response does not leak PHP Errors or Warnings\", function () {",
                   "    const html = pm.response.text();",
                   "    pm.expect(html).to.not.include(\"Fatal error\");",
                   "    pm.expect(html).to.not.include(\"Warning: mysqli\");",
@@ -84,18 +84,18 @@
           }
         },
         {
-          "name": "MOV_TC02 - Lấy toàn bộ danh sách phim (/movies.php)",
+          "name": "KAN-23-TC02: MOV_TC02 - Lấy toàn bộ danh sách phim (/movies.php)",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "pm.test(\"[KAN-23] Status code is 200 OK\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
                   "",
-                  "pm.test(\"Movies catalog view rendered successfully\", function () {",
+                  "pm.test(\"[KAN-23] Movies catalog view rendered successfully\", function () {",
                   "    const html = pm.response.text();",
                   "    pm.expect(html).to.include(\"movie-item\");",
                   "});"
@@ -114,18 +114,18 @@
           }
         },
         {
-          "name": "MOV_TC03 - Lọc phim theo Thể loại và Quốc gia (/movies.php?genre=Cartoon&country=Japan)",
+          "name": "KAN-23-TC03: MOV_TC03 - Lọc phim theo Thể loại và Quốc gia (/movies.php?genre=Cartoon&country=Japan)",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "pm.test(\"[KAN-23] Status code is 200 OK\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
                   "",
-                  "pm.test(\"Filtered results contain expected Japanese Cartoons (e.g., Doraemon/Pokemon)\", function () {",
+                  "pm.test(\"[KAN-23] Filtered results contain expected Japanese Cartoons (e.g., Doraemon/Pokemon)\", function () {",
                   "    const html = pm.response.text();",
                   "    pm.expect(html.toLowerCase()).to.match(/doraemon|pokemon|hoạt hình/i);",
                   "});"
@@ -154,18 +154,18 @@
           }
         },
         {
-          "name": "MOV_TC04 - Lọc với thể loại không tồn tại (/movies.php?genre=UnknownGenre123)",
+          "name": "KAN-23-TC04: MOV_TC04 - Lọc với thể loại không tồn tại (/movies.php?genre=UnknownGenre123)",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"Status code is 200 OK with graceful empty handling\", function () {",
+                  "pm.test(\"[KAN-23] Status code is 200 OK with graceful empty handling\", function () {",
                   "    pm.response.to.have.status(200);",
                   "});",
                   "",
-                  "pm.test(\"Application does not crash on non-existent genre\", function () {",
+                  "pm.test(\"[KAN-23] Application does not crash on non-existent genre\", function () {",
                   "    const html = pm.response.text();",
                   "    pm.expect(html).to.not.include(\"Fatal error\");",
                   "    pm.expect(html).to.not.include(\"SQLSTATE\");",
