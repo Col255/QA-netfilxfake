@@ -1,7 +1,10 @@
 version: "1.0"
-linter: jetbrains/qodana-php:2025.1
-failThreshold: 50
+linter: qodana-php
+profile:
+  name: qodana.recommended
+failThreshold: 100
 include:
+  - name: CheckDependencyLicenses
   - name: PhpDeprecationInspection
   - name: PhpSecurityInspection
 exclude:
