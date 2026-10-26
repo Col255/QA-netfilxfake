@@ -1,4 +1,3 @@
-# BÁO CÁO TEST CASE - VIP PACKAGE & PAYMENT
 - **Mã Task Jira:** KAN-43
 - **Thành viên thực hiện:** Lê Hoàng Nhật Bình
 
@@ -18,3 +17,4 @@
 
 ## 3. Test Cases cho Module Orders (Lịch sử đơn hàng)
 - **TC_ORD_01** | `GET /vip/orders/order_history.php` | Kiểm tra hiển thị lịch sử đơn hàng VIP | Gửi request `GET` tới API order_history | **Precondition:** Người dùng đã từng thực hiện giao dịch mua gói VIP | **Expected Result:** Trả về mã `200 OK`, hiển thị danh sách các đơn hàng đã mua kèm trạng thái (Pending/Completed), tổng giá trị và phương thức thanh toán (Momo/VNPay). | **Priority:** High | **Type:** Positive
+  KAN-43 Thiết kế Test Cases cho VIP Packages & Payment
