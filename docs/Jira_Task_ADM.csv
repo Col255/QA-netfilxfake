@@ -1,0 +1,72 @@
+﻿Summary,Description,Issue Type,Priority,Labels,Assignee
+"[KAN-47] Kiểm thử API Thêm Phim mới, Validation & An toàn Bảo mật (/add_movie.php)","User story
+As a tester, when validating the add movie function at /add_movie.php, I want to check input field validation, dynamic data handling, and security against Reflected XSS and SQL Injection so that the feature works correctly and is safe to use.
+
+Context
+The issue is about comprehensive testing of the add movie feature at /add_movie.php. It focuses on required field validation, data chaining for follow-up test steps, and security assessment.
+
+Acceptance criteria
+- The add movie function at /add_movie.php is tested end to end.
+- Input validation for required fields (title, category, video URL) is tested.
+- Reflected XSS protection is checked.
+- SQL Injection protection is checked.
+- Unauthorized access by regular users is blocked.
+
+Other information
+- Issue name: [KAN-47] Kiểm thử API Thêm Phim mới, Validation & An toàn Bảo mật (/add_movie.php)",Task,High,"qa,api-testing,ADM,postman,security",
+"[KAN-48] Kiểm thử API Quản lý Phim, Phân trang & Lọc Danh mục (/manage_movies.php)","User story
+As a tester, when validating the manage movies function at /manage_movies.php, I want to check movie list retrieval, category filtering, and pagination handling so that the feature works correctly and efficiently.
+
+Context
+The issue is about comprehensive testing of the movie management feature at /manage_movies.php. It focuses on dataset pagination, filtering by category, and data extraction for follow-up test steps.
+
+Acceptance criteria
+- The movie management function at /manage_movies.php is tested end to end.
+- Pagination handling (page, limit) is tested.
+- Category filtering is verified.
+- Data response format and error handling are checked.
+
+Other information
+- Issue name: [KAN-48] Kiểm thử API Quản lý Phim, Phân trang & Lọc Danh mục (/manage_movies.php)",Task,Medium,"qa,api-testing,ADM,postman",
+"[KAN-49] Kiểm thử API Quản lý Đơn hàng, Trạng thái & Gói VIP (/orders.php)","User story
+As a tester, when validating the order management function at /orders.php, I want to check order list retrieval, filtering by order status, and VIP package verification so that transaction records are accurate and accessible.
+
+Context
+The issue is about comprehensive testing of the order management feature at /orders.php. It focuses on order history querying, status filtering, and data extraction.
+
+Acceptance criteria
+- The order management function at /orders.php is tested end to end.
+- Order querying and filtering by ID or status are tested.
+- VIP package subscription data accuracy is verified.
+- Access control for non-admin accounts is checked.
+
+Other information
+- Issue name: [KAN-49] Kiểm thử API Quản lý Đơn hàng, Trạng thái & Gói VIP (/orders.php)",Task,Medium,"qa,api-testing,ADM,postman",
+"[KAN-50] Kiểm thử API Quản lý Khách hàng, Phân quyền & Khóa Tài khoản (/customers.php)","User story
+As a tester, when validating the customer management function at /customers.php, I want to check customer list retrieval, account status updates (block/unblock), and authorization enforcement so that customer management is secure and reliable.
+
+Context
+The issue is about comprehensive testing of the customer management feature at /customers.php. It focuses on user account control, role-based authorization, and security assessment.
+
+Acceptance criteria
+- The customer management function at /customers.php is tested end to end.
+- Customer account list retrieval and details are tested.
+- Block and unblock user account actions are verified.
+- Unauthorized access control (401/403 response) is checked.
+
+Other information
+- Issue name: [KAN-50] Kiểm thử API Quản lý Khách hàng, Phân quyền & Khóa Tài khoản (/customers.php)",Task,High,"qa,api-testing,ADM,postman,security",
+[KAN-51] Kiểm thử API Báo cáo Thống kê Doanh thu & Lượt xem (/statistics.php),"User story
+As a tester, when validating the statistics reporting function at /statistics.php, I want to check aggregate metrics calculation, view counter accuracy, and revenue report data integrity so that administrative dashboards show correct analytics.
+
+Context
+The issue is about comprehensive testing of the statistics reporting feature at /statistics.php. It focuses on metric calculation, data aggregation, and administrative access security.
+
+Acceptance criteria
+- The statistics reporting function at /statistics.php is tested end to end.
+- View counter and revenue metric aggregations are tested.
+- Response payload structure and data accuracy are verified.
+- Admin-only access restriction is enforced and tested.
+
+Other information
+- Issue name: [KAN-51] Kiểm thử API Báo cáo Thống kê Doanh thu & Lượt xem (/statistics.php)",Task,Medium,"qa,api-testing,ADM,postman",

@@ -1,0 +1,125 @@
+{
+  "info": {
+    "_postman_id": "2a329c30-a6c0-4e7b-94c2-dc1833b3779f",
+    "name": "Admin Management CMS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45658923"
+  },
+  "item": [
+    {
+      "name": "5. Admin Management Copy",
+      "item": [
+        {
+          "name": "Thêm phim mới (Add Movie)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Phim Test Postman",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Mô tả phim test",
+                  "type": "text"
+                },
+                {
+                  "key": "genre",
+                  "value": "Hành Động",
+                  "type": "text"
+                },
+                {
+                  "key": "year",
+                  "value": "2025",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/add_movie.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "add_movie.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Quản lý phim (Manage Movies)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/manage_movies.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "manage_movies.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Quản lý đơn hàng (Orders)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/orders.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "orders.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Quản lý khách hàng (Customers)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "customers.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Báo cáo thống kê (Statistics)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/statistics.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "statistics.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
