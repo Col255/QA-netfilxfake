@@ -97,6 +97,26 @@
   - `KAN-34-TC01` $\rightarrow$ `MOV_TC16`: Kiểm tra API Contract, JSON Schema và tăng bộ đếm `view_count`.
   - `KAN-34-TC02` $\rightarrow$ `MOV_TC17`: Kiểm tra xử lý biên với ID = 0, ID số âm và ID chứa ký tự lạ.
 
+
+### 📌 Phân rã kiểm thử Task KAN-38: Thiết kế kịch bản kiểm tra RBAC thêm/sửa/xóa phim
+* **Jira Task Key:** `KAN-38`
+* **Parent Story:** `KAN-37` (`[KAN-37] Kiểm thử Phân quyền Quản trị & CRUD Nội dung Phim Admin (/add_movie.php, /manage_movies.php)`)
+* **Phạm vi kiểm thử:** `GET/POST /add_movie.php`, `GET/POST /manage_movies.php`
+* **Kỹ thuật áp dụng:**
+  - **Role-Based Access Control (RBAC) Testing:**
+    - Khách vãng lai (`Guest` - Không có session): Bị chặn 100%, redirect 302 về `admin_login.php`.
+    - Người dùng thông thường (`User` - Có session nhưng `is_admin = 0`): Bị từ chối truy cập quyền quản trị, redirect về `admin_login.php`.
+    - Quản trị viên (`Admin` - Có session và `is_admin = 1`): Được cấp quyền truy cập giao diện biểu mẫu thêm phim và danh sách quản lý phim.
+  - **Multipart Form-Data Contract:** Mô phỏng payload thêm phim gồm các trường text (`title`, `description`, `genre`, `country`, `is_vip`) và file nhị phân (`thumbnail`, `video_file`).
+  - **Deletion & Mutation Safety:** Kiểm tra tham số `delete_id` với Prepared Statement chống SQLi.
+* **Ma trận phân quyền chi tiết (RBAC Matrix):**
+
+| Role / Actor | GET /add_movie.php | POST /add_movie.php (Add) | GET /manage_movies.php | POST /manage_movies.php (Delete) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Guest (Unauthenticated)** | ❌ 302 Redirect | ❌ 302 Redirect | ❌ 302 Redirect | ❌ 302 Redirect |
+| **Normal User (is_admin = 0)** | ❌ 302 Redirect | ❌ 302 Redirect | ❌ 302 Redirect | ❌ 302 Redirect |
+| **Admin (is_admin = 1)** | ✅ 200 OK | ✅ 200 OK (Thêm mới) | ✅ 200 OK | ✅ 200 OK (Xóa phim) |
+
 | Test Case ID | Jira Task | Module / Endpoint | Tên Test Case (Title) | Điều kiện tiên quyết (Preconditions) | Các bước thực hiện (Steps) | Dữ liệu kiểm thử (Test Data) | Kết quả mong đợi (Expected Result) | Mức ưu tiên (Priority) | Loại test (Type) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **MOV_TC01** | `KAN-22` | `/index.php` | Khám phá trang chủ thành công, hiển thị đầy đủ danh mục phim | Web server Apache và MySQL đang chạy. | 1. Gửi request `GET /index.php`<br>2. Kiểm tra status code và thời gian phản hồi.<br>3. Kiểm tra các khối nội dung HTML. | Headers: `Accept: text/html` | - HTTP Status: `200 OK`<br>- Response time < 1500ms<br>- Chứa slider Top Movies (`#top-movies-slide`), danh mục Phim Mới, Series, Hoạt Hình<br>- Không chứa lỗi PHP Notice/Warning/Fatal. | **P1 (High)** | Positive |
@@ -116,7 +136,7 @@
 | **MOV_TC15** | `KAN-30` | `/watch.php` | Cho phép xem phim VIP khi đã đăng nhập tài khoản VIP hợp lệ | Tài khoản User có `is_vip = 1` và chưa hết hạn. | 1. Đăng nhập tài khoản VIP lấy Session Cookie.<br>2. Gửi request `GET /watch.php?id=56` kèm Cookie.<br>3. Kiểm tra quyền phát. | Cookie: `PHPSESSID={vip_user}` | - HTTP Status: `200 OK`<br>- Video player mở khóa, cho phép phát luồng video VIP. | **P0 (Critical)** | Positive (Auth) |
 | **MOV_TC16** | `KAN-34` | `/api/view_counter.php` | Gọi RESTful API tăng lượt xem phim thành công | Phim ID 52 tồn tại trong CSDL. | 1. Gửi request `GET /api/view_counter.php?id=52`<br>2. Kiểm tra JSON response và bảng `movies`. | Query: `id=52`, Headers: `Accept: application/json` | - HTTP Status: `200 OK`<br>- Header `Content-Type: application/json`<br>- Response Body đúng contract: `{"success": true, "movie_id": 52}`<br>- CSDL trường `view_count` tăng thêm 1. | **P1 (High)** | Positive (API Contract) |
 | **MOV_TC17** | `KAN-34` | `/api/view_counter.php` | Gọi API tăng lượt xem với ID bằng 0 hoặc số âm | Web server đang chạy. | 1. Gửi request `GET /api/view_counter.php?id=0`<br>2. Kiểm tra phản hồi. | Query: `id=0` | - HTTP Status: `200 OK`<br>- Không cập nhật CSDL, không crash service. | **P2 (Medium)** | Edge |
-| **MOV_TC18** | `/add_movie.php` | Chặn tài khoản người dùng thường truy cập chức năng thêm phim | Tài khoản đăng nhập là User thường (`is_admin = 0`). | 1. Đăng nhập User thường.<br>2. Gửi request `POST /add_movie.php` kèm form dữ liệu phim. | Session: User thường | - Bị từ chối truy cập (Redirect về `index.php` hoặc báo lỗi không đủ quyền hạn). | **P1 (High)** | Security / Auth |
+| **MOV_TC18** | `KAN-38` | `/add_movie.php` | Chặn tài khoản người dùng thường truy cập chức năng thêm phim | Tài khoản đăng nhập là User thường (`is_admin = 0`). | 1. Đăng nhập User thường.<br>2. Gửi request `POST /add_movie.php` kèm form dữ liệu phim. | Session: User thường | - Bị từ chối truy cập (Redirect về `index.php` hoặc báo lỗi không đủ quyền hạn). | **P1 (High)** | Security / Auth |
 
 ---
 
