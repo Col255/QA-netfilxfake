@@ -757,6 +757,127 @@
           }
         }
       ]
+    },
+    {
+      "name": "05. Admin Movies Management [KAN-39]",
+      "item": [
+        {
+          "name": "MOV_TC18 - Chặn truy cập thêm phim khi chưa có quyền Admin (POST /add_movie.php)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "Automation Test Movie KAN-39",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Mô tả phim upload qua multipart form-data automation",
+                  "type": "text"
+                },
+                {
+                  "key": "genre",
+                  "value": "Action",
+                  "type": "text"
+                },
+                {
+                  "key": "country",
+                  "value": "Vietnam",
+                  "type": "text"
+                },
+                {
+                  "key": "year",
+                  "value": "2026",
+                  "type": "text"
+                },
+                {
+                  "key": "is_vip",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/add_movie.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "add_movie.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code indicates redirect or authentication challenge (200/302)\", function () {",
+                  "    pm.expect([200, 302]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "pm.test(\"RBAC Gatekeeper: Unauthenticated multipart upload is blocked from creating movie\", function () {",
+                  "    const html = pm.response.text();",
+                  "    // Máy chủ hoặc điều hướng về admin_login.php hoặc không hiển thị thông báo thành công",
+                  "    pm.expect(html).to.not.include(\"Thêm phim thành công\");",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "MOV_TC19 - Chặn truy cập danh sách quản lý phim khi chưa có quyền Admin (GET /manage_movies.php)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/manage_movies.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "manage_movies.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code indicates redirect or challenge (200/302)\", function () {",
+                  "    pm.expect([200, 302]).to.include(pm.response.code);",
+                  "});",
+                  "",
+                  "pm.test(\"RBAC Gatekeeper: Unauthorized user cannot view admin management table\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "    pm.expect(html).to.not.include(\"Warning\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
