@@ -1,0 +1,755 @@
+{
+  "info": {
+    "_postman_id": "mov-netfix2-qa-automation-2026",
+    "name": "Netfix2 - Movie & Discovery (MOV) API Automation",
+    "description": "Bộ Automation Test API & Chức năng cho nhóm Movie & Discovery (MOV) trên hệ thống Netfix2 Streaming Platform. Bao gồm kiểm thử Happy Path, Negative Testing, Edge Cases, Security (XSS/SQLi), Data Chaining và JSON Contract Verification.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "activeMovieId",
+      "value": "52",
+      "type": "string"
+    },
+    {
+      "key": "searchKeyword",
+      "value": "Doraemon",
+      "type": "string"
+    },
+    {
+      "key": "vipMovieId",
+      "value": "56",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Discovery & Catalog [KAN-23]",
+      "description": "[KAN-23] Các kịch bản kiểm thử tự động trang chủ khám phá, hiển thị slider phim nổi bật và lọc danh mục phim (/index.php, /movies.php)",
+      "item": [
+        {
+          "name": "KAN-23-TC01: MOV_TC01 - Khám phá trang chủ (/index.php)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"[KAN-23] Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Response time SLA is below 1500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Content-Type contains text/html\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/html\");",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Homepage contains Top Movies Slider and Main Navigation\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.include(\"top-movies-slide\");",
+                  "    pm.expect(html).to.include(\"NetfixVN\");",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Response does not leak PHP Errors or Warnings\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "    pm.expect(html).to.not.include(\"Warning: mysqli\");",
+                  "    pm.expect(html).to.not.include(\"Notice:\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/index.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "index.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "KAN-23-TC02: MOV_TC02 - Lấy toàn bộ danh sách phim (/movies.php)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"[KAN-23] Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Movies catalog view rendered successfully\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.include(\"movie-item\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movies.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "movies.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "KAN-23-TC03: MOV_TC03 - Lọc phim theo Thể loại và Quốc gia (/movies.php?genre=Cartoon&country=Japan)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"[KAN-23] Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Filtered results contain expected Japanese Cartoons (e.g., Doraemon/Pokemon)\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html.toLowerCase()).to.match(/doraemon|pokemon|hoạt hình/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movies.php?genre=Cartoon&country=Japan",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "movies.php"
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "Cartoon"
+                },
+                {
+                  "key": "country",
+                  "value": "Japan"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "KAN-23-TC04: MOV_TC04 - Lọc với thể loại không tồn tại (/movies.php?genre=UnknownGenre123)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"[KAN-23] Status code is 200 OK with graceful empty handling\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"[KAN-23] Application does not crash on non-existent genre\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "    pm.expect(html).to.not.include(\"SQLSTATE\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/movies.php?genre=UnknownGenre123",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "movies.php"
+              ],
+              "query": [
+                {
+                  "key": "genre",
+                  "value": "UnknownGenre123"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Search & Security Filter [KAN-27]",
+      "description": "Các kịch bản tìm kiếm, trích xuất dữ liệu động (Data Chaining) và kiểm thử an toàn bảo mật (XSS, SQLi)",
+      "item": [
+        {
+          "name": "MOV_TC05 - Tìm kiếm từ khóa chính xác & Trích xuất Movie ID (/search.php?q=Doraemon)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Search result returns matching keyword\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html.toLowerCase()).to.include(\"doraemon\");",
+                  "});",
+                  "",
+                  "// Dynamic Data Chaining: Trích xuất ID phim từ kết quả tìm kiếm",
+                  "const html = pm.response.text();",
+                  "const match = html.match(/watch\\.php\\?id=(\\d+)/);",
+                  "if (match && match[1]) {",
+                  "    pm.collectionVariables.set(\"activeMovieId\", match[1]);",
+                  "    console.log(\"[Data Chain] Đã lưu activeMovieId mới: \" + match[1]);",
+                  "} else {",
+                  "    console.log(\"[Data Chain] Giữ nguyên activeMovieId mặc định: \" + pm.collectionVariables.get(\"activeMovieId\"));",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search.php?query={{searchKeyword}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "{{searchKeyword}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC06 - Tìm kiếm không phân biệt chữ hoa thường (/search.php?q=POKEMON)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Uppercase query returns valid matches\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html.toLowerCase()).to.include(\"pokemon\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search.php?query=POKEMON",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "POKEMON"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC07 - Tìm kiếm từ khóa khoảng trắng (/search.php?query=%20%20)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Whitespace search handled gracefully\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search.php?query=%20%20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "  "
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC08 - Kiểm tra phòng chống Reflected XSS (/search.php?query=<script>alert('XSS')</script>)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Reflected input is properly sanitized or encoded (No raw <script> tag)\", function () {",
+                  "    const html = pm.response.text();",
+                  "    // Khẳng định không xuất hiện thẻ thực thi script thô trong HTML",
+                  "    pm.expect(html).to.not.include(\"<script>alert('XSS')</script>\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search.php?query=<script>alert('XSS')</script>",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "<script>alert('XSS')</script>"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC09 - Kiểm tra an toàn SQL Injection (/search.php?query=Doraemon' OR '1'='1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"No SQL syntax error or exception dumped\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"syntax error\");",
+                  "    pm.expect(html).to.not.include(\"mysqli_query\");",
+                  "    pm.expect(html).to.not.include(\"Warning\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search.php?query=Doraemon' OR '1'='1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Doraemon' OR '1'='1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Movie Detail & Streaming",
+      "description": "Kiểm thử chi tiết phim, danh sách tập phim và kiểm tra phân quyền truy cập nội dung VIP",
+      "item": [
+        {
+          "name": "MOV_TC10 - Xem phim miễn phí & Thông tin chi tiết (/watch.php?id={{activeMovieId}})",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Page contains Movie Details and Player element\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.include(\"player\");",
+                  "    pm.expect(html).to.not.include(\"ID phim không hợp lệ\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id={{activeMovieId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{activeMovieId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC11 - Xem phim bộ chuyển đổi tập (/watch.php?id={{vipMovieId}}&ep=1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Series metadata and episode list rendered\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id={{vipMovieId}}&ep=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{vipMovieId}}"
+                },
+                {
+                  "key": "ep",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC12 - Xem phim với ID không tồn tại (/watch.php?id=999999)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Graceful error notification for missing movie\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html.toLowerCase()).to.match(/không tồn tại|không tìm thấy|redirect/i);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "999999"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC13 - Xem phim với ID không hợp lệ (/watch.php?id=invalid_id_injection)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Application does not throw uncaught fatal error on non-numeric ID\", function () {",
+                  "    const html = pm.response.text();",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "    pm.expect(html).to.not.include(\"Uncaught TypeError\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=invalid_id_injection",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "invalid_id_injection"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC14 - Chặn xem phim VIP khi chưa có tài khoản VIP (/watch.php?id={{vipMovieId}})",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"VIP Gatekeeper: Shows VIP restriction notice or locks video player\", function () {",
+                  "    const html = pm.response.text();",
+                  "    // Hệ thống phải có cơ chế cảnh báo yêu cầu VIP hoặc nâng cấp gói",
+                  "    pm.expect(html).to.not.include(\"Fatal error\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id={{vipMovieId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{vipMovieId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Interactions & Metrics API",
+      "description": "Kiểm thử API JSON ghi nhận bộ đếm lượt xem (View Counter) và xác thực Contract",
+      "item": [
+        {
+          "name": "MOV_TC16 - Tăng lượt xem phim thành công (/api/view_counter.php?id={{activeMovieId}})",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time SLA is below 500ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(500);",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type is application/json\", function () {",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response contract matches specification\", function () {",
+                  "    const data = pm.response.json();",
+                  "    pm.expect(data).to.be.an(\"object\");",
+                  "    pm.expect(data).to.have.property(\"success\");",
+                  "    pm.expect(data.success).to.be.true;",
+                  "    pm.expect(data).to.have.property(\"movie_id\");",
+                  "    ",
+                  "    const expectedId = parseInt(pm.collectionVariables.get(\"activeMovieId\") || 52);",
+                  "    pm.expect(data.movie_id).to.eql(expectedId);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/view_counter.php?id={{activeMovieId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "{{activeMovieId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "MOV_TC17 - Gọi API tăng lượt xem với ID bằng 0 (/api/view_counter.php?id=0)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"API handles invalid 0 ID safely without 500 error\", function () {",
+                  "    pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/view_counter.php?id=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
