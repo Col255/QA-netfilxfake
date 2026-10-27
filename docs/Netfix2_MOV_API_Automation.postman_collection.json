@@ -78,8 +78,12 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/index.php",
-              "host": ["{{baseUrl}}"],
-              "path": ["index.php"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "index.php"
+              ]
             }
           }
         },
@@ -108,8 +112,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/movies.php",
-              "host": ["{{baseUrl}}"],
-              "path": ["movies.php"]
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "movies.php"
+              ]
             }
           }
         },
@@ -138,8 +146,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/movies.php?genre=Cartoon&country=Japan",
-              "host": ["{{baseUrl}}"],
-              "path": ["movies.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "movies.php"
+              ],
               "query": [
                 {
                   "key": "genre",
@@ -179,8 +191,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/movies.php?genre=UnknownGenre123",
-              "host": ["{{baseUrl}}"],
-              "path": ["movies.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "movies.php"
+              ],
               "query": [
                 {
                   "key": "genre",
@@ -193,7 +209,7 @@
       ]
     },
     {
-      "name": "02. Search & Security Filter",
+      "name": "02. Search & Security Filter [KAN-27]",
       "description": "Các kịch bản tìm kiếm, trích xuất dữ liệu động (Data Chaining) và kiểm thử an toàn bảo mật (XSS, SQLi)",
       "item": [
         {
@@ -231,8 +247,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/search.php?query={{searchKeyword}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["search.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
               "query": [
                 {
                   "key": "query",
@@ -267,8 +287,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/search.php?query=POKEMON",
-              "host": ["{{baseUrl}}"],
-              "path": ["search.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
               "query": [
                 {
                   "key": "query",
@@ -303,8 +327,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/search.php?query=%20%20",
-              "host": ["{{baseUrl}}"],
-              "path": ["search.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
               "query": [
                 {
                   "key": "query",
@@ -340,8 +368,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/search.php?query=<script>alert('XSS')</script>",
-              "host": ["{{baseUrl}}"],
-              "path": ["search.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
               "query": [
                 {
                   "key": "query",
@@ -378,8 +410,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/search.php?query=Doraemon' OR '1'='1",
-              "host": ["{{baseUrl}}"],
-              "path": ["search.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search.php"
+              ],
               "query": [
                 {
                   "key": "query",
@@ -421,8 +457,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/watch.php?id={{activeMovieId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["watch.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
               "query": [
                 {
                   "key": "id",
@@ -457,8 +497,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/watch.php?id={{vipMovieId}}&ep=1",
-              "host": ["{{baseUrl}}"],
-              "path": ["watch.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
               "query": [
                 {
                   "key": "id",
@@ -497,8 +541,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/watch.php?id=999999",
-              "host": ["{{baseUrl}}"],
-              "path": ["watch.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
               "query": [
                 {
                   "key": "id",
@@ -534,8 +582,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/watch.php?id=invalid_id_injection",
-              "host": ["{{baseUrl}}"],
-              "path": ["watch.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
               "query": [
                 {
                   "key": "id",
@@ -571,8 +623,12 @@
             "header": [],
             "url": {
               "raw": "{{baseUrl}}/watch.php?id={{vipMovieId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["watch.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
               "query": [
                 {
                   "key": "id",
@@ -632,8 +688,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/view_counter.php?id={{activeMovieId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "view_counter.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
               "query": [
                 {
                   "key": "id",
@@ -672,8 +733,13 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/view_counter.php?id=0",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "view_counter.php"],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
               "query": [
                 {
                   "key": "id",
