@@ -81,6 +81,22 @@
   - `KAN-26-TC04` $\rightarrow$ `MOV_TC08`: Kiểm tra phòng chống tấn công Cross-Site Scripting (Reflected XSS).
   - `KAN-26-TC05` $\rightarrow$ `MOV_TC09`: Kiểm tra phòng chống tấn công SQL Injection trên ô tìm kiếm.
 
+
+### 📌 Phân rã kiểm thử Task KAN-34: Thiết kế kịch bản kiểm thử API Contract, SLA và Edge cases
+* **Jira Task Key:** `KAN-34`
+* **Parent Story:** `KAN-33` (`[KAN-33] Kiểm thử RESTful API Ghi nhận Bộ đếm Lượt xem Phim (/api/view_counter.php)`)
+* **Phạm vi kiểm thử:** `GET /api/view_counter.php?id={movie_id}`
+* **Kỹ thuật áp dụng:**
+  - **API Contract Testing:** Xác thực chuẩn RESTful response header `Content-Type: application/json; charset=utf-8`, mã trạng thái HTTP 200, và cấu trúc JSON Schema `{"success": boolean, "movie_id": integer}`.
+  - **Performance / SLA Testing:** Giới hạn thời gian phản hồi (Response time) < 200ms đối với thao tác ghi nhận cập nhật bộ đếm (Atomic DB increment).
+  - **Equivalence Partitioning & Boundary Value Analysis (Edge Cases):**
+    - ID hợp lệ: `id = 52`, `id = 55` (Tồn tại trong CSDL $\rightarrow$ Success).
+    - ID biên & Âm: `id = 0`, `id = -1` (Không hợp lệ $\rightarrow$ Trả về `{"success": false, "error": "ID không hợp lệ"}`).
+    - ID kiểu dữ liệu sai (Type Coercion): `id = invalid_text`, `id = "'; DROP TABLE movies; --"` (Ép kiểu về 0, xử lý an toàn).
+* **Ma trận truy vết (Traceability Matrix):**
+  - `KAN-34-TC01` $\rightarrow$ `MOV_TC16`: Kiểm tra API Contract, JSON Schema và tăng bộ đếm `view_count`.
+  - `KAN-34-TC02` $\rightarrow$ `MOV_TC17`: Kiểm tra xử lý biên với ID = 0, ID số âm và ID chứa ký tự lạ.
+
 | Test Case ID | Jira Task | Module / Endpoint | Tên Test Case (Title) | Điều kiện tiên quyết (Preconditions) | Các bước thực hiện (Steps) | Dữ liệu kiểm thử (Test Data) | Kết quả mong đợi (Expected Result) | Mức ưu tiên (Priority) | Loại test (Type) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **MOV_TC01** | `KAN-22` | `/index.php` | Khám phá trang chủ thành công, hiển thị đầy đủ danh mục phim | Web server Apache và MySQL đang chạy. | 1. Gửi request `GET /index.php`<br>2. Kiểm tra status code và thời gian phản hồi.<br>3. Kiểm tra các khối nội dung HTML. | Headers: `Accept: text/html` | - HTTP Status: `200 OK`<br>- Response time < 1500ms<br>- Chứa slider Top Movies (`#top-movies-slide`), danh mục Phim Mới, Series, Hoạt Hình<br>- Không chứa lỗi PHP Notice/Warning/Fatal. | **P1 (High)** | Positive |
@@ -98,8 +114,8 @@
 | **MOV_TC13** | `KAN-30` | `/watch.php` | Xem phim với ID chứa ký tự chữ hoặc payload SQLi | Web server đang chạy. | 1. Gửi request `GET /watch.php?id=invalid_id_injection`<br>2. Kiểm tra phản hồi. | Query: `id=invalid_id_injection` | - HTTP Status: `200 OK`<br>- Hàm `(int)$_GET['id']` ép kiểu về `0`<br>- Hệ thống thông báo ID không hợp lệ, tuyệt đối an toàn. | **P0 (Critical)** | Security |
 | **MOV_TC14** | `KAN-30` | `/watch.php` | Chặn truy cập xem phim VIP đối với khách vãng lai (Guest) | Phim ID 56 có thiết lập `is_vip = 1`. | 1. Không gửi Session đăng nhập.<br>2. Gửi request `GET /watch.php?id=56`.<br>3. Kiểm tra trình phát video. | Query: `id=56`, No Session Cookie | - Trình phát video bị ẩn/khóa<br>- Hiển thị cảnh báo yêu cầu nâng cấp tài khoản VIP hoặc link sang `pricing.php`. | **P0 (Critical)** | Security / Auth |
 | **MOV_TC15** | `KAN-30` | `/watch.php` | Cho phép xem phim VIP khi đã đăng nhập tài khoản VIP hợp lệ | Tài khoản User có `is_vip = 1` và chưa hết hạn. | 1. Đăng nhập tài khoản VIP lấy Session Cookie.<br>2. Gửi request `GET /watch.php?id=56` kèm Cookie.<br>3. Kiểm tra quyền phát. | Cookie: `PHPSESSID={vip_user}` | - HTTP Status: `200 OK`<br>- Video player mở khóa, cho phép phát luồng video VIP. | **P0 (Critical)** | Positive (Auth) |
-| **MOV_TC16** | `/api/view_counter.php` | Gọi RESTful API tăng lượt xem phim thành công | Phim ID 52 tồn tại trong CSDL. | 1. Gửi request `GET /api/view_counter.php?id=52`<br>2. Kiểm tra JSON response và bảng `movies`. | Query: `id=52`, Headers: `Accept: application/json` | - HTTP Status: `200 OK`<br>- Header `Content-Type: application/json`<br>- Response Body đúng contract: `{"success": true, "movie_id": 52}`<br>- CSDL trường `view_count` tăng thêm 1. | **P1 (High)** | Positive (API Contract) |
-| **MOV_TC17** | `/api/view_counter.php` | Gọi API tăng lượt xem với ID bằng 0 hoặc số âm | Web server đang chạy. | 1. Gửi request `GET /api/view_counter.php?id=0`<br>2. Kiểm tra phản hồi. | Query: `id=0` | - HTTP Status: `200 OK`<br>- Không cập nhật CSDL, không crash service. | **P2 (Medium)** | Edge |
+| **MOV_TC16** | `KAN-34` | `/api/view_counter.php` | Gọi RESTful API tăng lượt xem phim thành công | Phim ID 52 tồn tại trong CSDL. | 1. Gửi request `GET /api/view_counter.php?id=52`<br>2. Kiểm tra JSON response và bảng `movies`. | Query: `id=52`, Headers: `Accept: application/json` | - HTTP Status: `200 OK`<br>- Header `Content-Type: application/json`<br>- Response Body đúng contract: `{"success": true, "movie_id": 52}`<br>- CSDL trường `view_count` tăng thêm 1. | **P1 (High)** | Positive (API Contract) |
+| **MOV_TC17** | `KAN-34` | `/api/view_counter.php` | Gọi API tăng lượt xem với ID bằng 0 hoặc số âm | Web server đang chạy. | 1. Gửi request `GET /api/view_counter.php?id=0`<br>2. Kiểm tra phản hồi. | Query: `id=0` | - HTTP Status: `200 OK`<br>- Không cập nhật CSDL, không crash service. | **P2 (Medium)** | Edge |
 | **MOV_TC18** | `/add_movie.php` | Chặn tài khoản người dùng thường truy cập chức năng thêm phim | Tài khoản đăng nhập là User thường (`is_admin = 0`). | 1. Đăng nhập User thường.<br>2. Gửi request `POST /add_movie.php` kèm form dữ liệu phim. | Session: User thường | - Bị từ chối truy cập (Redirect về `index.php` hoặc báo lỗi không đủ quyền hạn). | **P1 (High)** | Security / Auth |
 
 ---
