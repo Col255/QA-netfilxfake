@@ -641,7 +641,7 @@
       ]
     },
     {
-      "name": "04. Interactions & Metrics API",
+      "name": "04. Interactions & Metrics API [KAN-35]",
       "description": "Kiểm thử API JSON ghi nhận bộ đếm lượt xem (View Counter) và xác thực Contract",
       "item": [
         {
@@ -718,6 +718,13 @@
                   "",
                   "pm.test(\"API handles invalid 0 ID safely without 500 error\", function () {",
                   "    pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response contract for invalid ID returns success: false\", function () {",
+                  "    const data = pm.response.json();",
+                  "    pm.expect(data).to.have.property(\"success\");",
+                  "    pm.expect(data.success).to.be.false;",
+                  "    pm.expect(data).to.have.property(\"error\");",
                   "});"
                 ]
               }
