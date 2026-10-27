@@ -4,6 +4,8 @@ Netfix2 là website xem phim trực tuyến viết bằng PHP, kết nối MySQL
 
 > ⚠️ Các trang `.php` cần chạy qua web server có PHP. Không mở trực tiếp file PHP bằng trình duyệt hoặc VS Code.
 
+Link jira: https://lochnt0228.atlassian.net/jira/software/projects/KAN/list?jql=project+%3D+KAN+ORDER+BY+%22cf%5B10019%5D%22+ASC&atlOrigin=eyJpIjoiZmUxOWQ5MjQxZGMyNDEwYzg2MTVhYTU4ZjlhY2M5YWQiLCJwIjoiaiJ9
+
 ## 🛠️ Công nghệ sử dụng
 
 - 🐘 PHP và MySQLi
