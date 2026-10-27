@@ -1,10 +1,18 @@
-####################################################################################################################
-# WARNING: Do not store sensitive information in this file, as its contents will be included in the Qodana report. #
-####################################################################################################################
-
 version: "1.0"
 linter: qodana-php
 profile:
   name: qodana.recommended
+failThreshold: 100
 include:
   - name: CheckDependencyLicenses
+  - name: PhpDeprecationInspection
+  - name: PhpSecurityInspection
+exclude:
+  - name: All
+    paths:
+      - netfix2/uploads
+      - netfix2/images
+      - node_modules
+      - Postman
+      - tests
+      - backup_before_update

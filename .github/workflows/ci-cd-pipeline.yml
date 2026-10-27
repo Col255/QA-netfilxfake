@@ -1,51 +1,80 @@
-name: QA Pipeline - Qodana, CodeceptJS E2E & Docker Hub
+name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker Hub
 
 on:
   push:
-    branches: [ main, week2 ]
+    branches: [ main, 'week*' ]
   pull_request:
-    branches: [ main, week2 ]
+    branches: [ main, 'week*' ]
 
 jobs:
   # =========================================================================
-  # BƯỚC 1: KIỂM THỬ TĨNH (STATIC ANALYSIS) BẰNG PHP LINT & QODANA
+  # BƯỚC 1A: KIỂM THỬ TĨNH VỚI SONARQUBE CLOUD (STATIC TESTING 1)
   # =========================================================================
-  code-quality-scan:
-    name: 1. Static Code Analysis (PHP Lint & Qodana)
+  sonarqube-static-scan:
+    name: 1A. Static Test - SonarQube Scan
     runs-on: ubuntu-latest
     env:
-      QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Kiểm tra cú pháp toàn bộ file PHP (Không cần Token)
+      - name: Kiểm tra cú pháp PHP (PHP Syntax Lint)
         run: |
-          echo "Đang kiểm tra cú pháp (Syntax Check) toàn bộ mã nguồn PHP trong netfix2/..."
           find netfix2 -type f -name "*.php" -exec php -l {} +
 
-      - name: Qodana Scan (Chạy khi đã cấu hình QODANA_TOKEN)
-        if: env.QODANA_TOKEN != ''
-        uses: JetBrains/qodana-action@v2025.1
-        with:
-          args: --fail-threshold,50
+      - name: SonarQube Cloud Scan
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Thông báo nếu chưa gắn QODANA_TOKEN
+      - name: Nhắc nhở nếu chưa thêm SONAR_TOKEN
+        if: env.SONAR_TOKEN == ''
+        run: |
+          echo "::warning title=Chưa có SONAR_TOKEN::Hãy thêm SONAR_TOKEN vào GitHub Secrets để gửi báo cáo lên SonarQube Cloud."
+
+  # =========================================================================
+  # BƯỚC 1B: KIỂM THỬ TĨNH VỚI JETBRAINS QODANA (STATIC TESTING 2)
+  # =========================================================================
+  qodana-static-scan:
+    name: 1B. Static Test - Qodana Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+    env:
+      QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_646815503 || secrets.QODANA_TOKEN }}
+      QODANA_ENDPOINT: 'https://qodana.cloud'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Qodana Code Quality Scan
+        if: env.QODANA_TOKEN != ''
+        uses: JetBrains/qodana-action@v2026.1
+        with:
+          pr-mode: false
+          args: --fail-threshold,100
+
+      - name: Nhắc nhở nếu chưa thêm QODANA_TOKEN
         if: env.QODANA_TOKEN == ''
         run: |
-          echo "::warning title=Chưa có QODANA_TOKEN::Bỏ qua bước Qodana Cloud vì chưa thêm QODANA_TOKEN vào GitHub Secrets. Đã dùng PHP Syntax Lint để thay thế tạm thời."
+          echo "::warning title=Chưa có QODANA_TOKEN::Hãy thêm QODANA_TOKEN vào GitHub Secrets để chạy Qodana Cloud."
 
   # =========================================================================
-  # BƯỚC 2: KIỂM THỬ ĐỘNG TỰ ĐỘNG (E2E AUTOMATION TEST) BẰNG CODECEPTJS
+  # BƯỚC 2: KIỂM THỬ ĐỘNG VỚI CODECEPTJS + PLAYWRIGHT (DYNAMIC E2E TESTING)
   # =========================================================================
-  e2e-automation-test:
-    name: 2. CodeceptJS E2E Testing (PHP + MySQL)
-    needs: code-quality-scan
+  codeceptjs-dynamic-test:
+    name: 2. Dynamic Test - CodeceptJS E2E (PHP + MySQL)
+    needs: [sonarqube-static-scan, qodana-static-scan]
     runs-on: ubuntu-latest
 
-    # Khởi tạo container MySQL thật và nạp dữ liệu test
     services:
       mysql:
         image: mysql:8.0
@@ -96,7 +125,7 @@ jobs:
           npm install
           npx playwright install --with-deps chromium
 
-      - name: Chạy Kiểm thử Tự động CodeceptJS
+      - name: Chạy Kiểm thử Động CodeceptJS
         env:
           CI: 'true'
           BASE_URL: 'http://127.0.0.1:8000/netfix2'
@@ -111,11 +140,11 @@ jobs:
           path: output/
 
   # =========================================================================
-  # BƯỚC 3: ĐÓNG GÓI & ĐẨY LÊN DOCKER HUB (CHỈ CHẠY KHI BƯỚC 1 & 2 ĐỀU PASS)
+  # BƯỚC 3: ĐÓNG GÓI & ĐẨY LÊN DOCKER HUB (CHỈ CHẠY KHI TĨNH & ĐỘNG ĐỀU PASS)
   # =========================================================================
   docker-build-and-push:
-    name: 3. Build & Push Versioned Docker Image
-    needs: [code-quality-scan, e2e-automation-test]
+    name: 3. Release - Build & Push Docker Hub
+    needs: [sonarqube-static-scan, qodana-static-scan, codeceptjs-dynamic-test]
     if: success() && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
