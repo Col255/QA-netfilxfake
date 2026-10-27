@@ -428,7 +428,7 @@
       ]
     },
     {
-      "name": "03. Movie Detail & Streaming",
+      "name": "03. Movie Detail & Streaming [KAN-31]",
       "description": "Kiểm thử chi tiết phim, danh sách tập phim và kiểm tra phân quyền truy cập nội dung VIP",
       "item": [
         {
