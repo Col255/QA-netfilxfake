@@ -92,26 +92,37 @@
 | **MOV_TC07** | `KAN-26` | `/search.php` | Tìm kiếm với từ khóa là chuỗi rỗng hoặc khoảng trắng | Web server đang chạy. | 1. Gửi request `GET /search.php?query=%20%20`<br>2. Kiểm tra kết quả. | Query: `query=  ` | - HTTP Status: `200 OK`<br>- Không gây lỗi database<br>- Hiển thị toàn bộ danh sách hoặc thông báo yêu cầu nhập từ khóa tìm kiếm. | **P2 (Medium)** | Edge |
 | **MOV_TC08** | `KAN-26` | `/search.php` | Kiểm tra phòng chống tấn công Cross-Site Scripting (Reflected XSS) | Web server đang chạy. | 1. Gửi request `GET /search.php?query=<script>alert('XSS')</script>`<br>2. Kiểm tra mã nguồn HTML trả về. | Query: `query=<script>alert('XSS')</script>` | - HTTP Status: `200 OK`<br>- Chuỗi payload được encode an toàn thành `&lt;script&gt;` hoặc loại bỏ thẻ độc hại<br>- Script không bị thực thi trên trình duyệt. | **P0 (Critical)** | Security |
 | **MOV_TC09** | `KAN-26` | `/search.php` | Kiểm tra phòng chống tấn công SQL Injection trên ô tìm kiếm | Web server đang chạy. | 1. Gửi request `GET /search.php?query=Doraemon' OR '1'='1`<br>2. Kiểm tra phản hồi. | Query: `query=Doraemon' OR '1'='1` | - HTTP Status: `200 OK`<br>- Truy vấn được tham số hóa an toàn qua Prepared Statement<br>- Không lộ lỗi MySQL syntax, không dump toàn bộ database. | **P0 (Critical)** | Security |
-| **MOV_TC10** | `/watch.php` | Xem chi tiết và phát luồng phim miễn phí thành công | Phim ID 52 có `is_vip = 0`. | 1. Gửi request `GET /watch.php?id=52`<br>2. Kiểm tra metadata phim và thẻ phát video. | Query: `id=52` | - HTTP Status: `200 OK`<br>- Hiển thị tên phim, mô tả, diễn viên, thời lượng<br>- Hiển thị thẻ `<video>` chứa đường dẫn `video_path` phát phim. | **P0 (Critical)** | Positive |
-| **MOV_TC11** | `/watch.php` | Xem chi tiết phim bộ (Series) có danh sách các tập phim | Phim ID 56 (Vương Chiêu Quân) là Series có tập trong `episodes`. | 1. Gửi request `GET /watch.php?id=56`<br>2. Kiểm tra danh sách tập phim. | Query: `id=56` | - HTTP Status: `200 OK`<br>- Hiển thị danh sách các tập phim (Tập 1, Tập 2...)<br>- Có thể chọn tham số `&ep=1` để đổi tập phát. | **P1 (High)** | Positive |
-| **MOV_TC12** | `/watch.php` | Xem phim với ID không tồn tại trong hệ thống | Không có phim nào mang ID `999999`. | 1. Gửi request `GET /watch.php?id=999999`<br>2. Kiểm tra phản hồi. | Query: `id=999999` | - HTTP Status: `200 OK`<br>- Hiển thị thông báo "Phim không tồn tại" hoặc điều hướng về trang chủ<br>- Không lộ exception trace CSDL. | **P1 (High)** | Negative |
-| **MOV_TC13** | `/watch.php` | Xem phim với ID chứa ký tự chữ hoặc payload SQLi | Web server đang chạy. | 1. Gửi request `GET /watch.php?id=invalid_id_injection`<br>2. Kiểm tra phản hồi. | Query: `id=invalid_id_injection` | - HTTP Status: `200 OK`<br>- Hàm `(int)$_GET['id']` ép kiểu về `0`<br>- Hệ thống thông báo ID không hợp lệ, tuyệt đối an toàn. | **P0 (Critical)** | Security |
-| **MOV_TC14** | `/watch.php` | Chặn truy cập xem phim VIP đối với khách vãng lai (Guest) | Phim ID 56 có thiết lập `is_vip = 1`. | 1. Không gửi Session đăng nhập.<br>2. Gửi request `GET /watch.php?id=56`.<br>3. Kiểm tra trình phát video. | Query: `id=56`, No Session Cookie | - Trình phát video bị ẩn/khóa<br>- Hiển thị cảnh báo yêu cầu nâng cấp tài khoản VIP hoặc link sang `pricing.php`. | **P0 (Critical)** | Security / Auth |
-| **MOV_TC15** | `/watch.php` | Cho phép xem phim VIP khi đã đăng nhập tài khoản VIP hợp lệ | Tài khoản User có `is_vip = 1` và chưa hết hạn. | 1. Đăng nhập tài khoản VIP lấy Session Cookie.<br>2. Gửi request `GET /watch.php?id=56` kèm Cookie.<br>3. Kiểm tra quyền phát. | Cookie: `PHPSESSID={vip_user}` | - HTTP Status: `200 OK`<br>- Video player mở khóa, cho phép phát luồng video VIP. | **P0 (Critical)** | Positive (Auth) |
+| **MOV_TC10** | `KAN-30` | `/watch.php` | Xem chi tiết và phát luồng phim miễn phí thành công | Phim ID 52 có `is_vip = 0`. | 1. Gửi request `GET /watch.php?id=52`<br>2. Kiểm tra metadata phim và thẻ phát video. | Query: `id=52` | - HTTP Status: `200 OK`<br>- Hiển thị tên phim, mô tả, diễn viên, thời lượng<br>- Hiển thị thẻ `<video>` chứa đường dẫn `video_path` phát phim. | **P0 (Critical)** | Positive |
+| **MOV_TC11** | `KAN-30` | `/watch.php` | Xem chi tiết phim bộ (Series) có danh sách các tập phim | Phim ID 56 (Vương Chiêu Quân) là Series có tập trong `episodes`. | 1. Gửi request `GET /watch.php?id=56`<br>2. Kiểm tra danh sách tập phim. | Query: `id=56` | - HTTP Status: `200 OK`<br>- Hiển thị danh sách các tập phim (Tập 1, Tập 2...)<br>- Có thể chọn tham số `&ep=1` để đổi tập phát. | **P1 (High)** | Positive |
+| **MOV_TC12** | `KAN-30` | `/watch.php` | Xem phim với ID không tồn tại trong hệ thống | Không có phim nào mang ID `999999`. | 1. Gửi request `GET /watch.php?id=999999`<br>2. Kiểm tra phản hồi. | Query: `id=999999` | - HTTP Status: `200 OK`<br>- Hiển thị thông báo "Phim không tồn tại" hoặc điều hướng về trang chủ<br>- Không lộ exception trace CSDL. | **P1 (High)** | Negative |
+| **MOV_TC13** | `KAN-30` | `/watch.php` | Xem phim với ID chứa ký tự chữ hoặc payload SQLi | Web server đang chạy. | 1. Gửi request `GET /watch.php?id=invalid_id_injection`<br>2. Kiểm tra phản hồi. | Query: `id=invalid_id_injection` | - HTTP Status: `200 OK`<br>- Hàm `(int)$_GET['id']` ép kiểu về `0`<br>- Hệ thống thông báo ID không hợp lệ, tuyệt đối an toàn. | **P0 (Critical)** | Security |
+| **MOV_TC14** | `KAN-30` | `/watch.php` | Chặn truy cập xem phim VIP đối với khách vãng lai (Guest) | Phim ID 56 có thiết lập `is_vip = 1`. | 1. Không gửi Session đăng nhập.<br>2. Gửi request `GET /watch.php?id=56`.<br>3. Kiểm tra trình phát video. | Query: `id=56`, No Session Cookie | - Trình phát video bị ẩn/khóa<br>- Hiển thị cảnh báo yêu cầu nâng cấp tài khoản VIP hoặc link sang `pricing.php`. | **P0 (Critical)** | Security / Auth |
+| **MOV_TC15** | `KAN-30` | `/watch.php` | Cho phép xem phim VIP khi đã đăng nhập tài khoản VIP hợp lệ | Tài khoản User có `is_vip = 1` và chưa hết hạn. | 1. Đăng nhập tài khoản VIP lấy Session Cookie.<br>2. Gửi request `GET /watch.php?id=56` kèm Cookie.<br>3. Kiểm tra quyền phát. | Cookie: `PHPSESSID={vip_user}` | - HTTP Status: `200 OK`<br>- Video player mở khóa, cho phép phát luồng video VIP. | **P0 (Critical)** | Positive (Auth) |
 | **MOV_TC16** | `/api/view_counter.php` | Gọi RESTful API tăng lượt xem phim thành công | Phim ID 52 tồn tại trong CSDL. | 1. Gửi request `GET /api/view_counter.php?id=52`<br>2. Kiểm tra JSON response và bảng `movies`. | Query: `id=52`, Headers: `Accept: application/json` | - HTTP Status: `200 OK`<br>- Header `Content-Type: application/json`<br>- Response Body đúng contract: `{"success": true, "movie_id": 52}`<br>- CSDL trường `view_count` tăng thêm 1. | **P1 (High)** | Positive (API Contract) |
 | **MOV_TC17** | `/api/view_counter.php` | Gọi API tăng lượt xem với ID bằng 0 hoặc số âm | Web server đang chạy. | 1. Gửi request `GET /api/view_counter.php?id=0`<br>2. Kiểm tra phản hồi. | Query: `id=0` | - HTTP Status: `200 OK`<br>- Không cập nhật CSDL, không crash service. | **P2 (Medium)** | Edge |
 | **MOV_TC18** | `/add_movie.php` | Chặn tài khoản người dùng thường truy cập chức năng thêm phim | Tài khoản đăng nhập là User thường (`is_admin = 0`). | 1. Đăng nhập User thường.<br>2. Gửi request `POST /add_movie.php` kèm form dữ liệu phim. | Session: User thường | - Bị từ chối truy cập (Redirect về `index.php` hoặc báo lỗi không đủ quyền hạn). | **P1 (High)** | Security / Auth |
 
 ---
 
-## 4. MA TRẬN PHÂN QUYỀN TRUY CẬP PHIM VIP (Decision Table)
+## 4. THIẾT KẾ MA TRẬN DECISION TABLE PHÂN QUYỀN TÀI KHOẢN XEM PHIM VIP (KAN-30)
 
-| Điều kiện / Trạng thái | Rule 1 (Free - Guest) | Rule 2 (Free - Normal User) | Rule 3 (VIP - Guest) | Rule 4 (VIP - Normal User) | Rule 5 (VIP - VIP User) |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Trạng thái phim (`is_vip`)** | 0 (Free) | 0 (Free) | 1 (VIP) | 1 (VIP) | 1 (VIP) |
-| **Đăng nhập (`is_authenticated`)** | False | True | False | True | True |
-| **Trạng thái tài khoản (`user.is_vip`)** | N/A | 0 (Normal) | N/A | 0 (Normal) | 1 (VIP Active) |
-| **KẾT QUẢ MONG ĐỢI** | **Cho phép xem (Play)** | **Cho phép xem (Play)** | **Chặn (Yêu cầu đăng nhập)** | **Chặn (Yêu cầu nâng cấp gói)** | **Cho phép xem (Play VIP)** |
+* **Jira Task Key:** `KAN-30`
+* **Mục tiêu:** Thiết lập ma trận quyết định kiểm thử bao phủ toàn bộ các tổ hợp logic phân quyền Gatekeeper giữa người dùng (Khách vãng lai, Người dùng thông thường, Thành viên VIP, VIP hết hạn) và phân loại nội dung phim (Miễn phí vs VIP Streaming).
+
+### 4.1. Bảng Ma trận Quyết định Đầy đủ (Comprehensive Decision Table)
+
+| Điều kiện / Trạng thái (Conditions) | Rule 1 (Free - Guest) | Rule 2 (Free - Normal User) | Rule 3 (VIP - Guest) | Rule 4 (VIP - Normal User) | Rule 5 (VIP - VIP Active) | Rule 6 (VIP - Expired VIP) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Thuộc tính nội dung (`movie.is_vip` / `ep.is_vip`)** | 0 (Free) | 0 (Free) | 1 (VIP) | 1 (VIP) | 1 (VIP) | 1 (VIP) |
+| **Xác thực phiên (`is_authenticated`)** | False | True | False | True | True | True |
+| **Phân hạng tài khoản (`user.is_vip`)** | N/A | 0 (Normal) | N/A | 0 (Normal) | 1 (VIP) | 1 (VIP) |
+| **Thời hạn gói VIP (`vip_expired_at >= NOW()`)** | N/A | N/A | N/A | N/A | True (Còn hạn) | False (Hết hạn) |
+| **HÀNH ĐỘNG HỆ THỐNG (ACTIONS)** | | | | | | |
+| **Trình phát Video (Play Video)** | ✅ Cho phép | ✅ Cho phép | ❌ Chặn | ❌ Chặn | ✅ Cho phép | ❌ Chặn |
+| **Hiển thị Huy hiệu VIP (`.badge-vip`)** | Không | Không | Có | Có | Có | Có |
+| **Khóa tập phim (`.locked`) & Icon Khóa (🔒)** | Không | Không | Có | Có | Không | Có |
+| **Điều hướng nâng cấp gói (`data-href="pricing.php"`)** | Không | Không | Có (Đăng nhập/Gói) | Có (Nâng cấp VIP) | Không | Có (Gia hạn gói) |
+| **Truy vết Test Case ID** | `MOV_TC10` | `MOV_TC10` | `MOV_TC14` | `MOV_TC14` | `MOV_TC15` | `MOV_TC14` |
 
 ---
 
