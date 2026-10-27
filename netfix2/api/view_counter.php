@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/json; charset=utf-8');
 require '../db.php';
 
 $movie_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
