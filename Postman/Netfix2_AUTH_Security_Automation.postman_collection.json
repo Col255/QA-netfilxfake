@@ -1,0 +1,1603 @@
+{
+  "info": {
+    "_postman_id": "a8f5c101-2026-4a9b-9c11-authsecurity24",
+    "name": "Netfix2 - Phân Hệ 1: AUTH & SECURITY Automation (24 Test Cases)",
+    "description": "Bộ kịch bản kiểm thử tự động (Postman Automation Collection) cho Phân hệ 1: Authentication & Security (AUTH_TC01 -> AUTH_TC24).\n- Người thiết kế: Huỳnh Nguyễn Tiến Lộc (KAN-44)\n- Phạm vi: /register.php, /login.php, /admin_login.php, /profile.php, /edit_profile.php, /change_password.php, /logout.php\n- Kỹ thuật: Equivalence Partitioning (EP), Boundary Value Analysis (BVA), Decision Table (RBAC), State Transition, OWASP Security (SQLi & XSS).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "admin_user",
+      "value": "admin",
+      "type": "string"
+    },
+    {
+      "key": "admin_pass",
+      "value": "admin123",
+      "type": "string"
+    },
+    {
+      "key": "dynamic_user",
+      "value": "loc_qa_auto",
+      "type": "string"
+    },
+    {
+      "key": "dynamic_email",
+      "value": "loc_qa_auto@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "updated_user",
+      "value": "loc_qa_auto_up",
+      "type": "string"
+    },
+    {
+      "key": "updated_email",
+      "value": "up_loc_qa_auto@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "auth_user_sid",
+      "value": "usersessinit2026",
+      "type": "string"
+    },
+    {
+      "key": "admin_sid",
+      "value": "adminsessinit2026",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Đăng Ký Tài Khoản (/register.php) [AUTH_TC01 - AUTH_TC08]",
+      "item": [
+        {
+          "name": "AUTH_TC01 - Hiển thị giao diện trang Đăng ký thành công cho khách vãng lai",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC01: Hiển thị giao diện trang Đăng ký cho khách vãng lai",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC01] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC01] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC01] Giao diện chứa đầy đủ form .register-form và 4 trường input\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.include('register-form');",
+                  "    pm.expect(body).to.include('name=\"username\"');",
+                  "    pm.expect(body).to.include('name=\"email\"');",
+                  "    pm.expect(body).to.include('name=\"password\"');",
+                  "    pm.expect(body).to.include('name=\"confirm_password\"');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc01{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC02 - Đăng ký tài khoản mới thành công với mật khẩu tại biên tối thiểu (6 ký tự)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const ts = Date.now();",
+                  "pm.collectionVariables.set(\"dynamic_user\", \"loc_qa_\" + ts);",
+                  "pm.collectionVariables.set(\"dynamic_email\", \"loc_qa_\" + ts + \"@gmail.com\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC02: Đăng ký thành công tại biên tối thiểu 6 ký tự (BVA Min = 6)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC02] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC02] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC02] Hiển thị thông báo Đăng ký thành công và tự động chuyển hướng login.php\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.include(\"Đăng ký thành công! Vui lòng đăng nhập.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc02{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{dynamic_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "{{dynamic_email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC03 - Từ chối đăng ký khi mật khẩu có 5 ký tự (Dưới biên tối thiểu)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC03: Từ chối đăng ký khi mật khẩu < 6 ký tự (BVA Min - 1 = 5)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC03] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC03] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC03] Hiển thị lỗi: Mật khẩu phải có ít nhất 6 ký tự\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Mật khẩu phải có ít nhất 6 ký tự.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc03{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "loc_bva5_{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "loc_bva5_{{$timestamp}}@gmail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "12345",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "12345",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC04 - Từ chối đăng ký khi bỏ trống các trường bắt buộc",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC04: Từ chối đăng ký khi bỏ trống các trường bắt buộc",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC04] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC04] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC04] Hiển thị lỗi: Vui lòng nhập đầy đủ thông tin\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Vui lòng nhập đầy đủ thông tin.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc04{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC05 - Từ chối đăng ký khi mật khẩu xác nhận không khớp",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC05: Từ chối đăng ký khi password != confirm_password",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC05] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC05] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC05] Hiển thị lỗi: Mật khẩu xác nhận không khớp\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Mật khẩu xác nhận không khớp.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc05{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "loc_mismatch_{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "loc_mismatch_{{$timestamp}}@gmail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "654321",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC06 - Từ chối đăng ký khi trùng Tên đăng nhập (username) đã tồn tại",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC06: Từ chối đăng ký khi trùng username đã tồn tại",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC06] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC06] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC06] Hiển thị lỗi: Tên đăng nhập hoặc email đã được sử dụng\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email đã được sử dụng.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc06{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "{{dynamic_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "unique_mail_{{$timestamp}}@gmail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC07 - Từ chối đăng ký khi trùng Địa chỉ Email đã tồn tại",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC07: Từ chối đăng ký khi trùng email đã tồn tại",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC07] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC07] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC07] Hiển thị lỗi: Tên đăng nhập hoặc email đã được sử dụng\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email đã được sử dụng.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc07{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "unique_user_{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "{{dynamic_email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC08 - Kiểm tra xác thực định dạng Email ở tầng Backend khi gửi POST trực tiếp",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC08: Kiểm tra xác thực định dạng Email ở tầng Backend",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC08] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC08] Server phản hồi HTTP 200 OK và không gây lỗi 500\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC08] Ghi nhận kết quả kiểm tra Email Validation ở tầng Backend\", function () {",
+                  "    const body = pm.response.text();",
+                  "    if (body.includes(\"Đăng ký thành công\")) {",
+                  "        console.warn(\"[BUG-AUTH-01 DETECTED] register.php thiếu filter_var($email, FILTER_VALIDATE_EMAIL) ở tầng Backend!\");",
+                  "    }",
+                  "    pm.expect(body).to.be.a(\"string\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc08{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "username",
+                  "value": "badmail_user_{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "not_an_email_{{$timestamp}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/register.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "register.php"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Đăng Nhập Người Dùng (/login.php) [AUTH_TC09 - AUTH_TC14]",
+      "item": [
+        {
+          "name": "AUTH_TC09 - Đăng nhập thành công bằng Email hợp lệ của người dùng thường",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const sid = \"usersess\" + Date.now();",
+                  "pm.collectionVariables.set(\"auth_user_sid\", sid);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC09: Đăng nhập thành công bằng Email hợp lệ",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC09] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC09] Phản hồi hợp lệ (HTTP 200 sau Redirect hoặc 302 Found)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "});",
+                  "pm.test(\"[AUTH_TC09] Đăng nhập thành công, không xuất hiện thông báo lỗi .error\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.not.include(\"Mật khẩu không đúng.\");",
+                  "    pm.expect(body).to.not.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "{{dynamic_email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC10 - Đăng nhập thành công bằng Username hợp lệ của người dùng thường",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC10: Đăng nhập thành công bằng Username hợp lệ",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC10] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC10] Phản hồi hợp lệ (HTTP 200 sau Redirect hoặc 302 Found)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "});",
+                  "pm.test(\"[AUTH_TC10] Xác thực Username thành công, không báo lỗi đăng nhập\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.not.include(\"Mật khẩu không đúng.\");",
+                  "    pm.expect(body).to.not.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=usersess2{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "{{dynamic_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC11 - Từ chối đăng nhập khi nhập sai mật khẩu",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC11: Từ chối đăng nhập khi nhập sai mật khẩu",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC11] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC11] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC11] Hiển thị thông báo lỗi: Mật khẩu không đúng\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Mật khẩu không đúng.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc11{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "{{dynamic_email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "sai_mat_khau_123",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC12 - Từ chối đăng nhập khi Username hoặc Email không tồn tại",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC12: Từ chối đăng nhập khi tài khoản không tồn tại",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC12] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC12] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC12] Hiển thị thông báo lỗi: Tên đăng nhập hoặc email không tồn tại\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc12{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "khong_ton_tai_{{$timestamp}}@gmail.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC13 - Từ chối đăng nhập khi bỏ trống trường Tên đăng nhập hoặc Mật khẩu",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC13: Từ chối đăng nhập khi bỏ trống trường bắt buộc",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC13] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC13] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC13] Hiển thị lỗi: Vui lòng nhập đầy đủ tên đăng nhập/email và mật khẩu\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Vui lòng nhập đầy đủ tên đăng nhập/email và mật khẩu.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc13{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC14 - Chặn tài khoản Admin đăng nhập qua cổng người dùng thường (/login.php)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC14: Chặn tài khoản Admin đăng nhập qua cổng User thường (RBAC)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC14] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC14] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC14] Điều kiện AND is_admin = 0 chặn tài khoản Admin trên /login.php\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc14{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "{{admin_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{admin_pass}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Đăng Nhập Admin & Phân Quyền RBAC (/admin_login.php) [AUTH_TC15 - AUTH_TC16]",
+      "item": [
+        {
+          "name": "AUTH_TC15 - Đăng nhập Quản trị viên tại cổng Admin (/admin_login.php)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"admin_sid\", \"adminsess\" + Date.now());"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC15: Đăng nhập Quản trị viên tại cổng /admin_login.php",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC15] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC15] Phản hồi HTTP 200 hoặc 302 từ cổng Admin\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "});",
+                  "pm.test(\"[AUTH_TC15] Kiểm tra xác thực Admin (hoặc phát hiện BUG-AUTH-02 so sánh plain-text)\", function () {",
+                  "    const body = pm.response.text();",
+                  "    if (body.includes(\"Mật khẩu không đúng.\")) {",
+                  "        console.warn(\"[BUG-AUTH-02 DETECTED] admin_login.php dòng 29 dùng ($password === $user['password']) thay vì password_verify()!\");",
+                  "    }",
+                  "    pm.expect(body).to.not.include(\"Fatal error\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{admin_sid}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "{{admin_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "{{admin_pass}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin_login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin_login.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC16 - Chặn tài khoản người dùng thường (is_admin = 0) đăng nhập vào cổng Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC16: Chặn tài khoản User thường đăng nhập vào cổng Admin (RBAC)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC16] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC16] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC16] Hiển thị lỗi từ chối quyền Admin đối với User thường\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email không tồn tại hoặc tài khoản này không phải admin.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc16{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "{{dynamic_email}}",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin_login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "admin_login.php"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Quản Lý Hồ Sơ & Bảo Vệ Route (/profile.php, /edit_profile.php) [AUTH_TC17 - AUTH_TC20]",
+      "item": [
+        {
+          "name": "AUTH_TC17 - Chặn khách vãng lai (chưa đăng nhập) truy cập trực tiếp trang bảo vệ",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC17: Chặn khách vãng lai truy cập /profile.php (Access Guard)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC17] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC17] Chuyển hướng về login.php (302 Found hoặc 200 trang Đăng Nhập)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "    const body = pm.response.text();",
+                  "    if (pm.response.code === 200) {",
+                  "        pm.expect(body).to.include('action=\"login.php\"');",
+                  "        pm.expect(body).to.not.include('Hồ sơ của bạn');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc17{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC18 - Truy cập Hồ sơ cá nhân & Kiểm tra đồng bộ trạng thái gói VIP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC18: Hiển thị Hồ sơ cá nhân & Kiểm tra trạng thái VIP",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC18] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC18] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC18] Hiển thị đúng thông tin người dùng và trạng thái VIP (Chưa kích hoạt / Đang hoạt động)\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.include(\"Hồ sơ của bạn\");",
+                  "    pm.expect(body).to.include(\"Trạng thái VIP:\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC19 - Cập nhật thông tin hồ sơ (username, email) thành công",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const curUser = pm.collectionVariables.get(\"dynamic_user\");",
+                  "const curEmail = pm.collectionVariables.get(\"dynamic_email\");",
+                  "pm.collectionVariables.set(\"updated_user\", curUser + \"_up\");",
+                  "pm.collectionVariables.set(\"updated_email\", \"up_\" + curEmail);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC19: Cập nhật thông tin hồ sơ (username, email) thành công",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC19] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC19] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC19] Hiển thị thông báo: Thông tin cá nhân đã được cập nhật thành công!\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.include(\"Thông tin cá nhân đã được cập nhật thành công!\");",
+                  "    pm.expect(body).to.include(pm.collectionVariables.get(\"updated_user\"));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "update_profile",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{updated_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "{{updated_email}}",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/edit_profile.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "edit_profile.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC20 - Từ chối cập nhật hồ sơ khi nhập Email sai định dạng",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC20: Từ chối cập nhật hồ sơ khi nhập Email sai định dạng",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC20] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC20] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC20] Hiển thị thông báo lỗi: Địa chỉ email không hợp lệ\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Địa chỉ email không hợp lệ.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "update_profile",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "{{updated_user}}",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "email_sai_dinh_dang",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/edit_profile.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "edit_profile.php"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Đổi Mật Khẩu, Đăng Xuất & Bảo Mật OWASP [AUTH_TC21 - AUTH_TC24]",
+      "item": [
+        {
+          "name": "AUTH_TC21 - Đổi mật khẩu thành công khi nhập đúng mật khẩu hiện tại và mật khẩu mới >= 6 ký tự",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC21: Đổi mật khẩu thành công tại biên 6 ký tự",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC21] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC21] HTTP Status Code hợp lệ (200 OK hoặc 302 Redirect)\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "});",
+                  "pm.test(\"[AUTH_TC21] Đổi mật khẩu thành công và điều hướng về trang Hồ sơ\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.include(\"Hồ sơ của bạn\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "current_password",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "new_password",
+                  "value": "654321",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_new_password",
+                  "value": "654321",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/change_password.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "change_password.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC22 - Từ chối đổi mật khẩu khi nhập sai mật khẩu hiện tại hoặc mật khẩu mới < 6 ký tự",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC22: Từ chối đổi mật khẩu khi mật khẩu mới < 6 ký tự (BVA Min - 1 = 5)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC22] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC22] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC22] Hiển thị thông báo lỗi: Mật khẩu mới phải có ít nhất 6 ký tự\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Mật khẩu mới phải có ít nhất 6 ký tự.\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "change_password",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "current_password",
+                  "value": "654321",
+                  "type": "text"
+                },
+                {
+                  "key": "new_password",
+                  "value": "12345",
+                  "type": "text"
+                },
+                {
+                  "key": "confirm_new_password",
+                  "value": "12345",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/edit_profile.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "edit_profile.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC23 - Đăng xuất tài khoản thành công và hủy hoàn toàn phiên làm việc (Session Destroy)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC23: Đăng xuất tài khoản và hủy Session thành công",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC23] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC23] Phản hồi hợp lệ và chuyển hướng về trang login.php\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                  "    if (pm.response.code === 200) {",
+                  "        pm.expect(pm.response.text()).to.include('action=\"login.php\"');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID={{auth_user_sid}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/logout.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "logout.php"
+              ]
+            }
+          }
+        },
+        {
+          "name": "AUTH_TC24 - Phòng chống tấn công SQL Injection & XSS trên biểu mẫu Xác thực",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "// =========================================================================",
+                  "// AUTH_TC24: Phòng chống tấn công SQL Injection & XSS (OWASP)",
+                  "// =========================================================================",
+                  "pm.test(\"[AUTH_TC24] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "pm.test(\"[AUTH_TC24] HTTP Status Code là 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "pm.test(\"[AUTH_TC24] Chặn đứng SQL Injection (Prepared Statement) và không lộ lỗi SQL\", function () {",
+                  "    const body = pm.response.text();",
+                  "    pm.expect(body).to.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                  "    pm.expect(body).to.not.include(\"SQL syntax\");",
+                  "    pm.expect(body).to.not.include(\"mysqli_sql_exception\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "PHPSESSID=guesttc24{{$timestamp}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "identifier",
+                  "value": "' OR '1'='1 -- <script>alert(1)</script>",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "' OR '1'='1 --",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login.php"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

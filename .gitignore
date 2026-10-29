@@ -30,3 +30,8 @@ Postman/export_test_case_list.js
 
 # Thư mục backup cấu hình local
 backup_before_update/
+
+Netfix2_AUTH_Security_Automation.postman_collection.json.txt
+
+docs/JIRA_IMPORT_ALL_83_BUGS.csv 
+docs/JIRA_IMPORT_AUTH_24_BUGS.csv
