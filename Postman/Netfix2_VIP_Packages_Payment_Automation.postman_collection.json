@@ -1,0 +1,607 @@
+{
+  "info": {
+    "name": "Netfix2_VIP_Packages_Payment_Automation",
+    "description": "Postman Automation cho phân hệ VIP, lấy từ sheet 4_VIP (11 TCs) của BANG_TONG_HOP_TEST_CASE_CHINH.xlsx. Mỗi folder tương ứng một Test Case ID; TC05 và TC11 có request biến thể.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "sessionCookie",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminSessionCookie",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "guestSessionCookie",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "VIP_TC01 - Kiểm tra endpoint trang gói VIP phản hồi thành công",
+      "item": [
+        {
+          "name": "VIP_TC01 - Kiểm tra endpoint trang gói VIP phản hồi thành công",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pricing.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pricing.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC01\nTÊN: Kiểm tra endpoint trang gói VIP phản hồi thành công\nENDPOINT: /pricing.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server Apache và MySQL đang chạy; có thể truy cập localhost/netfix2.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /pricing.php trên Postman.\n2. Kiểm tra status code.\n3. Kiểm tra thời gian phản hồi.\n\nDỮ LIỆU KIỂM THỬ:\nURL: http://localhost/netfix2/pricing.php\n\nKẾT QUẢ MONG ĐỢI:\nHTTP 200 hoặc redirect hợp lệ; thời gian phản hồi dưới 1500 ms.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Positive\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                  "pm.test('Thời gian phản hồi dưới 1500 ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC02 - Kiểm tra nội dung trang hiển thị gói VIP hoặc yêu cầu đăng nhập",
+      "item": [
+        {
+          "name": "VIP_TC02 - Kiểm tra nội dung trang hiển thị gói VIP hoặc yêu cầu đăng nhập",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pricing.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pricing.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC02\nTÊN: Kiểm tra nội dung trang hiển thị gói VIP hoặc yêu cầu đăng nhập\nENDPOINT: /pricing.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /pricing.php.\n2. Kiểm tra response body / Preview để xác nhận nội dung phù hợp.\n\nDỮ LIỆU KIỂM THỬ:\nKhông có query params.\n\nKẾT QUẢ MONG ĐỢI:\nTrang hiển thị thông tin các gói VIP hoặc chuyển hướng/yêu cầu đăng nhập theo trạng thái phiên.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Functional\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                  "pm.test('Response body không rỗng', function () { pm.expect(pm.response.text().length).to.be.above(0); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC03 - Kiểm tra các gói và mức giá VIP",
+      "item": [
+        {
+          "name": "VIP_TC03 - Kiểm tra các gói và mức giá VIP",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/pricing.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pricing.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC03\nTÊN: Kiểm tra các gói và mức giá VIP\nENDPOINT: /pricing.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTrang pricing.php có thể truy cập và dữ liệu gói được cấu hình.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi GET /pricing.php.\n2. Kiểm tra response body hoặc giao diện Preview.\n3. Đối chiếu tên gói và giá.\n\nDỮ LIỆU KIỂM THỬ:\nGói 1 tháng: 79.000 VNĐ; 3 tháng: 201.675 VNĐ; 6 tháng: 379.200 VNĐ (theo pricing.php).\n\nKẾT QUẢ MONG ĐỢI:\nCác gói và mức giá hiển thị đúng theo cấu hình pricing.php.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Functional\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                  "pm.test('Response có thông tin giá gói VIP theo cấu hình', function () {",
+                  "  const body = pm.response.text().replace(/\\\\D/g, '');",
+                  "  pm.expect(body).to.include('79000');",
+                  "  pm.expect(body).to.include('201675');",
+                  "  pm.expect(body).to.include('379200');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC04 - Kiểm tra endpoint xử lý thanh toán phản hồi thành công",
+      "item": [
+        {
+          "name": "VIP_TC04 - Kiểm tra endpoint xử lý thanh toán phản hồi thành công",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/process_payment.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "process_payment.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC04\nTÊN: Kiểm tra endpoint xử lý thanh toán phản hồi thành công\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server và MySQL đang chạy; request được gửi qua Postman.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request POST /process_payment.php.\n2. Kiểm tra status code.\n3. Kiểm tra thời gian phản hồi.\n\nDỮ LIỆU KIỂM THỬ:\nURL: http://localhost/netfix2/process_payment.php\n\nKẾT QUẢ MONG ĐỢI:\nHTTP 200 hoặc redirect hợp lệ; thời gian phản hồi dưới 2000 ms.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Positive\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                  "pm.test('Thời gian phản hồi dưới 2000 ms', function () { pm.expect(pm.response.responseTime).to.be.below(2000); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC05 - Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ",
+      "item": [
+        {
+          "name": "VIP_TC05 - Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ - Thiếu package_id",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/process_payment.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "process_payment.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC05\nTÊN: Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST không có package_id hoặc package_id ngoài 1–3.\n2. Kiểm tra phản hồi và chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id: bỏ trống hoặc 999\n\nKẾT QUẢ MONG ĐỢI:\nHệ thống thông báo gói VIP không hợp lệ và chuyển hướng theo logic xử lý; không tạo đơn hàng hợp lệ.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Negative\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "payment_method",
+                  "value": "Momo",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                  "pm.test('Không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC05 - Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ - package_id không hợp lệ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/process_payment.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "process_payment.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC05\nTÊN: Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST không có package_id hoặc package_id ngoài 1–3.\n2. Kiểm tra phản hồi và chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id: bỏ trống hoặc 999\n\nKẾT QUẢ MONG ĐỢI:\nHệ thống thông báo gói VIP không hợp lệ và chuyển hướng theo logic xử lý; không tạo đơn hàng hợp lệ.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Negative\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "package_id",
+                  "value": "999",
+                  "type": "text"
+                },
+                {
+                  "key": "payment_method",
+                  "value": "Momo",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                  "pm.test('Không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC06 - Kiểm tra chọn phương thức thanh toán MoMo",
+      "item": [
+        {
+          "name": "VIP_TC06 - Kiểm tra chọn phương thức thanh toán MoMo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              },
+              {
+                "key": "Cookie",
+                "value": "{{sessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/process_payment.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "process_payment.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC06\nTÊN: Kiểm tra chọn phương thức thanh toán MoMo\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTài khoản đã đăng nhập; cấu hình kết nối MoMo test có thể truy cập.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST với package_id hợp lệ và payment_method=Momo.\n2. Kiểm tra kết quả tạo giao dịch.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id=1; payment_method=Momo\n\nKẾT QUẢ MONG ĐỢI:\nNếu MoMo trả payUrl, hệ thống tạo đơn Pending và chuyển hướng tới URL thanh toán; nếu không, hiển thị lỗi kết nối.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Integration\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "package_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "payment_method",
+                  "value": "Momo",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 201, 202, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 201, 202, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                  "pm.test('Request được xử lý, không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC07 - Kiểm tra phương thức thanh toán không phải MoMo",
+      "item": [
+        {
+          "name": "VIP_TC07 - Kiểm tra phương thức thanh toán không phải MoMo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded",
+                "type": "text"
+              },
+              {
+                "key": "Cookie",
+                "value": "{{sessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/process_payment.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "process_payment.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC07\nTÊN: Kiểm tra phương thức thanh toán không phải MoMo\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTài khoản đã đăng nhập; CSDL hoạt động.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST với package_id hợp lệ và phương thức thanh toán khác MoMo.\n2. Kiểm tra đơn hàng và trạng thái VIP sau xử lý.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id=1; payment_method=Chuyển khoản ngân hàng\n\nKẾT QUẢ MONG ĐỢI:\nTheo code hiện tại, hệ thống tạo đơn Completed và cập nhật is_vip=1, vip_expires_at.\n\nƯU TIÊN: P2 (Medium)\nLOẠI TEST: Functional\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "package_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "payment_method",
+                  "value": "Chuyển khoản ngân hàng",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 201, 202, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 201, 202, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                  "pm.test('Request được xử lý, không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC08 - Kiểm tra trang trả kết quả thanh toán thành công",
+      "item": [
+        {
+          "name": "VIP_TC08 - Kiểm tra trang trả kết quả thanh toán thành công",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{sessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payment_return.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payment_return.php"
+              ],
+              "query": [
+                {
+                  "key": "resultCode",
+                  "value": "0"
+                },
+                {
+                  "key": "message",
+                  "value": "Success"
+                }
+              ]
+            },
+            "description": "TEST CASE: VIP_TC08\nTÊN: Kiểm tra trang trả kết quả thanh toán thành công\nENDPOINT: /payment_return.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTài khoản đã đăng nhập và có thể mô phỏng query callback.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi GET /payment_return.php?resultCode=0&message=Success.\n2. Kiểm tra thông báo, trạng thái đơn và thông tin VIP.\n\nDỮ LIỆU KIỂM THỬ:\nresultCode=0; message=Success\n\nKẾT QUẢ MONG ĐỢI:\nHiển thị thông báo thanh toán thành công và kích hoạt/cập nhật thời hạn VIP theo logic hiện tại.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Integration\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403]).to.include(pm.response.code); });",
+                  "pm.test('Callback được xử lý mà không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC09 - Kiểm tra trang trả kết quả thanh toán thất bại",
+      "item": [
+        {
+          "name": "VIP_TC09 - Kiểm tra trang trả kết quả thanh toán thất bại",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{sessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/payment_return.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "payment_return.php"
+              ],
+              "query": [
+                {
+                  "key": "resultCode",
+                  "value": "1006"
+                },
+                {
+                  "key": "message",
+                  "value": "Failed"
+                }
+              ]
+            },
+            "description": "TEST CASE: VIP_TC09\nTÊN: Kiểm tra trang trả kết quả thanh toán thất bại\nENDPOINT: /payment_return.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy; có thể mô phỏng callback thất bại.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi GET /payment_return.php?resultCode=1006&message=Failed.\n2. Kiểm tra thông báo thất bại.\n\nDỮ LIỆU KIỂM THỬ:\nresultCode=1006; message=Failed\n\nKẾT QUẢ MONG ĐỢI:\nHiển thị thông báo thanh toán thất bại; không kích hoạt VIP mới.\n\nƯU TIÊN: P2 (Medium)\nLOẠI TEST: Negative\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403]).to.include(pm.response.code); });",
+                  "pm.test('Callback được xử lý mà không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC10 - Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công",
+      "item": [
+        {
+          "name": "VIP_TC10 - Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{sessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC10\nTÊN: Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công\nENDPOINT: /orders.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server Apache và MySQL đang chạy; có thể truy cập localhost/netfix2.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /orders.php trên Postman.\n2. Kiểm tra HTTP status code.\n3. Kiểm tra thời gian phản hồi.\n\nDỮ LIỆU KIỂM THỬ:\nURL: http://localhost/netfix2/orders.php\n\nKẾT QUẢ MONG ĐỢI:\nHTTP 200 OK hoặc redirect hợp lệ; thời gian phản hồi dưới 1500 ms.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Positive\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                  "pm.test('Thời gian phản hồi dưới 1500 ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP",
+      "item": [
+        {
+          "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP - Phiên Admin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{adminSessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC11\nTÊN: Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP\nENDPOINT: /orders.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy; CSDL có dữ liệu đơn hàng trong bảng orders.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /orders.php với phiên Admin và phiên khách.\n2. Kiểm tra nội dung phản hồi hoặc hành vi chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\nTrường hợp 1: Đã đăng nhập Admin (is_admin=1)\nTrường hợp 2: Chưa đăng nhập hoặc không phải Admin\n\nKẾT QUẢ MONG ĐỢI:\nAdmin xem được danh sách đơn hàng VIP kèm tổng doanh thu; người dùng không đủ quyền bị chuyển hướng về admin_login.php.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Security / Auth\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 401, 403]', function () { pm.expect([200, 301, 302, 303, 401, 403]).to.include(pm.response.code); });",
+                  "pm.test('Response có nội dung hoặc điều hướng đăng nhập/quyền truy cập', function () { pm.expect(pm.response.text().length > 0 || [301,302,303,401,403].includes(pm.response.code)).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP - Phiên khách/user thường",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "{{guestSessionCookie}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/orders.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "orders.php"
+              ]
+            },
+            "description": "TEST CASE: VIP_TC11\nTÊN: Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP\nENDPOINT: /orders.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy; CSDL có dữ liệu đơn hàng trong bảng orders.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /orders.php với phiên Admin và phiên khách.\n2. Kiểm tra nội dung phản hồi hoặc hành vi chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\nTrường hợp 1: Đã đăng nhập Admin (is_admin=1)\nTrường hợp 2: Chưa đăng nhập hoặc không phải Admin\n\nKẾT QUẢ MONG ĐỢI:\nAdmin xem được danh sách đơn hàng VIP kèm tổng doanh thu; người dùng không đủ quyền bị chuyển hướng về admin_login.php.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Security / Auth\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 401, 403]', function () { pm.expect([200, 301, 302, 303, 401, 403]).to.include(pm.response.code); });",
+                  "pm.test('Không trả lỗi máy chủ; cần xác nhận redirect/chặn quyền theo kết quả thực tế', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
