@@ -116,13 +116,34 @@
           },
           "event": [
             {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const baseUrl = pm.collectionVariables.get('baseUrl') || 'http://localhost/netfix2';",
+                  "pm.sendRequest({",
+                  "  url: baseUrl + '/login.php',",
+                  "  method: 'POST',",
+                  "  header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+                  "  body: {",
+                  "    mode: 'urlencoded',",
+                  "    urlencoded: [",
+                  "      { key: 'identifier', value: 'tuan@gmail.com' },",
+                  "      { key: 'password', value: '123456' }",
+                  "    ]",
+                  "  }",
+                  "}, function () {});"
+                ]
+              }
+            },
+            {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
                   "pm.test('Response có thông tin giá gói VIP theo cấu hình', function () {",
-                  "  const body = pm.response.text().replace(/\\\\D/g, '');",
+                  "  const body = pm.response.text().replace(/\\D/g, '');",
                   "  pm.expect(body).to.include('79000');",
                   "  pm.expect(body).to.include('201675');",
                   "  pm.expect(body).to.include('379200');",
@@ -280,11 +301,6 @@
                 "key": "Content-Type",
                 "value": "application/x-www-form-urlencoded",
                 "type": "text"
-              },
-              {
-                "key": "Cookie",
-                "value": "{{sessionCookie}}",
-                "type": "text"
               }
             ],
             "url": {
@@ -340,11 +356,6 @@
                 "key": "Content-Type",
                 "value": "application/x-www-form-urlencoded",
                 "type": "text"
-              },
-              {
-                "key": "Cookie",
-                "value": "{{sessionCookie}}",
-                "type": "text"
               }
             ],
             "url": {
@@ -395,13 +406,7 @@
           "name": "VIP_TC08 - Kiểm tra trang trả kết quả thanh toán thành công",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "{{sessionCookie}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/payment_return.php",
               "host": [
@@ -445,13 +450,7 @@
           "name": "VIP_TC09 - Kiểm tra trang trả kết quả thanh toán thất bại",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "{{sessionCookie}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/payment_return.php",
               "host": [
@@ -495,13 +494,7 @@
           "name": "VIP_TC10 - Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "{{sessionCookie}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/orders.php",
               "host": [
@@ -535,13 +528,7 @@
           "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP - Phiên Admin",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "{{adminSessionCookie}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/orders.php",
               "host": [
@@ -570,13 +557,7 @@
           "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP - Phiên khách/user thường",
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Cookie",
-                "value": "{{guestSessionCookie}}",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/orders.php",
               "host": [
@@ -602,6 +583,29 @@
           ]
         }
       ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const baseUrl = pm.collectionVariables.get('baseUrl') || 'http://localhost/netfix2';",
+          "pm.sendRequest({",
+          "  url: baseUrl + '/login.php',",
+          "  method: 'POST',",
+          "  header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+          "  body: {",
+          "    mode: 'urlencoded',",
+          "    urlencoded: [",
+          "      { key: 'identifier', value: 'tuan@gmail.com' },",
+          "      { key: 'password', value: '123456' }",
+          "    ]",
+          "  }",
+          "}, function () {});"
+        ]
+      }
     }
   ]
 }
