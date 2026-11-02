@@ -1,0 +1,32 @@
+@startuml
+title <size:24>System Context View: Netfix2 Streaming Platform</size>\n<size:24>C4 Level 1: System Context Diagram for Netfix2</size>
+
+set separator none
+left to right direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+
+Person(ViewerUser, "Viewer / User", $descr="A regular or VIP user who browses, streams movies, comments, and subscribes to VIP plans.", $tags="", $link="")
+System(MoMoPaymentGateway, "MoMo Payment Gateway", $descr="Processes digital payments via MoMo e-wallet QR code and API.", $tags="", $link="")
+System(VNPayGateway, "VNPay Gateway", $descr="Processes online banking and QR payments via VNPay.", $tags="", $link="")
+Person(Administrator, "Administrator", $descr="An administrative user who manages movies, episodes, user accounts, VIP orders, and views business analytics.", $tags="", $link="")
+System(Netfix2StreamingPlatform, "Netfix2 Streaming Platform", $descr="Allows users to watch movies/series, track watch history, comment, and buy VIP packages.", $tags="", $link="")
+
+Rel(ViewerUser, Netfix2StreamingPlatform, "Visits website, searches movies, watches streams, and pays for VIP via", $techn="HTTPS", $tags="", $link="")
+Rel(Administrator, Netfix2StreamingPlatform, "Manages content, users, and orders via admin portal", $techn="HTTPS", $tags="", $link="")
+Rel(Netfix2StreamingPlatform, MoMoPaymentGateway, "Initiates payment requests and receives IPN/return callbacks from", $techn="HTTPS / REST", $tags="", $link="")
+Rel(Netfix2StreamingPlatform, VNPayGateway, "Initiates payment requests and receives return callbacks from", $techn="HTTPS / REST", $tags="", $link="")
+Rel(ViewerUser, MoMoPaymentGateway, "Completes payment on", $techn="Mobile App / Web QR", $tags="", $link="")
+Rel(ViewerUser, VNPayGateway, "Completes payment on", $techn="Bank Portal / Web QR", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml

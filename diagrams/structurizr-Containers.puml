@@ -1,0 +1,43 @@
+@startuml
+title <size:24>Container View: Netfix2 Streaming Platform</size>\n<size:24>C4 Level 2: Container Diagram for Netfix2 Architecture</size>
+
+set separator none
+left to right direction
+
+<style>
+  root {
+    BackgroundColor: #ffffff
+    FontColor: #444444
+  }
+</style>
+
+!include <C4/C4>
+!include <C4/C4_Context>
+!include <C4/C4_Container>
+
+Person(ViewerUser, "Viewer / User", $descr="A regular or VIP user who browses, streams movies, comments, and subscribes to VIP plans.", $tags="", $link="")
+Person(Administrator, "Administrator", $descr="An administrative user who manages movies, episodes, user accounts, VIP orders, and views business analytics.", $tags="", $link="")
+System(MoMoPaymentGateway, "MoMo Payment Gateway", $descr="Processes digital payments via MoMo e-wallet QR code and API.", $tags="", $link="")
+System(VNPayGateway, "VNPay Gateway", $descr="Processes online banking and QR payments via VNPay.", $tags="", $link="")
+
+System_Boundary("Netfix2StreamingPlatform_boundary", "Netfix2 Streaming Platform", $tags="") {
+  ContainerDb(Netfix2StreamingPlatform.Netfix2MySQLDatabase, "Netfix2 MySQL Database", $techn="MySQL / MariaDB (netfixvn)", $descr="Stores users, movies, episodes, comments, watch history, and VIP orders.", $tags="", $link="")
+  Container(Netfix2StreamingPlatform.LocalMediaStorage, "Local Media Storage", $techn="File System (Uploads/)", $descr="Stores uploaded video files (mp4) and movie thumbnail posters.", $tags="", $link="")
+  Container(Netfix2StreamingPlatform.WebBrowser, "Web Browser", $techn="HTML5, CSS3, JavaScript", $descr="Delivers the user interface and video player controls to viewers and admins.", $tags="", $link="")
+  Container(Netfix2StreamingPlatform.Netfix2WebApplication, "Netfix2 Web Application", $techn="PHP 8.2 / Apache (XAMPP)", $descr="Monolithic web application handling HTTP requests, rendering views, business rules, and API endpoints.", $tags="", $link="")
+}
+
+Rel(ViewerUser, Netfix2StreamingPlatform.WebBrowser, "Visits website, searches movies, watches streams, and pays for VIP via", $techn="HTTPS", $tags="", $link="")
+Rel(Administrator, Netfix2StreamingPlatform.WebBrowser, "Manages content, users, and orders via admin portal", $techn="HTTPS", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.WebBrowser, Netfix2StreamingPlatform.Netfix2WebApplication, "Sends HTTP GET/POST requests to", $techn="HTTP / JSON", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication, Netfix2StreamingPlatform.WebBrowser, "Renders HTML pages, CSS, and video playback player to", $techn="HTTP / HTML", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication, Netfix2StreamingPlatform.Netfix2MySQLDatabase, "Executes SQL queries and transactions via", $techn="MySQL Protocol / TCP 3306", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication, Netfix2StreamingPlatform.LocalMediaStorage, "Serves video stream files from", $techn="File I/O", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication, MoMoPaymentGateway, "Initiates payment requests and receives IPN/return callbacks from", $techn="HTTPS / REST", $tags="", $link="")
+Rel(Netfix2StreamingPlatform.Netfix2WebApplication, VNPayGateway, "Initiates payment requests and receives return callbacks from", $techn="HTTPS / REST", $tags="", $link="")
+Rel(ViewerUser, MoMoPaymentGateway, "Completes payment on", $techn="Mobile App / Web QR", $tags="", $link="")
+Rel(ViewerUser, VNPayGateway, "Completes payment on", $techn="Bank Portal / Web QR", $tags="", $link="")
+
+SHOW_LEGEND(true)
+hide stereotypes
+@enduml
