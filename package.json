@@ -20,7 +20,7 @@
   "homepage": "https://github.com/Col255/QA-netfilxfake#readme",
   "devDependencies": {
     "codeceptjs": "^4.2.0",
-    "playwright": "^1.64.0"
+    "playwright": "^1.64.1"
   },
   "dependencies": {
     "exceljs": "^4.4.0"
