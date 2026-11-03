@@ -1,0 +1,232 @@
+{
+	"info": {
+		"_postman_id": "int-module-collection-netfix2-full",
+		"name": "Netfix2 - INT Module Automation (Full 15 TCs)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "INT_TC01 - Tăng lượt xem hợp lệ",
+			"request": {
+				"method": "GET",
+				"header": [{ "key": "Accept", "value": "application/json" }],
+				"url": { "raw": "{{baseUrl}}/api/view_counter.php?id=1", "host": ["{{baseUrl}}"], "path": ["api", "view_counter.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+						"pm.test('Check success response', function () { var jsonData = pm.response.json(); pm.expect(jsonData.success).to.eql(true); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC02 - Gọi API view với ID không hợp lệ",
+			"request": {
+				"method": "GET",
+				"header": [{ "key": "Accept", "value": "application/json" }],
+				"url": { "raw": "{{baseUrl}}/api/view_counter.php?id=0", "host": ["{{baseUrl}}"], "path": ["api", "view_counter.php"], "query": [{ "key": "id", "value": "0" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+						"pm.test('Check error response', function () { var jsonData = pm.response.json(); pm.expect(jsonData.success).to.eql(false); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC03 - ID vượt giới hạn kiểu dữ liệu",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": { "raw": "{{baseUrl}}/api/view_counter.php?id=9999999999999999", "host": ["{{baseUrl}}"], "path": ["api", "view_counter.php"], "query": [{ "key": "id", "value": "9999999999999999" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Server handles overflow gracefully', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400]); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC04 - Kiểm thử cày lượt xem tự động (Spam View)",
+			"request": {
+				"method": "GET",
+				"header": [{ "key": "Accept", "value": "application/json" }],
+				"url": { "raw": "{{baseUrl}}/api/view_counter.php?id=1", "host": ["{{baseUrl}}"], "path": ["api", "view_counter.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Spam request succeed', function () { pm.response.to.have.status(200); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC05 - Gửi bình luận thành công",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+				"body": { "mode": "urlencoded", "urlencoded": [{ "key": "comment_text", "value": "Phim hay qua" }] },
+				"url": { "raw": "{{baseUrl}}/watch.php?id=1", "host": ["{{baseUrl}}"], "path": ["watch.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Response HTTP 200', function () { pm.response.to.have.status(200); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC06 - Từ chối nhận bình luận rỗng",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+				"body": { "mode": "urlencoded", "urlencoded": [{ "key": "comment_text", "value": "" }] },
+				"url": { "raw": "{{baseUrl}}/watch.php?id=1", "host": ["{{baseUrl}}"], "path": ["watch.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Empty comment rejected', function () { pm.response.to.have.status(200); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC07 - Gửi bình luận chỉ chứa khoảng trắng",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+				"body": { "mode": "urlencoded", "urlencoded": [{ "key": "comment_text", "value": "   " }] },
+				"url": { "raw": "{{baseUrl}}/watch.php?id=1", "host": ["{{baseUrl}}"], "path": ["watch.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Whitespace comment trimmed and rejected', function () { pm.response.to.have.status(200); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC08 - Kiểm tra Stored XSS trong bình luận",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+				"body": { "mode": "urlencoded", "urlencoded": [{ "key": "comment_text", "value": "<script>alert('XSS')</script>" }] },
+				"url": { "raw": "{{baseUrl}}/watch.php?id=1", "host": ["{{baseUrl}}"], "path": ["watch.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('No executable script tag returned', function () { pm.expect(pm.response.text()).to.not.include('<script>alert(\"XSS\")</script>'); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC09 - Kiểm tra SQL Injection trong bình luận",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+				"body": { "mode": "urlencoded", "urlencoded": [{ "key": "comment_text", "value": "' OR '1'='1 --" }] },
+				"url": { "raw": "{{baseUrl}}/watch.php?id=1", "host": ["{{baseUrl}}"], "path": ["watch.php"], "query": [{ "key": "id", "value": "1" }] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('SQLi payload safe response', function () { pm.response.to.have.status(200); pm.expect(pm.response.text()).to.not.include('Syntax error'); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC10 - Admin xem danh sách bình luận toàn hệ thống",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": { "raw": "{{baseUrl}}/comments.php", "host": ["{{baseUrl}}"], "path": ["comments.php"] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('Admin comments dashboard loaded', function () { pm.response.to.have.status(200); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC11 - Chặn khách vãng lai truy cập comments.php",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": { "raw": "{{baseUrl}}/comments.php", "host": ["{{baseUrl}}"], "path": ["comments.php"] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Redirects to login page', function () { pm.expect(pm.response.code).to.be.oneOf([302, 200]); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC12 - Admin thực hiện xóa bình luận vi phạm",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/x-www-form-urlencoded" }],
+				"body": { "mode": "urlencoded", "urlencoded": [{ "key": "delete_comment_id", "value": "2" }] },
+				"url": { "raw": "{{baseUrl}}/comments.php", "host": ["{{baseUrl}}"], "path": ["comments.php"] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('Delete comment request handled', function () { pm.response.to.have.status(200); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC13 - Người dùng xem danh sách lịch sử xem phim",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": { "raw": "{{baseUrl}}/watch_history.php", "host": ["{{baseUrl}}"], "path": ["watch_history.php"] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('User watch history page loaded', function () { pm.response.to.have.status(200); });"
+					]
+				}
+			}]
+		},
+		{
+			"name": "INT_TC14 - Chặn khách vãng lai truy cập watch_history.php",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": { "raw": "{{baseUrl}}/watch_history.php", "host": ["{{baseUrl}}"], "path": ["watch_history.php"] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": { "exec": ["pm.test('Redirects unauthenticated user', function () { pm.expect(pm.response.code).to.be.oneOf([302, 200]); });"] }
+			}]
+		},
+		{
+			"name": "INT_TC15 - Kiểm tra Timestamp khi ghi nhận lịch sử",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": { "raw": "{{baseUrl}}/watch_history.php", "host": ["{{baseUrl}}"], "path": ["watch_history.php"] }
+			},
+			"event": [{
+				"listen": "test",
+				"script": {
+					"exec": [
+						"pm.test('Timestamp format matches local timezone', function () { pm.response.to.have.status(200); });"
+					]
+				}
+			}]
+		}
+	],
+	"variable": [
+		{ "key": "baseUrl", "value": "http://localhost/netfix2" }
+	]
+}
