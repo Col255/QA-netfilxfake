@@ -1,0 +1,14 @@
+STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Payload_Params,Ket_Qua_Mong_Doi,Tag_Bao_Phu
+1,KAN-47,TC01 - Them phim thanh cong tai bien duoi min,/add_movie.php,POST,"year=1900&duration=1&title=A&status=active",Hop le (200/302),V1; V2; V3; V4; V5; B1; B6
+2,KAN-47,TC02 - Them phim thanh cong tai bien tren max,/add_movie.php,POST,"year=2030&duration=600&title=MaxMovie&status=active",Hop le (200/302),V1; V2; V3; V4; V5; B5; B10
+3,KAN-47,TC03 - Them phim tai gia tri danh dinh nominal,/add_movie.php,POST,"year=2026&duration=120&title=QA Test 2026&status=active",Hop le (200/302),V1; V2; V3; V4; V5; B3; B8
+4,KAN-47,TC04 - Loi year nho hon 1900 (min-),/add_movie.php,POST,"year=1899&duration=120&title=Old Film&status=active",Khong hop le (year vi pham < 1900),X1
+5,KAN-47,TC05 - Loi year lon hon 2030 (max+),/add_movie.php,POST,"year=2031&duration=120&title=Future Film&status=active",Khong hop le (year vi pham > 2030),X2
+6,KAN-47,TC06 - Loi duration nho hon 1 (min-),/add_movie.php,POST,"year=2026&duration=0&title=Zero Dur&status=active",Khong hop le (duration vi pham < 1),X3
+7,KAN-47,TC07 - Loi duration lon hon 600 (max+),/add_movie.php,POST,"year=2026&duration=601&title=Too Long&status=active",Khong hop le (duration vi pham > 600),X4
+8,KAN-47,TC08 - Bao mat: Kiem tra SQL Injection o title,/add_movie.php,POST,"year=2026&duration=120&title=' OR 1=1 --&status=active",Tu choi / Loc ma doc,SEC_SQLI
+9,KAN-47,TC09 - Bao mat: Kiem tra Reflected XSS o title,/add_movie.php,POST,"year=2026&duration=120&title=<script>alert(1)</script>&status=active",Tu choi / Ma hoa HTML,SEC_XSS
+10,KAN-48,TC10 - Quan ly phim: Lay danh sach trang 1,/manage_movies.php,GET,"page=1&limit=10",Hop le (200),API_KAN48
+11,KAN-49,TC11 - Quan ly don hang: Loc don VIP Pending,/orders.php,GET,"status=pending",Hop le (200),API_KAN49
+12,KAN-50,TC12 - Quan ly khach hang: Danh sach user,/customers.php,GET,"",Hop le (200),API_KAN50
+13,KAN-51,TC13 - Bao cao thong ke: Doanh thu tong quan,/statistics.php,GET,"type=revenue",Hop le (200),API_KAN51

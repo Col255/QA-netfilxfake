@@ -1,0 +1,439 @@
+{
+  "info": {
+    "_postman_id": "2a329c30-a6c0-4e7b-94c2-dc1833b3779f",
+    "name": "Admin Management CMS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45658923"
+  },
+  "item": [
+    {
+      "name": "admin Copy",
+      "item": [
+        {
+          "name": "movies",
+          "item": [
+            {
+              "name": "/add_movie.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 2000ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "title",
+                      "value": "Phim Test QA Tự Động 2026",
+                      "description": "Tên phim",
+                      "type": "text"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Mô tả phim dùng cho kịch bản kiểm thử Postman QA",
+                      "description": "Mô tả nội dung",
+                      "type": "text"
+                    },
+                    {
+                      "key": "genre",
+                      "value": "Hành Động",
+                      "description": "Thể loại chính",
+                      "type": "text"
+                    },
+                    {
+                      "key": "sub_genre",
+                      "value": "Kịch tính",
+                      "description": "Thể loại phụ",
+                      "type": "text"
+                    },
+                    {
+                      "key": "year",
+                      "value": "2026",
+                      "description": "Năm phát hành",
+                      "type": "text"
+                    },
+                    {
+                      "key": "duration",
+                      "value": "120",
+                      "description": "Thời lượng (phút)",
+                      "type": "text"
+                    },
+                    {
+                      "key": "language",
+                      "value": "Tiếng Việt",
+                      "description": "Ngôn ngữ",
+                      "type": "text"
+                    },
+                    {
+                      "key": "country",
+                      "value": "Việt Nam",
+                      "description": "Quốc gia sản xuất",
+                      "type": "text"
+                    },
+                    {
+                      "key": "status",
+                      "value": "active",
+                      "description": "Trạng thái hiển thị",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/add_movie.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "add_movie.php"
+                  ]
+                },
+                "description": "Thêm một bộ phim mới vào cơ sở dữ liệu hệ thống"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Form thêm phim hoặc xác nhận",
+                  "originalRequest": {
+                    "method": "POST",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/add_movie.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "add_movie.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Thêm Phim Mới</h2></body></html>"
+                }
+              ]
+            },
+            {
+              "name": "/manage_movies.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302 (Admin Session Check)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/manage_movies.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "manage_movies.php"
+                  ]
+                },
+                "description": "Xem và quản lý danh sách toàn bộ các phim hiện có trong hệ thống"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Danh sách quản lý phim",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/manage_movies.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "manage_movies.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Quản Lý Phim</h2></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Quản lý kho phim"
+        },
+        {
+          "name": "orders",
+          "item": [
+            {
+              "name": "/orders.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/orders.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders.php"
+                  ]
+                },
+                "description": "Xem và phê duyệt các đơn hàng đăng ký VIP của khách hàng"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Quản lý đơn hàng",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/orders.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "orders.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Quản Lý Đơn Hàng VIP</h2></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Quản lý các đơn hàng đăng ký VIP của khách hàng"
+        },
+        {
+          "name": "customers",
+          "item": [
+            {
+              "name": "/customers.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/customers.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "customers.php"
+                  ]
+                },
+                "description": "Xem danh sách khách hàng và quản lý trạng thái tài khoản VIP"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Quản lý khách hàng",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/customers.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "customers.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Quản Lý Khách Hàng</h2></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Quản lý tài khoản khách hàng người dùng"
+        },
+        {
+          "name": "statistics",
+          "item": [
+            {
+              "name": "/statistics.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 or 302\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/statistics.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "statistics.php"
+                  ]
+                },
+                "description": "Báo cáo số liệu tổng quan doanh thu, số lượng người dùng và lượt xem"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Báo cáo thống kê",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/statistics.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "statistics.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Báo Cáo Thống Kê</h2></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Báo cáo thống kê số liệu kinh doanh và lượt xem"
+        }
+      ],
+      "description": "Các chức năng quản trị viên: Thêm phim, quản lý phim, đơn hàng, khách hàng và thống kê"
+    }
+  ]
+}

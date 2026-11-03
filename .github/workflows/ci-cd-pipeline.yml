@@ -2,9 +2,9 @@ name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker 
 
 on:
   push:
-    branches: [ main, 'week*', 'VIP-PACKAGES-&-PAYMENT_Blackbox' ]
+    branches: [ main, 'week*', 'ADM_Blackbox', 'MOV_Blackbox' ]
   pull_request:
-    branches: [ main, 'week*' ]
+    branches: [ main, 'week*', 'ADM_Blackbox', 'MOV_Blackbox' ]
 
 jobs:
   # =========================================================================

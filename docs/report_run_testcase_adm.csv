@@ -1,0 +1,14 @@
+﻿STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Thoi_Gian_ms,Status_Code,Ket_Qua_Mong_Doi,Trang_Thai,Tag_Bao_Phu
+1,KAN-47,TC01 - Them phim thanh cong tai bien duoi min,/add_movie.php,POST,230.98,200,Hop le (200/302),PASS,V1; V2; V3; V4; V5; B1; B6
+2,KAN-47,TC02 - Them phim thanh cong tai bien tren max,/add_movie.php,POST,33.43,200,Hop le (200/302),PASS,V1; V2; V3; V4; V5; B5; B10
+3,KAN-47,TC03 - Them phim tai gia tri danh dinh nominal,/add_movie.php,POST,20.47,200,Hop le (200/302),PASS,V1; V2; V3; V4; V5; B3; B8
+4,KAN-47,TC04 - Loi year nho hon 1900 (min-),/add_movie.php,POST,18.62,200,Khong hop le (year vi pham < 1900),PASS,X1
+5,KAN-47,TC05 - Loi year lon hon 2030 (max+),/add_movie.php,POST,19.66,200,Khong hop le (year vi pham > 2030),PASS,X2
+6,KAN-47,TC06 - Loi duration nho hon 1 (min-),/add_movie.php,POST,71.41,200,Khong hop le (duration vi pham < 1),PASS,X3
+7,KAN-47,TC07 - Loi duration lon hon 600 (max+),/add_movie.php,POST,17.55,200,Khong hop le (duration vi pham > 600),PASS,X4
+8,KAN-47,TC08 - Bao mat: Kiem tra SQL Injection o title,/add_movie.php,POST,28.88,200,Tu choi / Loc ma doc,PASS,SEC_SQLI
+9,KAN-47,TC09 - Bao mat: Kiem tra Reflected XSS o title,/add_movie.php,POST,29.42,200,Tu choi / Ma hoa HTML,PASS,SEC_XSS
+10,KAN-48,TC10 - Quan ly phim: Lay danh sach trang 1,/manage_movies.php,GET,49.76,200,Hop le (200),PASS,API_KAN48
+11,KAN-49,TC11 - Quan ly don hang: Loc don VIP Pending,/orders.php,GET,17.5,200,Hop le (200),PASS,API_KAN49
+12,KAN-50,TC12 - Quan ly khach hang: Danh sach user,/customers.php,GET,27.96,200,Hop le (200),PASS,API_KAN50
+13,KAN-51,TC13 - Bao cao thong ke: Doanh thu tong quan,/statistics.php,GET,43.73,200,Hop le (200),PASS,API_KAN51
