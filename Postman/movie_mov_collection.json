@@ -1,0 +1,371 @@
+{
+  "info": {
+    "_postman_id": "9f2fe1e3-199d-4167-9b66-456d3ca0bdad",
+    "name": "Movie MOV",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "45658923"
+  },
+  "item": [
+    {
+      "name": "movies Copy",
+      "item": [
+        {
+          "name": "genres",
+          "item": [
+            {
+              "name": "/movies.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Page returns movie genre category layout\", function () {",
+                      "    pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/movies.php?genre={{movie_genre}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "movies.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "genre",
+                      "value": "{{movie_genre}}",
+                      "description": "Tên thể loại cần lọc (ví dụ: Hành Động, Hoạt Hình, Tình Cảm)"
+                    }
+                  ]
+                },
+                "description": "Lọc danh sách phim theo thể loại (Genre)"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Danh sách phim lọc theo thể loại",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/movies.php?genre=Hành Động",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "movies.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "genre",
+                          "value": "Hành Động"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Thể loại: Hành Động</h2><div class=\"movie-grid\"></div></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Lọc danh sách phim theo thể loại"
+        },
+        {
+          "name": "search",
+          "item": [
+            {
+              "name": "/search.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Search query is reflected in response\", function () {",
+                      "    var keyword = pm.variables.get(\"search_keyword\") || \"Doremon\";",
+                      "    pm.expect(pm.response.text()).to.include(keyword);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/search.php?query={{search_keyword}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "search.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "{{search_keyword}}",
+                      "description": "Từ khóa tìm kiếm phim"
+                    }
+                  ]
+                },
+                "description": "Tìm kiếm phim theo từ khóa (tiêu đề, đạo diễn, diễn viên)"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Kết quả tìm kiếm phim",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/search.php?query=Doremon",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "search.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "query",
+                          "value": "Doremon"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><h2>Kết quả tìm kiếm cho: Doremon</h2></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Tìm kiếm phim theo từ khóa"
+        },
+        {
+          "name": "{id}",
+          "item": [
+            {
+              "name": "/watch.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Watch page loads video element or movie details\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"video\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/watch.php?id={{movie_id}}&episode={{episode_id}}",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "watch.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "id",
+                      "value": "{{movie_id}}",
+                      "description": "ID của phim"
+                    },
+                    {
+                      "key": "episode",
+                      "value": "{{episode_id}}",
+                      "description": "ID của tập phim"
+                    }
+                  ]
+                },
+                "description": "Xem chi tiết tập phim, giao diện phát video và danh sách tập"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Trình phát video và chi tiết tập phim",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/watch.php?id=1&episode=1",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "watch.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "id",
+                          "value": "1"
+                        },
+                        {
+                          "key": "episode",
+                          "value": "1"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><body><div class=\"video-player\"><video controls></video></div></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Chi tiết phim và trình chiếu video theo Movie ID và Episode ID"
+        },
+        {
+          "name": "/index.php",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200 OK\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                  "});",
+                  "",
+                  "pm.test(\"Home page HTML contains Netfix brand\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Netfix\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/html,application/xhtml+xml,application/xml"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/index.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "index.php"
+              ]
+            },
+            "description": "Lấy trang chủ và danh mục danh sách phim hiển thị"
+          },
+          "response": [
+            {
+              "name": "200 OK - Trang chủ danh sách phim",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/index.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "index.php"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "html",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/html; charset=UTF-8"
+                }
+              ],
+              "cookie": [],
+              "body": "<!DOCTYPE html><html><head><title>NetfixVN</title></head><body><h1>NetfixVN Movies Catalog</h1></body></html>"
+            }
+          ]
+        }
+      ],
+      "description": "Quản lý duyệt phim, phân loại theo thể loại, tìm kiếm và chi tiết phim/tập phim"
+    }
+  ]
+}

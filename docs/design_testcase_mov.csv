@@ -1,0 +1,14 @@
+STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Payload_Params,Ket_Qua_Mong_Doi,Tag_Bao_Phu
+1,MOV-01,TC01 - Loc the loai hop le (Hanh Dong),/movies.php,GET,"genre=Hành Động",Hop le (200 OK),MOV_V1; B1
+2,MOV-01,TC02 - Loc the loai tieng Anh (Action),/movies.php,GET,"genre=Action",Hop le (200 OK),MOV_V1; B2
+3,MOV-01,TC03 - Loc the loai voi gia tri rong (genre=),/movies.php,GET,"genre=",Hop le hien thi toan bo phim,MOV_X1
+4,MOV-01,TC04 - Bao mat: Kiem tra Reflected XSS tai the loai,/movies.php,GET,"genre=<script>alert('XSS')</script>",Tu choi / Ma hoa ky tu HTML,MOV_SEC_XSS
+5,MOV-02,TC05 - Tim kiem phim hop le (Doremon),/search.php,GET,"query=Doremon",Hop le tra ve ket qua tim kiem,MOV_V2; B3
+6,MOV-02,TC06 - Tim kiem voi tu khoa 1 ky tu (min),/search.php,GET,"query=A",Hop le tra ve ket qua (200 OK),MOV_V2; B4
+7,MOV-02,TC07 - Tim kiem voi tu khoa rong (query=),/search.php,GET,"query=",Yeu cau nhap tu khoa (200 OK),MOV_X2
+8,MOV-02,TC08 - Bao mat: Kiem tra SQL Injection tai query,/search.php,GET,"query=' OR 1=1 --",Loc ma doc / Khong lo thong tin SQL,MOV_SEC_SQLI
+9,MOV-03,TC09 - Xem phim voi ID va Episode hop le (id=1&ep=1),/watch.php,GET,"id=1&episode=1",Hop le tai trinh phat video (200),MOV_V3; B5
+10,MOV-03,TC10 - Xem phim voi ID can duoi min (id=1),/watch.php,GET,"id=1",Hop le tai tap mac dinh (200),MOV_V3; B6
+11,MOV-03,TC11 - Xem phim voi ID duoi min (id=0),/watch.php,GET,"id=0",Bao loi 404 / Khong tim thay phim,MOV_X3
+12,MOV-03,TC12 - Xem phim voi ID am (id=-1),/watch.php,GET,"id=-1",Bao loi 404 / ID khong hop le,MOV_X4
+13,MOV-04,TC13 - Tai trang chu Netfix (/index.php),/index.php,GET,"",Hop le chua thuong hieu Netfix (200),MOV_V4; B7
