@@ -1,0 +1,14 @@
+﻿STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Thoi_Gian_ms,Status_Code,Ket_Qua_Mong_Doi,Trang_Thai,Tag_Bao_Phu,Ngay_Kiem_Thu
+1,MOV-01,TC01 - Loc the loai hop le (Hanh Dong),/movies.php,GET,99.1,200,Hop le (200 OK),PASS,MOV_V1; B1,03/11/2026
+2,MOV-01,TC02 - Loc the loai tieng Anh (Action),/movies.php,GET,34.94,200,Hop le (200 OK),PASS,MOV_V1; B2,03/11/2026
+3,MOV-01,TC03 - Loc the loai voi gia tri rong (genre=),/movies.php,GET,12.18,200,Hop le hien thi toan bo phim,PASS,MOV_X1,03/11/2026
+4,MOV-01,TC04 - Bao mat: Kiem tra Reflected XSS tai the loai,/movies.php,GET,13.44,200,Tu choi / Ma hoa ky tu HTML,PASS,MOV_SEC_XSS,03/11/2026
+5,MOV-02,TC05 - Tim kiem phim hop le (Doremon),/search.php,GET,24.83,200,Hop le tra ve ket qua tim kiem,PASS,MOV_V2; B3,03/11/2026
+6,MOV-02,TC06 - Tim kiem voi tu khoa 1 ky tu (min),/search.php,GET,12.38,200,Hop le tra ve ket qua (200 OK),PASS,MOV_V2; B4,03/11/2026
+7,MOV-02,TC07 - Tim kiem voi tu khoa rong (query=),/search.php,GET,26.27,200,Yeu cau nhap tu khoa (200 OK),PASS,MOV_X2,03/11/2026
+8,MOV-02,TC08 - Bao mat: Kiem tra SQL Injection tai query,/search.php,GET,13.92,200,Loc ma doc / Khong lo thong tin SQL,PASS,MOV_SEC_SQLI,03/11/2026
+9,MOV-03,TC09 - Xem phim voi ID va Episode hop le (id=1&ep=1),/watch.php,GET,33.5,200,Hop le tai trinh phat video (200),PASS,MOV_V3; B5,03/11/2026
+10,MOV-03,TC10 - Xem phim voi ID can duoi min (id=1),/watch.php,GET,25.97,200,Hop le tai tap mac dinh (200),PASS,MOV_V3; B6,03/11/2026
+11,MOV-03,TC11 - Xem phim voi ID duoi min (id=0),/watch.php,GET,26.02,200,Bao loi 404 / Khong tim thay phim,PASS,MOV_X3,03/11/2026
+12,MOV-03,TC12 - Xem phim voi ID am (id=-1),/watch.php,GET,15.52,200,Bao loi 404 / ID khong hop le,PASS,MOV_X4,03/11/2026
+13,MOV-04,TC13 - Tai trang chu Netfix (/index.php),/index.php,GET,20.6,200,Hop le chua thuong hieu Netfix (200),PASS,MOV_V4; B7,03/11/2026
