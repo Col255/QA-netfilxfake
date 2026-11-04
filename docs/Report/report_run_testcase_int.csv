@@ -1,0 +1,16 @@
+﻿STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Thoi_Gian_ms,Status_Code,Ket_Qua_Mong_Doi,Trang_Thai,Tag_Bao_Phu
+1,KAN-33,TC01 - Tang luot xem phim thanh cong tai bien duoi min (id=1),/api/view_counter.php,GET,28.87,200,Hop le (200),PASS,V1; B1
+2,KAN-33,TC02 - Tang luot xem phim tai gia tri danh dinh nominal (id=52),/api/view_counter.php,GET,115.85,200,Hop le (200),PASS,V1; B3
+3,KAN-34,TC03 - Loi id bang 0 nho hon bien duoi (min-),/api/view_counter.php,GET,24.64,200,Khong hop le (id vi pham < 1),PASS,X1; B0
+4,KAN-34,TC04 - Loi id la so nguyen am (id=-5),/api/view_counter.php,GET,8.5,200,Khong hop le (id am vi pham mien duong),PASS,X2
+5,KAN-34,TC05 - Loi id vuot gioi han kieu du lieu (max+),/api/view_counter.php,GET,7.89,200,Khong hop le (id vuot bien max+),PASS,X3; B5
+6,KAN-36,TC06 - Kiem thu tai / Spam luot xem lien tuc qua API,/api/view_counter.php,GET,28.77,200,Hop le (200),PASS,V1; API_KAN36
+7,KAN-45,TC07 - Gui binh luan hop le tai gia tri danh dinh nominal,/watch.php,POST,48.55,200,Hop le (200/302),PASS,V2; V3; B6
+8,KAN-45,TC08 - Loi gui binh luan bo trong noi dung (min-),/watch.php,POST,59.48,200,Khong hop le (comment_text rong),PASS,X4
+9,KAN-45,TC09 - Loi gui binh luan chi chua khoang trang,/watch.php,POST,60.86,200,Khong hop le (comment_text toan khoang trang),PASS,X5
+10,KAN-45,TC10 - Bao mat: Kiem tra Stored XSS o comment_text,/watch.php,POST,40.46,200,Tu choi / Ma hoa HTML,PASS,SEC_XSS
+11,KAN-45,TC11 - Bao mat: Kiem tra SQL Injection o comment_text,/watch.php,POST,14.75,200,Tu choi / Loc ma doc,PASS,SEC_SQLI
+12,KAN-45,TC12 - Quan ly binh luan: Lay danh sach binh luan toan he thong,/comments.php,GET,20.77,200,Hop le (200/302),PASS,API_KAN45_CMT
+13,KAN-45,TC13 - Bao mat: Chan khach chua dang nhap truy cap /comments.php,/comments.php,GET,16.41,200,Tu choi / Loc phan quyen Admin,PASS,SEC_RBAC
+14,KAN-45,TC14 - Quan ly binh luan: Xoa binh luan vi pham (delete_comment_id=2),/comments.php,POST,30.59,200,Hop le (200/302),PASS,API_KAN45_DEL
+15,KAN-45,TC15 - Lich su xem phim: Kiem tra danh sach va moc thoi gian,/watch_history.php,GET,8.21,200,Hop le (200/302),PASS,API_KAN45_HIS

@@ -1,0 +1,25 @@
+STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Payload_Params,Ket_Qua_Mong_Doi,Tag_Bao_Phu
+1,KAN-79,TC01 - Hien thi giao dien trang Dang ky cho khach vang lai,/register.php,GET,,Hop le (200),V1; API_KAN79
+2,KAN-80,TC02 - Dang ky thanh cong voi mat khau tai bien duoi min (6 ky tu),/register.php,POST,username=loc_qa01&email=loc_qa01@gmail.com&password=123456&confirm_password=123456,Hop le (200/302),V1; V2; V3; B1
+3,KAN-81,TC03 - Loi mat khau 5 ky tu nho hon bien duoi (min-),/register.php,POST,username=loc_qa02&email=loc_qa02@gmail.com&password=12345&confirm_password=12345,Khong hop le (password vi pham < 6),X1; B0
+4,KAN-82,TC04 - Loi bo trong cac truong bat buoc khi dang ky,/register.php,POST,username=&email=&password=&confirm_password=,Khong hop le (thieu truong bat buoc),X2
+5,KAN-83,TC05 - Loi mat khau xac nhan khong khop (password != confirm),/register.php,POST,username=loc_qa03&email=loc_qa03@gmail.com&password=123456&confirm_password=654321,Khong hop le (confirm_password khong khop),X3
+6,KAN-84,TC06 - Loi dang ky trung username da ton tai (tuan),/register.php,POST,username=tuan&email=new_tuan@gmail.com&password=123456&confirm_password=123456,Khong hop le (username da ton tai),X4
+7,KAN-85,TC07 - Loi dang ky trung email da ton tai (tuan@gmail.com),/register.php,POST,username=tuan_moi&email=tuan@gmail.com&password=123456&confirm_password=123456,Khong hop le (email da ton tai),X5
+8,KAN-86,TC08 - Loi dinh dang email khong hop le o tang Backend,/register.php,POST,username=test_bad_mail&email=not_an_email&password=123456&confirm_password=123456,Khong hop le (email sai dinh dang),X6
+9,KAN-87,TC09 - Dang nhap thanh cong bang Email hop le tai gia tri nominal,/login.php,POST,identifier=tuan@gmail.com&password=123456,Hop le (200/302),V1; V2; B2
+10,KAN-88,TC10 - Dang nhap thanh cong bang Username hop le (tuan),/login.php,POST,identifier=tuan&password=123456,Hop le (200/302),V1; V2; B3
+11,KAN-89,TC11 - Loi dang nhap khi nhap sai mat khau,/login.php,POST,identifier=tuan@gmail.com&password=sai_mat_khau_123,Khong hop le (mat khau khong dung),X7
+12,KAN-90,TC12 - Loi dang nhap khi tai khoan khong ton tai,/login.php,POST,identifier=khong_ton_tai@gmail.com&password=123456,Khong hop le (tai khoan khong ton tai),X8
+13,KAN-91,TC13 - Loi dang nhap khi bo trong identifier va password,/login.php,POST,identifier=&password=,Khong hop le (bo trong thong tin),X9
+14,KAN-92,TC14 - Bao mat: Chan Admin dang nhap qua cong User thuong,/login.php,POST,identifier=admin&password=admin123,Tu choi / Loc phan quyen RBAC,SEC_RBAC1
+15,KAN-93,TC15 - Dang nhap Quan tri vien thanh cong tai cong Admin,/admin_login.php,POST,identifier=admin&password=admin123,Hop le (200/302),V4; B4; API_KAN93
+16,KAN-94,TC16 - Bao mat: Chan User thuong (is_admin=0) dang nhap cong Admin,/admin_login.php,POST,identifier=tuan@gmail.com&password=123456,Tu choi / Loc phan quyen Admin,SEC_RBAC2
+17,KAN-95,TC17 - Bao mat: Chan khach vang lai truy cap trang /profile.php,/profile.php,GET,,Tu choi / Chuyen huong login (200/302),SEC_AUTH
+18,KAN-96,TC18 - Ho so ca nhan: Kiem tra trang thai VIP va tu dong ha cap,/profile.php,GET,tab=overview,Hop le (200/302),V5; API_KAN96
+19,KAN-97,TC19 - Cap nhat ho so (username tai gia tri hop le),/edit_profile.php,POST,update_profile=1&username=tuan&email=tuan@gmail.com,Hop le (200/302),V1; V2; B5
+20,KAN-98,TC20 - Loi cap nhat ho so voi email sai dinh dang,/edit_profile.php,POST,update_profile=1&username=tuan&email=sai_dinh_dang,Khong hop le (email vi pham dinh dang),X10
+21,KAN-99,TC21 - Doi mat khau thanh cong tai bien duoi min (6 ky tu),/change_password.php,POST,current_password=123456&new_password=654321&confirm_new_password=654321,Hop le (200/302),V3; B6; API_KAN99
+22,KAN-100,TC22 - Loi doi mat khau moi nho hon 6 ky tu (min-),/change_password.php,POST,current_password=123456&new_password=12345&confirm_new_password=12345,Khong hop le (new_password vi pham < 6),X11; B7
+23,KAN-101,TC23 - Dang xuat tai khoan va huy phien lam viec (Session Destroy),/logout.php,GET,,Hop le (200/302),API_KAN101
+24,KAN-102,TC24 - Bao mat: Kiem tra SQL Injection va XSS tren form Dang nhap,/login.php,POST,identifier=' OR 1=1 --&password=<script>alert(1)</script>,Tu choi / Loc ma doc SQLi & XSS,SEC_SQLI; SEC_XSS

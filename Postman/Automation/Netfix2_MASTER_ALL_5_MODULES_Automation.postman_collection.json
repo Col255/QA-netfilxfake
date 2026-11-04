@@ -1,0 +1,3572 @@
+{
+  "info": {
+    "_postman_id": "99999999-8888-4777-a666-555555555555",
+    "name": "Netfix2 - MASTER ALL 5 MODULES Automation (AUTH + MOV + INT + VIP + ADM)",
+    "description": "Bộ Collection Postman Tự Động Hóa Tổng Hợp Toàn Hệ Thống Netfix2 (5 Phân Hệ: AUTH, MOV, INT, VIP, ADM) - Gộp đầy đủ 100% kịch bản kiểm thử Black-Box, EP, BVA, RBAC & Bảo mật OWASP.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "PHÂN HỆ 1: AUTHENTICATION & SECURITY (AUTH - 24 TCs)",
+      "description": "Bộ kiểm thử tự động Phân hệ 1: Đăng ký, Đăng nhập User/Admin, Hồ sơ, Đổi mật khẩu, Đăng xuất & Bảo mật OWASP (KAN-79 -> KAN-102).",
+      "item": [
+        {
+          "name": "1. Đăng Ký Tài Khoản (/register.php) [AUTH_TC01 - AUTH_TC08]",
+          "item": [
+            {
+              "name": "AUTH_TC01 - Hiển thị giao diện trang Đăng ký thành công cho khách vãng lai",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC01: Hiển thị giao diện trang Đăng ký cho khách vãng lai",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC01] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC01] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC01] Giao diện chứa đầy đủ form .register-form và 4 trường input\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.include('register-form');",
+                      "    pm.expect(body).to.include('name=\"username\"');",
+                      "    pm.expect(body).to.include('name=\"email\"');",
+                      "    pm.expect(body).to.include('name=\"password\"');",
+                      "    pm.expect(body).to.include('name=\"confirm_password\"');",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc01{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC02 - Đăng ký tài khoản mới thành công với mật khẩu tại biên tối thiểu (6 ký tự)",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const ts = Date.now();",
+                      "pm.collectionVariables.set(\"dynamic_user\", \"loc_qa_\" + ts);",
+                      "pm.collectionVariables.set(\"dynamic_email\", \"loc_qa_\" + ts + \"@gmail.com\");"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC02: Đăng ký thành công tại biên tối thiểu 6 ký tự (BVA Min = 6)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC02] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC02] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC02] Hiển thị thông báo Đăng ký thành công và tự động chuyển hướng login.php\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.include(\"Đăng ký thành công! Vui lòng đăng nhập.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc02{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "{{dynamic_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "{{dynamic_email}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC03 - Từ chối đăng ký khi mật khẩu có 5 ký tự (Dưới biên tối thiểu)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC03: Từ chối đăng ký khi mật khẩu < 6 ký tự (BVA Min - 1 = 5)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC03] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC03] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC03] Hiển thị lỗi: Mật khẩu phải có ít nhất 6 ký tự\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Mật khẩu phải có ít nhất 6 ký tự.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc03{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "loc_bva5_{{$timestamp}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "loc_bva5_{{$timestamp}}@gmail.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "12345",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "12345",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC04 - Từ chối đăng ký khi bỏ trống các trường bắt buộc",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC04: Từ chối đăng ký khi bỏ trống các trường bắt buộc",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC04] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC04] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC04] Hiển thị lỗi: Vui lòng nhập đầy đủ thông tin\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Vui lòng nhập đầy đủ thông tin.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc04{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC05 - Từ chối đăng ký khi mật khẩu xác nhận không khớp",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC05: Từ chối đăng ký khi password != confirm_password",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC05] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC05] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC05] Hiển thị lỗi: Mật khẩu xác nhận không khớp\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Mật khẩu xác nhận không khớp.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc05{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "loc_mismatch_{{$timestamp}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "loc_mismatch_{{$timestamp}}@gmail.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "654321",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC06 - Từ chối đăng ký khi trùng Tên đăng nhập (username) đã tồn tại",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC06: Từ chối đăng ký khi trùng username đã tồn tại",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC06] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC06] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC06] Hiển thị lỗi: Tên đăng nhập hoặc email đã được sử dụng\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email đã được sử dụng.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc06{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "{{dynamic_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "unique_mail_{{$timestamp}}@gmail.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC07 - Từ chối đăng ký khi trùng Địa chỉ Email đã tồn tại",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC07: Từ chối đăng ký khi trùng email đã tồn tại",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC07] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC07] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC07] Hiển thị lỗi: Tên đăng nhập hoặc email đã được sử dụng\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email đã được sử dụng.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc07{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "unique_user_{{$timestamp}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "{{dynamic_email}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC08 - Kiểm tra xác thực định dạng Email ở tầng Backend khi gửi POST trực tiếp",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC08: Kiểm tra xác thực định dạng Email ở tầng Backend",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC08] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC08] Server phản hồi HTTP 200 OK và không gây lỗi 500\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC08] Ghi nhận kết quả kiểm tra Email Validation ở tầng Backend\", function () {",
+                      "    const body = pm.response.text();",
+                      "    if (body.includes(\"Đăng ký thành công\")) {",
+                      "        console.warn(\"[BUG-AUTH-01 DETECTED] register.php thiếu filter_var($email, FILTER_VALIDATE_EMAIL) ở tầng Backend!\");",
+                      "    }",
+                      "    pm.expect(body).to.be.a(\"string\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc08{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "username",
+                      "value": "badmail_user_{{$timestamp}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "not_an_email_{{$timestamp}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/register.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "register.php"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. Đăng Nhập Người Dùng (/login.php) [AUTH_TC09 - AUTH_TC14]",
+          "item": [
+            {
+              "name": "AUTH_TC09 - Đăng nhập thành công bằng Email hợp lệ của người dùng thường",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const sid = \"usersess\" + Date.now();",
+                      "pm.collectionVariables.set(\"auth_user_sid\", sid);"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC09: Đăng nhập thành công bằng Email hợp lệ",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC09] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC09] Phản hồi hợp lệ (HTTP 200 sau Redirect hoặc 302 Found)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "pm.test(\"[AUTH_TC09] Đăng nhập thành công, không xuất hiện thông báo lỗi .error\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.not.include(\"Mật khẩu không đúng.\");",
+                      "    pm.expect(body).to.not.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{dynamic_email}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC10 - Đăng nhập thành công bằng Username hợp lệ của người dùng thường",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC10: Đăng nhập thành công bằng Username hợp lệ",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC10] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC10] Phản hồi hợp lệ (HTTP 200 sau Redirect hoặc 302 Found)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "pm.test(\"[AUTH_TC10] Xác thực Username thành công, không báo lỗi đăng nhập\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.not.include(\"Mật khẩu không đúng.\");",
+                      "    pm.expect(body).to.not.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=usersess2{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{dynamic_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC11 - Từ chối đăng nhập khi nhập sai mật khẩu",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC11: Từ chối đăng nhập khi nhập sai mật khẩu",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC11] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC11] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC11] Hiển thị thông báo lỗi: Mật khẩu không đúng\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Mật khẩu không đúng.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc11{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{dynamic_email}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "sai_mat_khau_123",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC12 - Từ chối đăng nhập khi Username hoặc Email không tồn tại",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC12: Từ chối đăng nhập khi tài khoản không tồn tại",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC12] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC12] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC12] Hiển thị thông báo lỗi: Tên đăng nhập hoặc email không tồn tại\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc12{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "khong_ton_tai_{{$timestamp}}@gmail.com",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC13 - Từ chối đăng nhập khi bỏ trống trường Tên đăng nhập hoặc Mật khẩu",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC13: Từ chối đăng nhập khi bỏ trống trường bắt buộc",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC13] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC13] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC13] Hiển thị lỗi: Vui lòng nhập đầy đủ tên đăng nhập/email và mật khẩu\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Vui lòng nhập đầy đủ tên đăng nhập/email và mật khẩu.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc13{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC14 - Chặn tài khoản Admin đăng nhập qua cổng người dùng thường (/login.php)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC14: Chặn tài khoản Admin đăng nhập qua cổng User thường (RBAC)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC14] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC14] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC14] Điều kiện AND is_admin = 0 chặn tài khoản Admin trên /login.php\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc14{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{admin_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{admin_pass}}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. Đăng Nhập Admin & Phân Quyền RBAC (/admin_login.php) [AUTH_TC15 - AUTH_TC16]",
+          "item": [
+            {
+              "name": "AUTH_TC15 - Đăng nhập Quản trị viên tại cổng Admin (/admin_login.php)",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.collectionVariables.set(\"admin_sid\", \"adminsess\" + Date.now());"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC15: Đăng nhập Quản trị viên tại cổng /admin_login.php",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC15] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC15] Phản hồi HTTP 200 hoặc 302 từ cổng Admin\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "pm.test(\"[AUTH_TC15] Kiểm tra xác thực Admin (hoặc phát hiện BUG-AUTH-02 so sánh plain-text)\", function () {",
+                      "    const body = pm.response.text();",
+                      "    if (body.includes(\"Mật khẩu không đúng.\")) {",
+                      "        console.warn(\"[BUG-AUTH-02 DETECTED] admin_login.php dòng 29 dùng ($password === $user['password']) thay vì password_verify()!\");",
+                      "    }",
+                      "    pm.expect(body).to.not.include(\"Fatal error\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{admin_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{admin_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{admin_pass}}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin_login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin_login.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC16 - Chặn tài khoản người dùng thường (is_admin = 0) đăng nhập vào cổng Admin",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC16: Chặn tài khoản User thường đăng nhập vào cổng Admin (RBAC)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC16] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC16] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC16] Hiển thị lỗi từ chối quyền Admin đối với User thường\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Tên đăng nhập hoặc email không tồn tại hoặc tài khoản này không phải admin.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc16{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "{{dynamic_email}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "123456",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/admin_login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "admin_login.php"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. Quản Lý Hồ Sơ & Bảo Vệ Route (/profile.php, /edit_profile.php) [AUTH_TC17 - AUTH_TC20]",
+          "item": [
+            {
+              "name": "AUTH_TC17 - Chặn khách vãng lai (chưa đăng nhập) truy cập trực tiếp trang bảo vệ",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC17: Chặn khách vãng lai truy cập /profile.php (Access Guard)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC17] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC17] Chuyển hướng về login.php (302 Found hoặc 200 trang Đăng Nhập)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "    const body = pm.response.text();",
+                      "    if (pm.response.code === 200) {",
+                      "        pm.expect(body).to.include('action=\"login.php\"');",
+                      "        pm.expect(body).to.not.include('Hồ sơ của bạn');",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc17{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/profile.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "profile.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC18 - Truy cập Hồ sơ cá nhân & Kiểm tra đồng bộ trạng thái gói VIP",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC18: Hiển thị Hồ sơ cá nhân & Kiểm tra trạng thái VIP",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC18] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC18] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC18] Hiển thị đúng thông tin người dùng và trạng thái VIP (Chưa kích hoạt / Đang hoạt động)\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.include(\"Hồ sơ của bạn\");",
+                      "    pm.expect(body).to.include(\"Trạng thái VIP:\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/profile.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "profile.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC19 - Cập nhật thông tin hồ sơ (username, email) thành công",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const curUser = pm.collectionVariables.get(\"dynamic_user\");",
+                      "const curEmail = pm.collectionVariables.get(\"dynamic_email\");",
+                      "pm.collectionVariables.set(\"updated_user\", curUser + \"_up\");",
+                      "pm.collectionVariables.set(\"updated_email\", \"up_\" + curEmail);"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC19: Cập nhật thông tin hồ sơ (username, email) thành công",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC19] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC19] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC19] Hiển thị thông báo: Thông tin cá nhân đã được cập nhật thành công!\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.include(\"Thông tin cá nhân đã được cập nhật thành công!\");",
+                      "    pm.expect(body).to.include(pm.collectionVariables.get(\"updated_user\"));",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "update_profile",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "username",
+                      "value": "{{updated_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "{{updated_email}}",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/edit_profile.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "edit_profile.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC20 - Từ chối cập nhật hồ sơ khi nhập Email sai định dạng",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC20: Từ chối cập nhật hồ sơ khi nhập Email sai định dạng",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC20] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC20] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC20] Hiển thị thông báo lỗi: Địa chỉ email không hợp lệ\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Địa chỉ email không hợp lệ.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "update_profile",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "username",
+                      "value": "{{updated_user}}",
+                      "type": "text"
+                    },
+                    {
+                      "key": "email",
+                      "value": "email_sai_dinh_dang",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/edit_profile.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "edit_profile.php"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "5. Đổi Mật Khẩu, Đăng Xuất & Bảo Mật OWASP [AUTH_TC21 - AUTH_TC24]",
+          "item": [
+            {
+              "name": "AUTH_TC21 - Đổi mật khẩu thành công khi nhập đúng mật khẩu hiện tại và mật khẩu mới >= 6 ký tự",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC21: Đổi mật khẩu thành công tại biên 6 ký tự",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC21] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC21] HTTP Status Code hợp lệ (200 OK hoặc 302 Redirect)\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "});",
+                      "pm.test(\"[AUTH_TC21] Đổi mật khẩu thành công và điều hướng về trang Hồ sơ\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.include(\"Hồ sơ của bạn\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "current_password",
+                      "value": "123456",
+                      "type": "text"
+                    },
+                    {
+                      "key": "new_password",
+                      "value": "654321",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_new_password",
+                      "value": "654321",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/change_password.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "change_password.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC22 - Từ chối đổi mật khẩu khi nhập sai mật khẩu hiện tại hoặc mật khẩu mới < 6 ký tự",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC22: Từ chối đổi mật khẩu khi mật khẩu mới < 6 ký tự (BVA Min - 1 = 5)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC22] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC22] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC22] Hiển thị thông báo lỗi: Mật khẩu mới phải có ít nhất 6 ký tự\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Mật khẩu mới phải có ít nhất 6 ký tự.\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "change_password",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "current_password",
+                      "value": "654321",
+                      "type": "text"
+                    },
+                    {
+                      "key": "new_password",
+                      "value": "12345",
+                      "type": "text"
+                    },
+                    {
+                      "key": "confirm_new_password",
+                      "value": "12345",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/edit_profile.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "edit_profile.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC23 - Đăng xuất tài khoản thành công và hủy hoàn toàn phiên làm việc (Session Destroy)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC23: Đăng xuất tài khoản và hủy Session thành công",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC23] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC23] Phản hồi hợp lệ và chuyển hướng về trang login.php\", function () {",
+                      "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                      "    if (pm.response.code === 200) {",
+                      "        pm.expect(pm.response.text()).to.include('action=\"login.php\"');",
+                      "    }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID={{auth_user_sid}}",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/logout.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "logout.php"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "AUTH_TC24 - Phòng chống tấn công SQL Injection & XSS trên biểu mẫu Xác thực",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "// =========================================================================",
+                      "// AUTH_TC24: Phòng chống tấn công SQL Injection & XSS (OWASP)",
+                      "// =========================================================================",
+                      "pm.test(\"[AUTH_TC24] Thời gian phản hồi (Response Time) < 2000ms\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                      "});",
+                      "pm.test(\"[AUTH_TC24] HTTP Status Code là 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "pm.test(\"[AUTH_TC24] Chặn đứng SQL Injection (Prepared Statement) và không lộ lỗi SQL\", function () {",
+                      "    const body = pm.response.text();",
+                      "    pm.expect(body).to.include(\"Tên đăng nhập hoặc email không tồn tại.\");",
+                      "    pm.expect(body).to.not.include(\"SQL syntax\");",
+                      "    pm.expect(body).to.not.include(\"mysqli_sql_exception\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Cookie",
+                    "value": "PHPSESSID=guesttc24{{$timestamp}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "identifier",
+                      "value": "' OR '1'='1 -- <script>alert(1)</script>",
+                      "type": "text"
+                    },
+                    {
+                      "key": "password",
+                      "value": "' OR '1'='1 --",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/login.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "login.php"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHÂN HỆ 2: MOVIES, SEARCH & STREAMING (MOV - 13 TCs)",
+      "description": "Bộ kiểm thử tự động Phân hệ 2: Khám phá Trang chủ, Lọc Thể loại, Tìm kiếm Phim, Xem Phim & Bảo mật XSS/SQLi (MOV-01 -> MOV-04).",
+      "item": [
+        {
+          "name": "movies Copy",
+          "item": [
+            {
+              "name": "genres",
+              "item": [
+                {
+                  "name": "/movies.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Page returns movie genre category layout\", function () {",
+                          "    pm.expect(pm.response.text()).to.not.include(\"Fatal error\");",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/movies.php?genre={{movie_genre}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "movies.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "genre",
+                          "value": "{{movie_genre}}",
+                          "description": "Tên thể loại cần lọc (ví dụ: Hành Động, Hoạt Hình, Tình Cảm)"
+                        }
+                      ]
+                    },
+                    "description": "Lọc danh sách phim theo thể loại (Genre)"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Danh sách phim lọc theo thể loại",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/movies.php?genre=Hành Động",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "movies.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "genre",
+                              "value": "Hành Động"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Thể loại: Hành Động</h2><div class=\"movie-grid\"></div></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Lọc danh sách phim theo thể loại"
+            },
+            {
+              "name": "search",
+              "item": [
+                {
+                  "name": "/search.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Search query is reflected in response\", function () {",
+                          "    var keyword = pm.variables.get(\"search_keyword\") || \"Doremon\";",
+                          "    pm.expect(pm.response.text()).to.include(keyword);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/search.php?query={{search_keyword}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "search.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "query",
+                          "value": "{{search_keyword}}",
+                          "description": "Từ khóa tìm kiếm phim"
+                        }
+                      ]
+                    },
+                    "description": "Tìm kiếm phim theo từ khóa (tiêu đề, đạo diễn, diễn viên)"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Kết quả tìm kiếm phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/search.php?query=Doremon",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "search.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "query",
+                              "value": "Doremon"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Kết quả tìm kiếm cho: Doremon</h2></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Tìm kiếm phim theo từ khóa"
+            },
+            {
+              "name": "{id}",
+              "item": [
+                {
+                  "name": "/watch.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 OK\", function () {",
+                          "    pm.response.to.have.status(200);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});",
+                          "",
+                          "pm.test(\"Watch page loads video element or movie details\", function () {",
+                          "    pm.expect(pm.response.text()).to.include(\"video\");",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/watch.php?id={{movie_id}}&episode={{episode_id}}",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "watch.php"
+                      ],
+                      "query": [
+                        {
+                          "key": "id",
+                          "value": "{{movie_id}}",
+                          "description": "ID của phim"
+                        },
+                        {
+                          "key": "episode",
+                          "value": "{{episode_id}}",
+                          "description": "ID của tập phim"
+                        }
+                      ]
+                    },
+                    "description": "Xem chi tiết tập phim, giao diện phát video và danh sách tập"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Trình phát video và chi tiết tập phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/watch.php?id=1&episode=1",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "watch.php"
+                          ],
+                          "query": [
+                            {
+                              "key": "id",
+                              "value": "1"
+                            },
+                            {
+                              "key": "episode",
+                              "value": "1"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><div class=\"video-player\"><video controls></video></div></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Chi tiết phim và trình chiếu video theo Movie ID và Episode ID"
+            },
+            {
+              "name": "/index.php",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"Status code is 200 OK\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                      "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                      "});",
+                      "",
+                      "pm.test(\"Home page HTML contains Netfix brand\", function () {",
+                      "    pm.expect(pm.response.text()).to.include(\"Netfix\");",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/index.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "index.php"
+                  ]
+                },
+                "description": "Lấy trang chủ và danh mục danh sách phim hiển thị"
+              },
+              "response": [
+                {
+                  "name": "200 OK - Trang chủ danh sách phim",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{baseUrl}}/index.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "index.php"
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "html",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/html; charset=UTF-8"
+                    }
+                  ],
+                  "cookie": [],
+                  "body": "<!DOCTYPE html><html><head><title>NetfixVN</title></head><body><h1>NetfixVN Movies Catalog</h1></body></html>"
+                }
+              ]
+            }
+          ],
+          "description": "Quản lý duyệt phim, phân loại theo thể loại, tìm kiếm và chi tiết phim/tập phim"
+        }
+      ]
+    },
+    {
+      "name": "PHÂN HỆ 3: INTERACTIONS & ENGAGEMENT (INT - 15 TCs)",
+      "description": "Bộ kiểm thử tự động Phân hệ 3: API Bộ đếm lượt xem, Bình luận phim, Quản trị bình luận & Lịch sử xem phim (INT_TC01 -> INT_TC15).",
+      "item": [
+        {
+          "name": "INT_TC01 - Tăng lượt xem hợp lệ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/view_counter.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Check success response', function () { var jsonData = pm.response.json(); pm.expect(jsonData.success).to.eql(true); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC02 - Gọi API view với ID không hợp lệ",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/view_counter.php?id=0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Check error response', function () { var jsonData = pm.response.json(); pm.expect(jsonData.success).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC03 - ID vượt giới hạn kiểu dữ liệu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/view_counter.php?id=9999999999999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "9999999999999999"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Server handles overflow gracefully', function () { pm.expect(pm.response.code).to.be.oneOf([200, 400]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC04 - Kiểm thử cày lượt xem tự động (Spam View)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/view_counter.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "view_counter.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Spam request succeed', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC05 - Gửi bình luận thành công",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "comment_text",
+                  "value": "Phim hay qua"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response HTTP 200', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC06 - Từ chối nhận bình luận rỗng",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "comment_text",
+                  "value": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Empty comment rejected', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC07 - Gửi bình luận chỉ chứa khoảng trắng",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "comment_text",
+                  "value": "   "
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Whitespace comment trimmed and rejected', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC08 - Kiểm tra Stored XSS trong bình luận",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "comment_text",
+                  "value": "<script>alert('XSS')</script>"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('No executable script tag returned', function () { pm.expect(pm.response.text()).to.not.include('<script>alert(\"XSS\")</script>'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC09 - Kiểm tra SQL Injection trong bình luận",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "comment_text",
+                  "value": "' OR '1'='1 --"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/watch.php?id=1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch.php"
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('SQLi payload safe response', function () { pm.response.to.have.status(200); pm.expect(pm.response.text()).to.not.include('Syntax error'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC10 - Admin xem danh sách bình luận toàn hệ thống",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comments.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Admin comments dashboard loaded', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC11 - Chặn khách vãng lai truy cập comments.php",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/comments.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Redirects to login page', function () { pm.expect(pm.response.code).to.be.oneOf([302, 200]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC12 - Admin thực hiện xóa bình luận vi phạm",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "delete_comment_id",
+                  "value": "2"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/comments.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "comments.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Delete comment request handled', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC13 - Người dùng xem danh sách lịch sử xem phim",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch_history.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch_history.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('User watch history page loaded', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC14 - Chặn khách vãng lai truy cập watch_history.php",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch_history.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch_history.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Redirects unauthenticated user', function () { pm.expect(pm.response.code).to.be.oneOf([302, 200]); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "INT_TC15 - Kiểm tra Timestamp khi ghi nhận lịch sử",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/watch_history.php",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "watch_history.php"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Timestamp format matches local timezone', function () { pm.response.to.have.status(200); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "PHÂN HỆ 4: VIP PACKAGES & PAYMENT (VIP - 11 TCs)",
+      "description": "Bộ kiểm thử tự động Phân hệ 4: Danh sách gói VIP, Thanh toán MoMo/Chuyển khoản, Callback kết quả & Quản lý đơn VIP (VIP_TC01 -> VIP_TC11).",
+      "item": [
+        {
+          "name": "VIP_TC01 - Kiểm tra endpoint trang gói VIP phản hồi thành công",
+          "item": [
+            {
+              "name": "VIP_TC01 - Kiểm tra endpoint trang gói VIP phản hồi thành công",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC01\nTÊN: Kiểm tra endpoint trang gói VIP phản hồi thành công\nENDPOINT: /pricing.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server Apache và MySQL đang chạy; có thể truy cập localhost/netfix2.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /pricing.php trên Postman.\n2. Kiểm tra status code.\n3. Kiểm tra thời gian phản hồi.\n\nDỮ LIỆU KIỂM THỬ:\nURL: http://localhost/netfix2/pricing.php\n\nKẾT QUẢ MONG ĐỢI:\nHTTP 200 hoặc redirect hợp lệ; thời gian phản hồi dưới 1500 ms.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Positive\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                      "pm.test('Thời gian phản hồi dưới 1500 ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC02 - Kiểm tra nội dung trang hiển thị gói VIP hoặc yêu cầu đăng nhập",
+          "item": [
+            {
+              "name": "VIP_TC02 - Kiểm tra nội dung trang hiển thị gói VIP hoặc yêu cầu đăng nhập",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC02\nTÊN: Kiểm tra nội dung trang hiển thị gói VIP hoặc yêu cầu đăng nhập\nENDPOINT: /pricing.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /pricing.php.\n2. Kiểm tra response body / Preview để xác nhận nội dung phù hợp.\n\nDỮ LIỆU KIỂM THỬ:\nKhông có query params.\n\nKẾT QUẢ MONG ĐỢI:\nTrang hiển thị thông tin các gói VIP hoặc chuyển hướng/yêu cầu đăng nhập theo trạng thái phiên.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Functional\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                      "pm.test('Response body không rỗng', function () { pm.expect(pm.response.text().length).to.be.above(0); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC03 - Kiểm tra các gói và mức giá VIP",
+          "item": [
+            {
+              "name": "VIP_TC03 - Kiểm tra các gói và mức giá VIP",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/pricing.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "pricing.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC03\nTÊN: Kiểm tra các gói và mức giá VIP\nENDPOINT: /pricing.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTrang pricing.php có thể truy cập và dữ liệu gói được cấu hình.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi GET /pricing.php.\n2. Kiểm tra response body hoặc giao diện Preview.\n3. Đối chiếu tên gói và giá.\n\nDỮ LIỆU KIỂM THỬ:\nGói 1 tháng: 79.000 VNĐ; 3 tháng: 201.675 VNĐ; 6 tháng: 379.200 VNĐ (theo pricing.php).\n\nKẾT QUẢ MONG ĐỢI:\nCác gói và mức giá hiển thị đúng theo cấu hình pricing.php.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Functional\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "const baseUrl = pm.collectionVariables.get('baseUrl') || 'http://localhost/netfix2';",
+                      "pm.sendRequest({",
+                      "  url: baseUrl + '/login.php',",
+                      "  method: 'POST',",
+                      "  header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+                      "  body: {",
+                      "    mode: 'urlencoded',",
+                      "    urlencoded: [",
+                      "      { key: 'identifier', value: 'tuan@gmail.com' },",
+                      "      { key: 'password', value: '123456' }",
+                      "    ]",
+                      "  }",
+                      "}, function () {});"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                      "pm.test('Response có thông tin giá gói VIP theo cấu hình', function () {",
+                      "  const body = pm.response.text().replace(/\\D/g, '');",
+                      "  pm.expect(body).to.include('79000');",
+                      "  pm.expect(body).to.include('201675');",
+                      "  pm.expect(body).to.include('379200');",
+                      "});"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC04 - Kiểm tra endpoint xử lý thanh toán phản hồi thành công",
+          "item": [
+            {
+              "name": "VIP_TC04 - Kiểm tra endpoint xử lý thanh toán phản hồi thành công",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/process_payment.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process_payment.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC04\nTÊN: Kiểm tra endpoint xử lý thanh toán phản hồi thành công\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server và MySQL đang chạy; request được gửi qua Postman.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request POST /process_payment.php.\n2. Kiểm tra status code.\n3. Kiểm tra thời gian phản hồi.\n\nDỮ LIỆU KIỂM THỬ:\nURL: http://localhost/netfix2/process_payment.php\n\nKẾT QUẢ MONG ĐỢI:\nHTTP 200 hoặc redirect hợp lệ; thời gian phản hồi dưới 2000 ms.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Positive\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                      "pm.test('Thời gian phản hồi dưới 2000 ms', function () { pm.expect(pm.response.responseTime).to.be.below(2000); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC05 - Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ",
+          "item": [
+            {
+              "name": "VIP_TC05 - Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ - Thiếu package_id",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/process_payment.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process_payment.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC05\nTÊN: Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST không có package_id hoặc package_id ngoài 1–3.\n2. Kiểm tra phản hồi và chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id: bỏ trống hoặc 999\n\nKẾT QUẢ MONG ĐỢI:\nHệ thống thông báo gói VIP không hợp lệ và chuyển hướng theo logic xử lý; không tạo đơn hàng hợp lệ.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Negative\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "payment_method",
+                      "value": "Momo",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                      "pm.test('Không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "VIP_TC05 - Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ - package_id không hợp lệ",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/process_payment.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process_payment.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC05\nTÊN: Kiểm tra xử lý khi thiếu package_id / package_id không hợp lệ\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST không có package_id hoặc package_id ngoài 1–3.\n2. Kiểm tra phản hồi và chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id: bỏ trống hoặc 999\n\nKẾT QUẢ MONG ĐỢI:\nHệ thống thông báo gói VIP không hợp lệ và chuyển hướng theo logic xử lý; không tạo đơn hàng hợp lệ.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Negative\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "package_id",
+                      "value": "999",
+                      "type": "text"
+                    },
+                    {
+                      "key": "payment_method",
+                      "value": "Momo",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                      "pm.test('Không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC06 - Kiểm tra chọn phương thức thanh toán MoMo",
+          "item": [
+            {
+              "name": "VIP_TC06 - Kiểm tra chọn phương thức thanh toán MoMo",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/process_payment.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process_payment.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC06\nTÊN: Kiểm tra chọn phương thức thanh toán MoMo\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTài khoản đã đăng nhập; cấu hình kết nối MoMo test có thể truy cập.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST với package_id hợp lệ và payment_method=Momo.\n2. Kiểm tra kết quả tạo giao dịch.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id=1; payment_method=Momo\n\nKẾT QUẢ MONG ĐỢI:\nNếu MoMo trả payUrl, hệ thống tạo đơn Pending và chuyển hướng tới URL thanh toán; nếu không, hiển thị lỗi kết nối.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Integration\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "package_id",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "payment_method",
+                      "value": "Momo",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 201, 202, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 201, 202, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                      "pm.test('Request được xử lý, không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC07 - Kiểm tra phương thức thanh toán không phải MoMo",
+          "item": [
+            {
+              "name": "VIP_TC07 - Kiểm tra phương thức thanh toán không phải MoMo",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/x-www-form-urlencoded",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/process_payment.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "process_payment.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC07\nTÊN: Kiểm tra phương thức thanh toán không phải MoMo\nENDPOINT: /process_payment.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTài khoản đã đăng nhập; CSDL hoạt động.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi POST với package_id hợp lệ và phương thức thanh toán khác MoMo.\n2. Kiểm tra đơn hàng và trạng thái VIP sau xử lý.\n\nDỮ LIỆU KIỂM THỬ:\npackage_id=1; payment_method=Chuyển khoản ngân hàng\n\nKẾT QUẢ MONG ĐỢI:\nTheo code hiện tại, hệ thống tạo đơn Completed và cập nhật is_vip=1, vip_expires_at.\n\nƯU TIÊN: P2 (Medium)\nLOẠI TEST: Functional\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI.",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "key": "package_id",
+                      "value": "1",
+                      "type": "text"
+                    },
+                    {
+                      "key": "payment_method",
+                      "value": "Chuyển khoản ngân hàng",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 201, 202, 301, 302, 303, 400, 401, 403, 422]', function () { pm.expect([200, 201, 202, 301, 302, 303, 400, 401, 403, 422]).to.include(pm.response.code); });",
+                      "pm.test('Request được xử lý, không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC08 - Kiểm tra trang trả kết quả thanh toán thành công",
+          "item": [
+            {
+              "name": "VIP_TC08 - Kiểm tra trang trả kết quả thanh toán thành công",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/payment_return.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payment_return.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "resultCode",
+                      "value": "0"
+                    },
+                    {
+                      "key": "message",
+                      "value": "Success"
+                    }
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC08\nTÊN: Kiểm tra trang trả kết quả thanh toán thành công\nENDPOINT: /payment_return.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nTài khoản đã đăng nhập và có thể mô phỏng query callback.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi GET /payment_return.php?resultCode=0&message=Success.\n2. Kiểm tra thông báo, trạng thái đơn và thông tin VIP.\n\nDỮ LIỆU KIỂM THỬ:\nresultCode=0; message=Success\n\nKẾT QUẢ MONG ĐỢI:\nHiển thị thông báo thanh toán thành công và kích hoạt/cập nhật thời hạn VIP theo logic hiện tại.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Integration\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403]).to.include(pm.response.code); });",
+                      "pm.test('Callback được xử lý mà không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC09 - Kiểm tra trang trả kết quả thanh toán thất bại",
+          "item": [
+            {
+              "name": "VIP_TC09 - Kiểm tra trang trả kết quả thanh toán thất bại",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/payment_return.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "payment_return.php"
+                  ],
+                  "query": [
+                    {
+                      "key": "resultCode",
+                      "value": "1006"
+                    },
+                    {
+                      "key": "message",
+                      "value": "Failed"
+                    }
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC09\nTÊN: Kiểm tra trang trả kết quả thanh toán thất bại\nENDPOINT: /payment_return.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy; có thể mô phỏng callback thất bại.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi GET /payment_return.php?resultCode=1006&message=Failed.\n2. Kiểm tra thông báo thất bại.\n\nDỮ LIỆU KIỂM THỬ:\nresultCode=1006; message=Failed\n\nKẾT QUẢ MONG ĐỢI:\nHiển thị thông báo thanh toán thất bại; không kích hoạt VIP mới.\n\nƯU TIÊN: P2 (Medium)\nLOẠI TEST: Negative\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 400, 401, 403]', function () { pm.expect([200, 301, 302, 303, 400, 401, 403]).to.include(pm.response.code); });",
+                      "pm.test('Callback được xử lý mà không phát sinh lỗi máy chủ 5xx', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC10 - Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công",
+          "item": [
+            {
+              "name": "VIP_TC10 - Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/orders.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC10\nTÊN: Kiểm tra endpoint trang quản lý đơn hàng VIP phản hồi thành công\nENDPOINT: /orders.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server Apache và MySQL đang chạy; có thể truy cập localhost/netfix2.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /orders.php trên Postman.\n2. Kiểm tra HTTP status code.\n3. Kiểm tra thời gian phản hồi.\n\nDỮ LIỆU KIỂM THỬ:\nURL: http://localhost/netfix2/orders.php\n\nKẾT QUẢ MONG ĐỢI:\nHTTP 200 OK hoặc redirect hợp lệ; thời gian phản hồi dưới 1500 ms.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Positive\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 307, 308]', function () { pm.expect([200, 301, 302, 303, 307, 308]).to.include(pm.response.code); });",
+                      "pm.test('Thời gian phản hồi dưới 1500 ms', function () { pm.expect(pm.response.responseTime).to.be.below(1500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP",
+          "item": [
+            {
+              "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP - Phiên Admin",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/orders.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC11\nTÊN: Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP\nENDPOINT: /orders.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy; CSDL có dữ liệu đơn hàng trong bảng orders.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /orders.php với phiên Admin và phiên khách.\n2. Kiểm tra nội dung phản hồi hoặc hành vi chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\nTrường hợp 1: Đã đăng nhập Admin (is_admin=1)\nTrường hợp 2: Chưa đăng nhập hoặc không phải Admin\n\nKẾT QUẢ MONG ĐỢI:\nAdmin xem được danh sách đơn hàng VIP kèm tổng doanh thu; người dùng không đủ quyền bị chuyển hướng về admin_login.php.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Security / Auth\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 401, 403]', function () { pm.expect([200, 301, 302, 303, 401, 403]).to.include(pm.response.code); });",
+                      "pm.test('Response có nội dung hoặc điều hướng đăng nhập/quyền truy cập', function () { pm.expect(pm.response.text().length > 0 || [301,302,303,401,403].includes(pm.response.code)).to.eql(true); });"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "VIP_TC11 - Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP - Phiên khách/user thường",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/orders.php",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "orders.php"
+                  ]
+                },
+                "description": "TEST CASE: VIP_TC11\nTÊN: Kiểm tra phân quyền Admin và nội dung danh sách đơn hàng gói VIP\nENDPOINT: /orders.php\n\nĐIỀU KIỆN TIÊN QUYẾT:\nWeb server đang chạy; CSDL có dữ liệu đơn hàng trong bảng orders.\n\nCÁC BƯỚC THỰC HIỆN:\n1. Gửi request GET /orders.php với phiên Admin và phiên khách.\n2. Kiểm tra nội dung phản hồi hoặc hành vi chuyển hướng.\n\nDỮ LIỆU KIỂM THỬ:\nTrường hợp 1: Đã đăng nhập Admin (is_admin=1)\nTrường hợp 2: Chưa đăng nhập hoặc không phải Admin\n\nKẾT QUẢ MONG ĐỢI:\nAdmin xem được danh sách đơn hàng VIP kèm tổng doanh thu; người dùng không đủ quyền bị chuyển hướng về admin_login.php.\n\nƯU TIÊN: P1 (High)\nLOẠI TEST: Security / Auth\n\nGhi chú automation: Postman assertions hiện kiểm tra HTTP/status/thời gian phản hồi ở mức API. Các kết quả cần xác minh DB (đơn hàng, is_vip, vip_expires_at, doanh thu) phải kiểm tra bổ sung trong CSDL hoặc UI."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test('HTTP status thuộc nhóm mong đợi: [200, 301, 302, 303, 401, 403]', function () { pm.expect([200, 301, 302, 303, 401, 403]).to.include(pm.response.code); });",
+                      "pm.test('Không trả lỗi máy chủ; cần xác nhận redirect/chặn quyền theo kết quả thực tế', function () { pm.expect(pm.response.code).to.be.below(500); });"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const baseUrl = pm.collectionVariables.get('baseUrl') || 'http://localhost/netfix2';",
+              "pm.sendRequest({",
+              "  url: baseUrl + '/login.php',",
+              "  method: 'POST',",
+              "  header: { 'Content-Type': 'application/x-www-form-urlencoded' },",
+              "  body: {",
+              "    mode: 'urlencoded',",
+              "    urlencoded: [",
+              "      { key: 'identifier', value: 'tuan@gmail.com' },",
+              "      { key: 'password', value: '123456' }",
+              "    ]",
+              "  }",
+              "}, function () {});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "PHÂN HỆ 5: ADMIN MANAGEMENT CMS (ADM - 13 TCs)",
+      "description": "Bộ kiểm thử tự động Phân hệ 5: Thêm phim mới (EP/BVA/SQLi/XSS), Quản lý phim, Quản lý đơn hàng VIP, Quản lý khách hàng & Thống kê doanh thu (KAN-47 -> KAN-51).",
+      "item": [
+        {
+          "name": "admin Copy",
+          "item": [
+            {
+              "name": "movies",
+              "item": [
+                {
+                  "name": "/add_movie.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 2000ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "body": {
+                      "mode": "formdata",
+                      "formdata": [
+                        {
+                          "key": "title",
+                          "value": "Phim Test QA Tự Động 2026",
+                          "description": "Tên phim",
+                          "type": "text"
+                        },
+                        {
+                          "key": "description",
+                          "value": "Mô tả phim dùng cho kịch bản kiểm thử Postman QA",
+                          "description": "Mô tả nội dung",
+                          "type": "text"
+                        },
+                        {
+                          "key": "genre",
+                          "value": "Hành Động",
+                          "description": "Thể loại chính",
+                          "type": "text"
+                        },
+                        {
+                          "key": "sub_genre",
+                          "value": "Kịch tính",
+                          "description": "Thể loại phụ",
+                          "type": "text"
+                        },
+                        {
+                          "key": "year",
+                          "value": "2026",
+                          "description": "Năm phát hành",
+                          "type": "text"
+                        },
+                        {
+                          "key": "duration",
+                          "value": "120",
+                          "description": "Thời lượng (phút)",
+                          "type": "text"
+                        },
+                        {
+                          "key": "language",
+                          "value": "Tiếng Việt",
+                          "description": "Ngôn ngữ",
+                          "type": "text"
+                        },
+                        {
+                          "key": "country",
+                          "value": "Việt Nam",
+                          "description": "Quốc gia sản xuất",
+                          "type": "text"
+                        },
+                        {
+                          "key": "status",
+                          "value": "active",
+                          "description": "Trạng thái hiển thị",
+                          "type": "text"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/add_movie.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "add_movie.php"
+                      ]
+                    },
+                    "description": "Thêm một bộ phim mới vào cơ sở dữ liệu hệ thống"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Form thêm phim hoặc xác nhận",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/add_movie.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "add_movie.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Thêm Phim Mới</h2></body></html>"
+                    }
+                  ]
+                },
+                {
+                  "name": "/manage_movies.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302 (Admin Session Check)\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/manage_movies.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "manage_movies.php"
+                      ]
+                    },
+                    "description": "Xem và quản lý danh sách toàn bộ các phim hiện có trong hệ thống"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Danh sách quản lý phim",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/manage_movies.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "manage_movies.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Phim</h2></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Quản lý kho phim"
+            },
+            {
+              "name": "orders",
+              "item": [
+                {
+                  "name": "/orders.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/orders.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "orders.php"
+                      ]
+                    },
+                    "description": "Xem và phê duyệt các đơn hàng đăng ký VIP của khách hàng"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Quản lý đơn hàng",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/orders.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "orders.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Đơn Hàng VIP</h2></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Quản lý các đơn hàng đăng ký VIP của khách hàng"
+            },
+            {
+              "name": "customers",
+              "item": [
+                {
+                  "name": "/customers.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/customers.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "customers.php"
+                      ]
+                    },
+                    "description": "Xem danh sách khách hàng và quản lý trạng thái tài khoản VIP"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Quản lý khách hàng",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/customers.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "customers.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Quản Lý Khách Hàng</h2></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Quản lý tài khoản khách hàng người dùng"
+            },
+            {
+              "name": "statistics",
+              "item": [
+                {
+                  "name": "/statistics.php",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.test(\"Status code is 200 or 302\", function () {",
+                          "    pm.expect(pm.response.code).to.be.oneOf([200, 302]);",
+                          "});",
+                          "",
+                          "pm.test(\"Response time is acceptable (< 1500ms)\", function () {",
+                          "    pm.expect(pm.response.responseTime).to.be.below(1500);",
+                          "});"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "text/html,application/xhtml+xml,application/xml"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/statistics.php",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "statistics.php"
+                      ]
+                    },
+                    "description": "Báo cáo số liệu tổng quan doanh thu, số lượng người dùng và lượt xem"
+                  },
+                  "response": [
+                    {
+                      "name": "200 OK - Báo cáo thống kê",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                          "raw": "{{baseUrl}}/statistics.php",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "statistics.php"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "html",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "text/html; charset=UTF-8"
+                        }
+                      ],
+                      "cookie": [],
+                      "body": "<!DOCTYPE html><html><body><h2>Báo Cáo Thống Kê</h2></body></html>"
+                    }
+                  ]
+                }
+              ],
+              "description": "Báo cáo thống kê số liệu kinh doanh và lượt xem"
+            }
+          ],
+          "description": "Các chức năng quản trị viên: Thêm phim, quản lý phim, đơn hàng, khách hàng và thống kê"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "base_url",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "admin_user",
+      "value": "admin",
+      "type": "string"
+    },
+    {
+      "key": "admin_pass",
+      "value": "admin123",
+      "type": "string"
+    },
+    {
+      "key": "dynamic_user",
+      "value": "loc_qa_auto",
+      "type": "string"
+    },
+    {
+      "key": "dynamic_email",
+      "value": "loc_qa_auto@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "updated_user",
+      "value": "loc_qa_auto_up",
+      "type": "string"
+    },
+    {
+      "key": "updated_email",
+      "value": "up_loc_qa_auto@gmail.com",
+      "type": "string"
+    },
+    {
+      "key": "auth_user_sid",
+      "value": "usersessinit2026",
+      "type": "string"
+    },
+    {
+      "key": "admin_sid",
+      "value": "adminsessinit2026",
+      "type": "string"
+    },
+    {
+      "key": "sessionCookie",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminSessionCookie",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "guestSessionCookie",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

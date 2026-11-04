@@ -1,0 +1,16 @@
+﻿STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Payload_Params,Ket_Qua_Mong_Doi,Tag_Bao_Phu
+1,KAN-33,TC01 - Tang luot xem phim thanh cong tai bien duoi min (id=1),/api/view_counter.php,GET,"id=1",Hop le (200),V1; B1
+2,KAN-33,TC02 - Tang luot xem phim tai gia tri danh dinh nominal (id=52),/api/view_counter.php,GET,"id=52",Hop le (200),V1; B3
+3,KAN-34,TC03 - Loi id bang 0 nho hon bien duoi (min-),/api/view_counter.php,GET,"id=0",Khong hop le (id vi pham < 1),X1; B0
+4,KAN-34,TC04 - Loi id la so nguyen am (id=-5),/api/view_counter.php,GET,"id=-5",Khong hop le (id am vi pham mien duong),X2
+5,KAN-34,TC05 - Loi id vuot gioi han kieu du lieu (max+),/api/view_counter.php,GET,"id=9999999999999999",Khong hop le (id vuot bien max+),X3; B5
+6,KAN-36,TC06 - Kiem thu tai / Spam luot xem lien tuc qua API,/api/view_counter.php,GET,"id=1",Hop le (200),V1; API_KAN36
+7,KAN-45,TC07 - Gui binh luan hop le tai gia tri danh dinh nominal,/watch.php,POST,"id=1&comment_text=Phim hay qua",Hop le (200/302),V2; V3; B6
+8,KAN-45,TC08 - Loi gui binh luan bo trong noi dung (min-),/watch.php,POST,"id=1&comment_text=",Khong hop le (comment_text rong),X4
+9,KAN-45,TC09 - Loi gui binh luan chi chua khoang trang,/watch.php,POST,"id=1&comment_text=     ",Khong hop le (comment_text toan khoang trang),X5
+10,KAN-45,TC10 - Bao mat: Kiem tra Stored XSS o comment_text,/watch.php,POST,"id=1&comment_text=<script>alert(1)</script>",Tu choi / Ma hoa HTML,SEC_XSS
+11,KAN-45,TC11 - Bao mat: Kiem tra SQL Injection o comment_text,/watch.php,POST,"id=1&comment_text=' OR 1=1 --",Tu choi / Loc ma doc,SEC_SQLI
+12,KAN-45,TC12 - Quan ly binh luan: Lay danh sach binh luan toan he thong,/comments.php,GET,"",Hop le (200/302),API_KAN45_CMT
+13,KAN-45,TC13 - Bao mat: Chan khach chua dang nhap truy cap /comments.php,/comments.php,GET,"",Tu choi / Loc phan quyen Admin,SEC_RBAC
+14,KAN-45,TC14 - Quan ly binh luan: Xoa binh luan vi pham (delete_comment_id=2),/comments.php,POST,"delete_comment_id=2",Hop le (200/302),API_KAN45_DEL
+15,KAN-45,TC15 - Lich su xem phim: Kiem tra danh sach va moc thoi gian,/watch_history.php,GET,"",Hop le (200/302),API_KAN45_HIS

@@ -1,0 +1,25 @@
+STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Thoi_Gian_ms,Status_Code,Ket_Qua_Mong_Doi,Trang_Thai,Tag_Bao_Phu
+1,KAN-79,TC01 - Hien thi giao dien trang Dang ky cho khach vang lai,/register.php,GET,17.17,200,Hop le (200),PASS,V1; API_KAN79
+2,KAN-80,TC02 - Dang ky thanh cong voi mat khau tai bien duoi min (6 ky tu),/register.php,POST,108.1,200,Hop le (200/302),PASS,V1; V2; V3; B1
+3,KAN-81,TC03 - Loi mat khau 5 ky tu nho hon bien duoi (min-),/register.php,POST,26.22,200,Khong hop le (password vi pham < 6),PASS,X1; B0
+4,KAN-82,TC04 - Loi bo trong cac truong bat buoc khi dang ky,/register.php,POST,16.27,200,Khong hop le (thieu truong bat buoc),PASS,X2
+5,KAN-83,TC05 - Loi mat khau xac nhan khong khop (password != confirm),/register.php,POST,15.01,200,Khong hop le (confirm_password khong khop),PASS,X3
+6,KAN-84,TC06 - Loi dang ky trung username da ton tai (tuan),/register.php,POST,17.92,200,Khong hop le (username da ton tai),PASS,X4
+7,KAN-85,TC07 - Loi dang ky trung email da ton tai (tuan@gmail.com),/register.php,POST,6.4,200,Khong hop le (email da ton tai),PASS,X5
+8,KAN-86,TC08 - Loi dinh dang email khong hop le o tang Backend,/register.php,POST,90.09,200,Khong hop le (email sai dinh dang),PASS,X6
+9,KAN-87,TC09 - Dang nhap thanh cong bang Email hop le tai gia tri nominal,/login.php,POST,116.67,200,Hop le (200/302),PASS,V1; V2; B2
+10,KAN-88,TC10 - Dang nhap thanh cong bang Username hop le (tuan),/login.php,POST,77.96,200,Hop le (200/302),PASS,V1; V2; B3
+11,KAN-89,TC11 - Loi dang nhap khi nhap sai mat khau,/login.php,POST,56.07,200,Khong hop le (mat khau khong dung),PASS,X7
+12,KAN-90,TC12 - Loi dang nhap khi tai khoan khong ton tai,/login.php,POST,28.2,200,Khong hop le (tai khoan khong ton tai),PASS,X8
+13,KAN-91,TC13 - Loi dang nhap khi bo trong identifier va password,/login.php,POST,2.3,200,Khong hop le (bo trong thong tin),PASS,X9
+14,KAN-92,TC14 - Bao mat: Chan Admin dang nhap qua cong User thuong,/login.php,POST,3.05,200,Tu choi / Loc phan quyen RBAC,PASS,SEC_RBAC1
+15,KAN-93,TC15 - Dang nhap Quan tri vien thanh cong tai cong Admin,/admin_login.php,POST,2.05,200,Hop le (200/302),PASS,V4; B4; API_KAN93
+16,KAN-94,TC16 - Bao mat: Chan User thuong (is_admin=0) dang nhap cong Admin,/admin_login.php,POST,20.79,200,Tu choi / Loc phan quyen Admin,PASS,SEC_RBAC2
+17,KAN-95,TC17 - Bao mat: Chan khach vang lai truy cap trang /profile.php,/profile.php,GET,14.04,200,Tu choi / Chuyen huong login (200/302),PASS,SEC_AUTH
+18,KAN-96,TC18 - Ho so ca nhan: Kiem tra trang thai VIP va tu dong ha cap,/profile.php,GET,1.93,200,Hop le (200/302),PASS,V5; API_KAN96
+19,KAN-97,TC19 - Cap nhat ho so (username tai gia tri hop le),/edit_profile.php,POST,14.5,200,Hop le (200/302),PASS,V1; V2; B5
+20,KAN-98,TC20 - Loi cap nhat ho so voi email sai dinh dang,/edit_profile.php,POST,15.12,200,Khong hop le (email vi pham dinh dang),PASS,X10
+21,KAN-99,TC21 - Doi mat khau thanh cong tai bien duoi min (6 ky tu),/change_password.php,POST,15.97,200,Hop le (200/302),PASS,V3; B6; API_KAN99
+22,KAN-100,TC22 - Loi doi mat khau moi nho hon 6 ky tu (min-),/change_password.php,POST,16.35,200,Khong hop le (new_password vi pham < 6),PASS,X11; B7
+23,KAN-101,TC23 - Dang xuat tai khoan va huy phien lam viec (Session Destroy),/logout.php,GET,5.07,200,Hop le (200/302),PASS,API_KAN101
+24,KAN-102,TC24 - Bao mat: Kiem tra SQL Injection va XSS tren form Dang nhap,/login.php,POST,29.25,200,Tu choi / Loc ma doc SQLi & XSS,PASS,SEC_SQLI; SEC_XSS

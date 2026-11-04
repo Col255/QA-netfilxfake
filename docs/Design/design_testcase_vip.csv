@@ -1,0 +1,12 @@
+STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Payload_Params,Ket_Qua_Mong_Doi,Tag_Bao_Phu
+1,KAN-105,TC01 - Trang goi VIP: Kiem tra endpoint phan hoi thanh cong,/pricing.php,GET,"",Hop le (200/302),V1; API_KAN105
+2,KAN-106,TC02 - Trang goi VIP: Hien thi thong tin goi hoac yeu cau dang nhap,/pricing.php,GET,"",Hop le (200/302),V1; B1
+3,KAN-107,TC03 - Trang goi VIP: Kiem tra 3 goi VIP (1-3-6 thang) va muc gia,/pricing.php,GET,"",Hop le (200/302),V1; V2; B2
+4,KAN-108,TC04 - Xu ly thanh toan: Kiem tra endpoint phan hoi thanh cong,/process_payment.php,POST,"package_id=1&payment_method=Chuyen khoan ngan hang",Hop le (200/302),V2; V3; B3
+5,KAN-109,TC05 - Loi package_id vuot bien tren max (max+ = 999),/process_payment.php,POST,"package_id=999&payment_method=Momo",Khong hop le (package_id vi pham > 3),X1; B5
+6,KAN-110,TC06 - Thanh toan VIP tai bien duoi min (package_id=1 Momo),/process_payment.php,POST,"package_id=1&payment_method=Momo",Hop le (200/302),V2; V3; B1; B6
+7,KAN-111,TC07 - Thanh toan VIP tai bien tren max (package_id=3 Chuyen khoan),/process_payment.php,POST,"package_id=3&payment_method=Chuyen khoan ngan hang",Hop le (200/302),V2; V3; B4; B8
+8,KAN-112,TC08 - Ket qua thanh toan: Callback thanh cong (resultCode=0),/payment_return.php,GET,"resultCode=0&message=Success",Hop le (200/302),V4; B9
+9,KAN-113,TC09 - Ket qua thanh toan: Callback that bai (resultCode=1006),/payment_return.php,GET,"resultCode=1006&message=Failed",Khong hop le (Giao dich that bai 1006),X2; B10
+10,KAN-114,TC10 - Quan ly don hang VIP: Kiem tra endpoint /orders.php,/orders.php,GET,"status=pending",Hop le (200),API_KAN114
+11,KAN-115,TC11 - Bao mat: Kiem tra phan quyen Admin xem danh sach don VIP,/orders.php,GET,"status=all",Tu choi / Loc phan quyen Admin,SEC_RBAC; API_KAN115

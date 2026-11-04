@@ -1,0 +1,77 @@
+﻿STT,Jira_Task,Ten_Test_Case,Endpoint,Method,Thoi_Gian_ms,Status_Code,Ket_Qua_Mong_Doi,Trang_Thai,Tag_Bao_Phu
+1,KAN-79,TC01 - Hien thi giao dien trang Dang ky cho khach vang lai,/register.php,GET,17.17,200,Hop le (200),PASS,V1; API_KAN79
+2,KAN-80,TC02 - Dang ky thanh cong voi mat khau tai bien duoi min (6 ky tu),/register.php,POST,108.1,200,Hop le (200/302),PASS,V1; V2; V3; B1
+3,KAN-81,TC03 - Loi mat khau 5 ky tu nho hon bien duoi (min-),/register.php,POST,26.22,200,Khong hop le (password vi pham < 6),PASS,X1; B0
+4,KAN-82,TC04 - Loi bo trong cac truong bat buoc khi dang ky,/register.php,POST,16.27,200,Khong hop le (thieu truong bat buoc),PASS,X2
+5,KAN-83,TC05 - Loi mat khau xac nhan khong khop (password != confirm),/register.php,POST,15.01,200,Khong hop le (confirm_password khong khop),PASS,X3
+6,KAN-84,TC06 - Loi dang ky trung username da ton tai (tuan),/register.php,POST,17.92,200,Khong hop le (username da ton tai),PASS,X4
+7,KAN-85,TC07 - Loi dang ky trung email da ton tai (tuan@gmail.com),/register.php,POST,6.4,200,Khong hop le (email da ton tai),PASS,X5
+8,KAN-86,TC08 - Loi dinh dang email khong hop le o tang Backend,/register.php,POST,90.09,200,Khong hop le (email sai dinh dang),PASS,X6
+9,KAN-87,TC09 - Dang nhap thanh cong bang Email hop le tai gia tri nominal,/login.php,POST,116.67,200,Hop le (200/302),PASS,V1; V2; B2
+10,KAN-88,TC10 - Dang nhap thanh cong bang Username hop le (tuan),/login.php,POST,77.96,200,Hop le (200/302),PASS,V1; V2; B3
+11,KAN-89,TC11 - Loi dang nhap khi nhap sai mat khau,/login.php,POST,56.07,200,Khong hop le (mat khau khong dung),PASS,X7
+12,KAN-90,TC12 - Loi dang nhap khi tai khoan khong ton tai,/login.php,POST,28.2,200,Khong hop le (tai khoan khong ton tai),PASS,X8
+13,KAN-91,TC13 - Loi dang nhap khi bo trong identifier va password,/login.php,POST,2.3,200,Khong hop le (bo trong thong tin),PASS,X9
+14,KAN-92,TC14 - Bao mat: Chan Admin dang nhap qua cong User thuong,/login.php,POST,3.05,200,Tu choi / Loc phan quyen RBAC,PASS,SEC_RBAC1
+15,KAN-93,TC15 - Dang nhap Quan tri vien thanh cong tai cong Admin,/admin_login.php,POST,2.05,200,Hop le (200/302),PASS,V4; B4; API_KAN93
+16,KAN-94,TC16 - Bao mat: Chan User thuong (is_admin=0) dang nhap cong Admin,/admin_login.php,POST,20.79,200,Tu choi / Loc phan quyen Admin,PASS,SEC_RBAC2
+17,KAN-95,TC17 - Bao mat: Chan khach vang lai truy cap trang /profile.php,/profile.php,GET,14.04,200,Tu choi / Chuyen huong login (200/302),PASS,SEC_AUTH
+18,KAN-96,TC18 - Ho so ca nhan: Kiem tra trang thai VIP va tu dong ha cap,/profile.php,GET,1.93,200,Hop le (200/302),PASS,V5; API_KAN96
+19,KAN-97,TC19 - Cap nhat ho so (username tai gia tri hop le),/edit_profile.php,POST,14.5,200,Hop le (200/302),PASS,V1; V2; B5
+20,KAN-98,TC20 - Loi cap nhat ho so voi email sai dinh dang,/edit_profile.php,POST,15.12,200,Khong hop le (email vi pham dinh dang),PASS,X10
+21,KAN-99,TC21 - Doi mat khau thanh cong tai bien duoi min (6 ky tu),/change_password.php,POST,15.97,200,Hop le (200/302),PASS,V3; B6; API_KAN99
+22,KAN-100,TC22 - Loi doi mat khau moi nho hon 6 ky tu (min-),/change_password.php,POST,16.35,200,Khong hop le (new_password vi pham < 6),PASS,X11; B7
+23,KAN-101,TC23 - Dang xuat tai khoan va huy phien lam viec (Session Destroy),/logout.php,GET,5.07,200,Hop le (200/302),PASS,API_KAN101
+24,KAN-102,TC24 - Bao mat: Kiem tra SQL Injection va XSS tren form Dang nhap,/login.php,POST,29.25,200,Tu choi / Loc ma doc SQLi & XSS,PASS,SEC_SQLI; SEC_XSS
+25,MOV-01,TC01 - Loc the loai hop le (Hanh Dong),/movies.php,GET,99.1,200,Hop le (200 OK),PASS,MOV_V1; B1
+26,MOV-01,TC02 - Loc the loai tieng Anh (Action),/movies.php,GET,34.94,200,Hop le (200 OK),PASS,MOV_V1; B2
+27,MOV-01,TC03 - Loc the loai voi gia tri rong (genre=),/movies.php,GET,12.18,200,Hop le hien thi toan bo phim,PASS,MOV_X1
+28,MOV-01,TC04 - Bao mat: Kiem tra Reflected XSS tai the loai,/movies.php,GET,13.44,200,Tu choi / Ma hoa ky tu HTML,PASS,MOV_SEC_XSS
+29,MOV-02,TC05 - Tim kiem phim hop le (Doremon),/search.php,GET,24.83,200,Hop le tra ve ket qua tim kiem,PASS,MOV_V2; B3
+30,MOV-02,TC06 - Tim kiem voi tu khoa 1 ky tu (min),/search.php,GET,12.38,200,Hop le tra ve ket qua (200 OK),PASS,MOV_V2; B4
+31,MOV-02,TC07 - Tim kiem voi tu khoa rong (query=),/search.php,GET,26.27,200,Yeu cau nhap tu khoa (200 OK),PASS,MOV_X2
+32,MOV-02,TC08 - Bao mat: Kiem tra SQL Injection tai query,/search.php,GET,13.92,200,Loc ma doc / Khong lo thong tin SQL,PASS,MOV_SEC_SQLI
+33,MOV-03,TC09 - Xem phim voi ID va Episode hop le (id=1&ep=1),/watch.php,GET,33.5,200,Hop le tai trinh phat video (200),PASS,MOV_V3; B5
+34,MOV-03,TC10 - Xem phim voi ID can duoi min (id=1),/watch.php,GET,25.97,200,Hop le tai tap mac dinh (200),PASS,MOV_V3; B6
+35,MOV-03,TC11 - Xem phim voi ID duoi min (id=0),/watch.php,GET,26.02,200,Bao loi 404 / Khong tim thay phim,PASS,MOV_X3
+36,MOV-03,TC12 - Xem phim voi ID am (id=-1),/watch.php,GET,15.52,200,Bao loi 404 / ID khong hop le,PASS,MOV_X4
+37,MOV-04,TC13 - Tai trang chu Netfix (/index.php),/index.php,GET,20.6,200,Hop le chua thuong hieu Netfix (200),PASS,MOV_V4; B7
+38,KAN-33,TC01 - Tang luot xem phim thanh cong tai bien duoi min (id=1),/api/view_counter.php,GET,28.87,200,Hop le (200),PASS,V1; B1
+39,KAN-33,TC02 - Tang luot xem phim tai gia tri danh dinh nominal (id=52),/api/view_counter.php,GET,115.85,200,Hop le (200),PASS,V1; B3
+40,KAN-34,TC03 - Loi id bang 0 nho hon bien duoi (min-),/api/view_counter.php,GET,24.64,200,Khong hop le (id vi pham < 1),PASS,X1; B0
+41,KAN-34,TC04 - Loi id la so nguyen am (id=-5),/api/view_counter.php,GET,8.5,200,Khong hop le (id am vi pham mien duong),PASS,X2
+42,KAN-34,TC05 - Loi id vuot gioi han kieu du lieu (max+),/api/view_counter.php,GET,7.89,200,Khong hop le (id vuot bien max+),PASS,X3; B5
+43,KAN-36,TC06 - Kiem thu tai / Spam luot xem lien tuc qua API,/api/view_counter.php,GET,28.77,200,Hop le (200),PASS,V1; API_KAN36
+44,KAN-45,TC07 - Gui binh luan hop le tai gia tri danh dinh nominal,/watch.php,POST,48.55,200,Hop le (200/302),PASS,V2; V3; B6
+45,KAN-45,TC08 - Loi gui binh luan bo trong noi dung (min-),/watch.php,POST,59.48,200,Khong hop le (comment_text rong),PASS,X4
+46,KAN-45,TC09 - Loi gui binh luan chi chua khoang trang,/watch.php,POST,60.86,200,Khong hop le (comment_text toan khoang trang),PASS,X5
+47,KAN-45,TC10 - Bao mat: Kiem tra Stored XSS o comment_text,/watch.php,POST,40.46,200,Tu choi / Ma hoa HTML,PASS,SEC_XSS
+48,KAN-45,TC11 - Bao mat: Kiem tra SQL Injection o comment_text,/watch.php,POST,14.75,200,Tu choi / Loc ma doc,PASS,SEC_SQLI
+49,KAN-45,TC12 - Quan ly binh luan: Lay danh sach binh luan toan he thong,/comments.php,GET,20.77,200,Hop le (200/302),PASS,API_KAN45_CMT
+50,KAN-45,TC13 - Bao mat: Chan khach chua dang nhap truy cap /comments.php,/comments.php,GET,16.41,200,Tu choi / Loc phan quyen Admin,PASS,SEC_RBAC
+51,KAN-45,TC14 - Quan ly binh luan: Xoa binh luan vi pham (delete_comment_id=2),/comments.php,POST,30.59,200,Hop le (200/302),PASS,API_KAN45_DEL
+52,KAN-45,TC15 - Lich su xem phim: Kiem tra danh sach va moc thoi gian,/watch_history.php,GET,8.21,200,Hop le (200/302),PASS,API_KAN45_HIS
+53,KAN-105,TC01 - Trang goi VIP: Kiem tra endpoint phan hoi thanh cong,/pricing.php,GET,20.71,200,Hop le (200/302),PASS,V1; API_KAN105
+54,KAN-106,TC02 - Trang goi VIP: Hien thi thong tin goi hoac yeu cau dang nhap,/pricing.php,GET,15.3,200,Hop le (200/302),PASS,V1; B1
+55,KAN-107,TC03 - Trang goi VIP: Kiem tra 3 goi VIP (1-3-6 thang) va muc gia,/pricing.php,GET,16.52,200,Hop le (200/302),PASS,V1; V2; B2
+56,KAN-108,TC04 - Xu ly thanh toan: Kiem tra endpoint phan hoi thanh cong,/process_payment.php,POST,6.31,200,Hop le (200/302),PASS,V2; V3; B3
+57,KAN-109,TC05 - Loi package_id vuot bien tren max (max+ = 999),/process_payment.php,POST,5.55,200,Khong hop le (package_id vi pham > 3),PASS,X1; B5
+58,KAN-110,TC06 - Thanh toan VIP tai bien duoi min (package_id=1 Momo),/process_payment.php,POST,19.21,200,Hop le (200/302),PASS,V2; V3; B1; B6
+59,KAN-111,TC07 - Thanh toan VIP tai bien tren max (package_id=3 Chuyen khoan),/process_payment.php,POST,13.36,200,Hop le (200/302),PASS,V2; V3; B4; B8
+60,KAN-112,TC08 - Ket qua thanh toan: Callback thanh cong (resultCode=0),/payment_return.php,GET,16.38,200,Hop le (200/302),PASS,V4; B9
+61,KAN-113,TC09 - Ket qua thanh toan: Callback that bai (resultCode=1006),/payment_return.php,GET,15.41,200,Khong hop le (Giao dich that bai 1006),PASS,X2; B10
+62,KAN-114,TC10 - Quan ly don hang VIP: Kiem tra endpoint /orders.php,/orders.php,GET,15.77,200,Hop le (200),PASS,API_KAN114
+63,KAN-115,TC11 - Bao mat: Kiem tra phan quyen Admin xem danh sach don VIP,/orders.php,GET,14.69,200,Tu choi / Loc phan quyen Admin,PASS,SEC_RBAC; API_KAN115
+64,KAN-47,TC01 - Them phim thanh cong tai bien duoi min,/add_movie.php,POST,230.98,200,Hop le (200/302),PASS,V1; V2; V3; V4; V5; B1; B6
+65,KAN-47,TC02 - Them phim thanh cong tai bien tren max,/add_movie.php,POST,33.43,200,Hop le (200/302),PASS,V1; V2; V3; V4; V5; B5; B10
+66,KAN-47,TC03 - Them phim tai gia tri danh dinh nominal,/add_movie.php,POST,20.47,200,Hop le (200/302),PASS,V1; V2; V3; V4; V5; B3; B8
+67,KAN-47,TC04 - Loi year nho hon 1900 (min-),/add_movie.php,POST,18.62,200,Khong hop le (year vi pham < 1900),PASS,X1
+68,KAN-47,TC05 - Loi year lon hon 2030 (max+),/add_movie.php,POST,19.66,200,Khong hop le (year vi pham > 2030),PASS,X2
+69,KAN-47,TC06 - Loi duration nho hon 1 (min-),/add_movie.php,POST,71.41,200,Khong hop le (duration vi pham < 1),PASS,X3
+70,KAN-47,TC07 - Loi duration lon hon 600 (max+),/add_movie.php,POST,17.55,200,Khong hop le (duration vi pham > 600),PASS,X4
+71,KAN-47,TC08 - Bao mat: Kiem tra SQL Injection o title,/add_movie.php,POST,28.88,200,Tu choi / Loc ma doc,PASS,SEC_SQLI
+72,KAN-47,TC09 - Bao mat: Kiem tra Reflected XSS o title,/add_movie.php,POST,29.42,200,Tu choi / Ma hoa HTML,PASS,SEC_XSS
+73,KAN-48,TC10 - Quan ly phim: Lay danh sach trang 1,/manage_movies.php,GET,49.76,200,Hop le (200),PASS,API_KAN48
+74,KAN-49,TC11 - Quan ly don hang: Loc don VIP Pending,/orders.php,GET,17.5,200,Hop le (200),PASS,API_KAN49
+75,KAN-50,TC12 - Quan ly khach hang: Danh sach user,/customers.php,GET,27.96,200,Hop le (200),PASS,API_KAN50
+76,KAN-51,TC13 - Bao cao thong ke: Doanh thu tong quan,/statistics.php,GET,43.73,200,Hop le (200),PASS,API_KAN51
