@@ -6,6 +6,9 @@ exports.config = {
       url: process.env.BASE_URL || 'http://localhost/netfix2',
       show: !process.env.CI,
       browser: 'chromium',
+      restart: 'session',
+      keepBrowserState: true,
+      keepCookies: true,
       waitForNavigation: 'domcontentloaded',
       waitForTimeout: 5000
     },

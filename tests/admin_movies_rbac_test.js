@@ -1,29 +1,20 @@
-Feature('KAN-37: Kiểm thử Phân quyền Quản trị & CRUD Nội dung Phim Admin (/add_movie.php, /manage_movies.php)');
+const { loadCsvDataAndCoverage } = require('../steps_file');
 
-Scenario('KAN-37-TC01: Khách vãng lai truy cập /add_movie.php bị chặn và điều hướng về trang đăng nhập Admin', ({ I }) => {
-    // 1. Thử truy cập thẳng trang thêm phim khi chưa đăng nhập quyền admin
-    I.amOnPage('/add_movie.php');
+// Đọc trực tiếp các Test Case thuộc nhóm Quản lý & Thêm phim (/add_movie.php, /manage_movies.php) từ design_testcase_adm.csv
+const { table, tracker } = loadCsvDataAndCoverage(
+  'design_testcase_adm.csv',
+  row => row.Endpoint === '/add_movie.php' || row.Endpoint === '/manage_movies.php'
+);
 
-    // 2. Xác thực hệ thống chuyển hướng về admin_login.php
-    I.seeInCurrentUrl('admin_login.php');
-    I.dontSee('Fatal error');
-});
+Feature('KAN-37: Kiểm thử Phân quyền Quản trị & CRUD Nội dung Phim Data-Driven Từ CSV (/add_movie.php, /manage_movies.php)');
 
-Scenario('KAN-37-TC02: Khách vãng lai truy cập /manage_movies.php bị chặn và điều hướng về trang đăng nhập Admin', ({ I }) => {
-    // 1. Thử truy cập trang quản lý phim
-    I.amOnPage('/manage_movies.php');
+Data(table).Scenario(
+  'Thực thi Test Case Quản trị phim từ design_testcase_adm.csv @KAN_37',
+  async ({ I, current }) => {
+    await I.executeDataDrivenTestCase(current, tracker);
+  }
+);
 
-    // 2. Xác thực hệ thống chuyển hướng về admin_login.php
-    I.seeInCurrentUrl('admin_login.php');
-    I.dontSee('Fatal error');
-});
-
-Scenario('KAN-37-TC03: Xác thực trang đăng nhập Quản trị viên (admin_login.php) hoạt động bình thường', ({ I }) => {
-    // 1. Mở trang đăng nhập admin
-    I.amOnPage('/admin_login.php');
-
-    // 2. Kiểm tra các trường biểu mẫu đăng nhập
-    I.seeElement('form');
-    I.dontSee('Fatal error');
-    I.dontSee('Warning: mysqli');
+AfterSuite(() => {
+  tracker.printCoverageReport('KAN-37: QUẢN TRỊ NỘI DUNG PHIM ADMIN (/add_movie.php, /manage_movies.php)');
 });

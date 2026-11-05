@@ -1,4 +1,4 @@
-"""
+﻿"""
 MASTER AUTOMATED TEST RUNNER CHO TOÀN BỘ 5 PHÂN HỆ (AUTH, MOV, INT, VIP, ADM) - NETFIX2
 Đọc test case thiết kế tổng hợp (design_testcase_master.csv - 76 Test Cases)
 và xuất kết quả kiểm thử ra CSV (report_run_testcase_master.csv)
@@ -17,8 +17,8 @@ BASE_URL = "http://localhost/netfix2"
 
 def run_master_test_suite():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_csv = os.path.join(script_dir, "design_testcase_master.csv")
-    output_csv = os.path.join(script_dir, "report_run_testcase_master.csv")
+    input_csv = os.path.normpath(os.path.join(script_dir, "..", "Design", "design_testcase_master.csv"))
+    output_csv = os.path.normpath(os.path.join(script_dir, "..", "Report", "report_run_testcase_master.csv"))
 
     print("+" + "=" * 90 + "+")
     print("| KHỞI CHẠY KIỂM THỬ TỰ ĐỘNG TỔNG HỢP 5 PHÂN HỆ (AUTH, MOV, INT, VIP, ADM - 76 TCs)")

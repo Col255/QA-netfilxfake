@@ -1,4 +1,4 @@
-"""
+﻿"""
 AUTOMATED TEST RUNNER CHO 11 TASK JIRA VIP (NETFIX2)
 Đọc test case thiết kế và xuất kết quả kiểm thử ra CSV
 """
@@ -16,8 +16,8 @@ BASE_URL = "http://localhost/netfix2"
 
 def run_vip_test_suite():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_csv = os.path.join(script_dir, "design_testcase_vip.csv")
-    output_csv = os.path.join(script_dir, "report_run_testcase_vip.csv")
+    input_csv = os.path.normpath(os.path.join(script_dir, "..", "Design", "design_testcase_vip.csv"))
+    output_csv = os.path.normpath(os.path.join(script_dir, "..", "Report", "report_run_testcase_vip.csv"))
 
     print("+" + "=" * 90 + "+")
     print("| KHỞI CHẠY KIỂM THỬ TỰ ĐỘNG CHO 11 TASK JIRA VIP - MODULE VIP PACKAGES & PAYMENT")

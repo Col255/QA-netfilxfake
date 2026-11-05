@@ -1,4 +1,4 @@
-"""
+﻿"""
 AUTOMATED TEST RUNNER CHO FEATURE MOV (MOVIES & SEARCH) - NETFIX2
 Thực thi kiểm thử tự động từ file test case thiết kế và xuất báo cáo CSV
 """
@@ -14,8 +14,8 @@ BASE_URL = "http://localhost/netfix2"
 
 def execute_mov_test_suite():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_csv = os.path.join(script_dir, "design_testcase_mov.csv")
-    output_csv = os.path.join(script_dir, "report_run_testcase_mov.csv")
+    input_csv = os.path.normpath(os.path.join(script_dir, "..", "Design", "design_testcase_mov.csv"))
+    output_csv = os.path.normpath(os.path.join(script_dir, "..", "Report", "report_run_testcase_mov.csv"))
 
     print("+" + "=" * 90 + "+")
     print("| KHỞI CHẠY KIỂM THỬ TỰ ĐỘNG - FEATURE MOV (MOVIES, SEARCH, WATCH, HOME)")
