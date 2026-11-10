@@ -23,6 +23,7 @@
     "playwright": "^1.64.1"
   },
   "dependencies": {
+    "csv-parse": "^7.0.3",
     "exceljs": "^4.4.0"
   }
 }
