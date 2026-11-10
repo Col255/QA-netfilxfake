@@ -1,36 +1,39 @@
-Feature('Movies and Search (MOV) Testing');
+const fs = require('fs');
+const path = require('path');
+const { parse } = require('csv-parse/sync');
 
-// MOV-01: Lọc danh sách phim theo thể loại
-Scenario('[MOV-01] Lọc danh sách phim theo thể loại Hành Động', ({ I }) => {
-    I.amOnPage('/movies.php?genre=Hành Động');
-    I.see('Hành Động');
-    I.dontSee('Fatal error');
-});
+Feature('MOV - Data-Driven Testing from CSV (Movies & Search)');
 
-// MOV-02: Tìm kiếm phim theo từ khóa
-Scenario('[MOV-02] Tìm kiếm phim với từ khóa hợp lệ (Doremon)', ({ I }) => {
-    I.amOnPage('/search.php?query=Doremon');
-    // Kiểm tra trang tải không lỗi và hiển thị giao diện tìm kiếm / kết quả
-    I.dontSee('Fatal error');
-    I.seeInCurrentUrl('/search.php');
-});
+const csvFilePath = path.resolve(__dirname, '../docs/Design/design_testcase_mov.csv');
+let testRecords = [];
 
-Scenario('[MOV-02] Tìm kiếm an toàn với ký tự đặc biệt SQL Injection', ({ I }) => {
-    I.amOnPage("/search.php?query=' OR 1=1 --");
-    I.dontSee('SQL syntax');
-    I.dontSee('mysql_fetch');
-});
+if (fs.existsSync(csvFilePath)) {
+    const fileContent = fs.readFileSync(csvFilePath, 'utf-8');
+    testRecords = parse(fileContent, {
+        columns: true,
+        skip_empty_lines: true,
+        bom: true
+    });
+}
 
-// MOV-03: Xem phim và chi tiết phim
-Scenario('[MOV-03] Truy cập trang xem chi tiết tập phim (/watch.php)', ({ I }) => {
-    I.amOnPage('/watch.php?id=1&episode=1');
-    // Kiểm tra trang xem phim tải thành công, không gặp lỗi hệ thống 500
-    I.dontSee('Fatal error');
-    I.seeInCurrentUrl('/watch.php');
-});
+testRecords.forEach((test) => {
+    Scenario(`[${test.Jira_Task || 'MOV'}] ${test.Ten_Test_Case}`, ({ I }) => {
+        const endpoint = test.Endpoint;
+        const params = test.Payload_Params ? `?${test.Payload_Params}` : '';
+        const fullUrl = `${endpoint}${params}`;
 
-// MOV-04: Trang chủ Netfix
-Scenario('[MOV-04] Tải trang chủ Netfix hiển thị thương hiệu và danh mục', ({ I }) => {
-    I.amOnPage('/index.php');
-    I.see('Netfix');
+        I.amOnPage(fullUrl);
+
+        I.dontSee('Fatal error');
+        I.dontSee('Parse error');
+
+        if (test.Tag_Bao_Phu && test.Tag_Bao_Phu.includes('SEC_SQLI')) {
+            I.dontSee('SQL syntax');
+            I.dontSee('mysql_fetch');
+        }
+
+        if (test.Tag_Bao_Phu && test.Tag_Bao_Phu.includes('SEC_XSS')) {
+            I.dontSeeInSource("<script>alert('XSS')</script>");
+        }
+    });
 });
