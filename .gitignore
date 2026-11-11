@@ -21,6 +21,7 @@ package-lock.json
 .claude/
 .gemini
 .claude-workspace
+.agents
 
 # Bỏ qua file backup và script build Postman nội bộ
 *.original.json
