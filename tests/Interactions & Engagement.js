@@ -115,7 +115,7 @@ Scenario('INT_TC12 - Admin thực hiện xóa bình luận vi phạm thành côn
 // 3. LỊCH SỬ XEM PHIM (INT_TC13 - INT_TC15)
 // ----------------------------------------------------
 
-Scenario('INT_TC13 - Người dùng xem danh sách lịch sử xem phim cá nhân @INT_TC13', async ({ I }) => {
+Scenario('INT_TC13 - Người dùng xem danh sách lịch sử xem phim cá nhân @INT_TC13 @KAN-135', async ({ I }) => {
   loginUser(I);
   I.amOnPage('/watch_history.php');
   I.seeInCurrentUrl('/watch_history.php');
