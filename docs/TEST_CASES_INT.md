@@ -20,3 +20,13 @@
 | **INT_TC13** | `/watch_history.php` | Người dùng xem danh sách lịch sử xem phim cá nhân | Tài khoản User đã đăng nhập và có session hoạt động. | 1. Gửi request GET tại /watch_history.php<br>2. Kiểm tra danh sách phim đã xem được kết xuất. | Session: User thường | HTTP 200 OK. Giao diện hiển thị chính xác và đầy đủ danh sách các bộ phim hoặc tập phim mà tài khoản user hiện tại đã từng nhấn vào xem. | P1 (High) | Positive | Ready |
 | **INT_TC14** | `/watch_history.php` | Chặn tài khoản chưa đăng nhập truy cập trang Lịch sử xem phim | Không khởi tạo Session người dùng (Khách vãng lai). | 1. Gửi request GET tại /watch_history.php<br>2. Kiểm tra chuyển hướng. | No Cookie / No Session | Bị chặn truy cập dữ liệu cá nhân, hệ thống trả về mã HTTP 302 Found và điều hướng về trang login.php. | P0 (Critical) | Security / Auth | Ready |
 | **INT_TC15** | `/watch_history.php` | Kiểm tra mốc thời gian (Timestamp) khi ghi nhận lịch sử xem phim | Tài khoản User đã đăng nhập thành công. | 1. Bấm phát một bộ phim bất kỳ.<br>2. Truy cập bảng lịch sử trong DB và đối chiếu thời gian. | Session: User thường | Thời gian ghi nhận tại cột thời gian phải khớp chính xác với giờ Việt Nam (Asia/Ho_Chi_Minh), không lệch sang giờ UTC. | P1 (High) | Logic | Ready |
+
+---
+
+## TỔNG KẾT THỰC THI TỰ ĐỘNG HÓA PHÂN HỆ INT (Jira Task: KAN-138)
+- **Người thực thi kiểm thử:** Duong Nguyen (`syduong009`)
+- **Công cụ áp dụng:** CodeceptJS (Playwright Engine) & Postman Collection
+- **Số lượng Test Cases:** 15/15 kịch bản
+- **Tỷ lệ Đạt (Pass rate):** 100% (15 passed, 0 failed)
+- **Thời gian nghiệm thu:** 11/11/2026
+
