@@ -121,7 +121,7 @@ Scenario('INT_TC13 - Người dùng xem danh sách lịch sử xem phim cá nhâ
   I.seeInCurrentUrl('/watch_history.php');
 });
 
-Scenario('INT_TC14 - Chặn tài khoản chưa đăng nhập truy cập trang Lịch sử xem phim @INT_TC14', async ({ I }) => {
+Scenario('INT_TC14 - Chặn tài khoản chưa đăng nhập truy cập trang Lịch sử xem phim @INT_TC14 @KAN-136', async ({ I }) => {
   I.clearCookie();
   I.amOnPage('/watch_history.php');
   I.seeInCurrentUrl('/login.php');
