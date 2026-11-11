@@ -100,7 +100,7 @@ Scenario('INT_TC10 - Admin truy cập xem danh sách bình luận toàn hệ th�
   I.seeInTitle('Bình Luận') || I.see('Quản Lý Bình Luận');
 });
 
-Scenario('INT_TC11 - Chặn tài khoản chưa đăng nhập truy cập quản lý bình luận @INT_TC11', async ({ I }) => {
+Scenario('INT_TC11 - Chặn tài khoản chưa đăng nhập truy cập quản lý bình luận @INT_TC11 @KAN-133', async ({ I }) => {
   I.clearCookie();
   I.amOnPage('/comments.php');
   I.seeInCurrentUrl('/admin_login.php');
