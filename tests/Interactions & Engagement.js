@@ -127,7 +127,7 @@ Scenario('INT_TC14 - Chặn tài khoản chưa đăng nhập truy cập trang L�
   I.seeInCurrentUrl('/login.php');
 });
 
-Scenario('INT_TC15 - Kiểm tra mốc thời gian (Timestamp) khi ghi nhận lịch sử xem phim @INT_TC15', async ({ I }) => {
+Scenario('INT_TC15 - Kiểm tra mốc thời gian (Timestamp) khi ghi nhận lịch sử xem phim @INT_TC15 @KAN-137', async ({ I }) => {
   loginUser(I);
   I.amOnPage('/watch.php?id=1');
   I.amOnPage('/watch_history.php');
