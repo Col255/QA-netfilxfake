@@ -106,7 +106,7 @@ Scenario('INT_TC11 - Chặn tài khoản chưa đăng nhập truy cập quản l
   I.seeInCurrentUrl('/admin_login.php');
 });
 
-Scenario('INT_TC12 - Admin thực hiện xóa bình luận vi phạm thành công @INT_TC12', async ({ I }) => {
+Scenario('INT_TC12 - Admin thực hiện xóa bình luận vi phạm thành công @INT_TC12 @KAN-134', async ({ I }) => {
   loginAdmin(I);
   I.amOnPage('/comments.php');
 });
