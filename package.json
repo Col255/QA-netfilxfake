@@ -4,7 +4,11 @@
   "description": "Netfix2 là website xem phim trực tuyến viết bằng PHP, kết nối MySQL/MariaDB. Dự án có các trang dành cho khách xem phim, người dùng và quản trị viên. Mã nguồn website nằm trong `netfix2/`; repository cũng có file SQL khởi tạo dữ liệu và Postman Collection để gửi thử các request.",
   "main": "index.js",
   "scripts": {
-    "test": "npx codeceptjs run --steps"
+    "test": "npx codeceptjs run --steps",
+    "skill:graph": "node .gemini/skills/project-graph-router/scripts/build_graph.js",
+    "skill:cfg": "node .gemini/skills/php-whitebox-cfg/scripts/analyze_cfg.js",
+    "skill:sarif": "node .gemini/skills/qodana-sarif-digest/scripts/parse_sarif.js",
+    "skill:audit": "node .gemini/skills/qa-data-driven-sync/scripts/audit_coverage.js"
   },
   "repository": {
     "type": "git",

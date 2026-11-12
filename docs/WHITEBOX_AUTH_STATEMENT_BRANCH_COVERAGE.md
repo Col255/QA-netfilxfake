@@ -7,8 +7,8 @@
 | **Người thực hiện** | Huỳnh Nguyễn Tiến Lộc (`KAN-44`) |
 | **Phạm vi mã nguồn** | `register.php`, `login.php`, `admin_login.php`, `profile.php`, `edit_profile.php`, `change_password.php` |
 | **Trạng thái hiện tại** | **ĐÃ HOÀN THIỆN THIẾT KẾ TEST CASE (TEST DESIGN) - CHƯA BẮT ĐẦU CHẠY TEST THEO TIẾN ĐỘ BÀI GIẢNG** |
-| **File Thiết kế CSV** | [`docs/Design/whitebox_testcase_auth.csv`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/docs/Design/whitebox_testcase_auth.csv) |
-| **Script Runner dự phòng** | [`docs/testrun/whitebox_runner_auth.js`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/docs/testrun/whitebox_runner_auth.js) *(Dùng khi lớp bắt đầu thực thi test)* |
+| **File Thiết kế CSV** |  |
+| **Script Runner dự phòng** |  *(Dùng khi lớp bắt đầu thực thi test)* |
 
 ---
 
@@ -29,7 +29,7 @@ Theo tiến độ giảng dạy phương pháp Kiểm thử Hộp trắng (White
 
 ## II. PHÂN TÍCH ĐỒ THỊ LUỒNG ĐIỀU KHIỂN (CFG), CÂU LỆNH ($S$) & NHÁNH ($D$) TỪNG FILE
 
-### 1. Chức năng Đăng ký tài khoản ([`netfix2/register.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/register.php#L1-L53))
+### 1. Chức năng Đăng ký tài khoản ()
 
 #### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$)
 | Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
@@ -81,7 +81,7 @@ flowchart TD
 
 ---
 
-### 2. Chức năng Đăng nhập User ([`netfix2/login.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/login.php#L1-L43)) & Đăng nhập Admin ([`netfix2/admin_login.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/admin_login.php#L1-L43))
+### 2. Chức năng Đăng nhập User () & Đăng nhập Admin ()
 
 #### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của `login.php`
 | Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
@@ -129,7 +129,7 @@ flowchart TD
 
 ---
 
-### 3. Chức năng Xem Hồ sơ Cá nhân ([`netfix2/profile.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/profile.php#L1-L64))
+### 3. Chức năng Xem Hồ sơ Cá nhân ()
 
 #### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của `profile.php`
 | Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
@@ -173,7 +173,7 @@ flowchart TD
 
 ---
 
-### 4. Chức năng Chỉnh Sửa Hồ Sơ ([`netfix2/edit_profile.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/edit_profile.php#L1-L75))
+### 4. Chức năng Chỉnh Sửa Hồ Sơ ()
 
 #### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của `edit_profile.php`
 | Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
@@ -217,7 +217,7 @@ flowchart TD
 
 ---
 
-### 5. Chức năng Đổi Mật Khẩu ([`netfix2/change_password.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/change_password.php#L1-L59))
+### 5. Chức năng Đổi Mật Khẩu ()
 
 #### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của `change_password.php`
 | Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
@@ -281,19 +281,19 @@ flowchart TD
 
 | File PHP trong phân hệ `AUTH` | Số Test Case Thiết Kế | Tổng Số Khối Lệnh ($S_i$) Phủ Được ($C_0$) | Tổng Số Nhánh Rẽ ($D_i$) Phủ Được ($C_1$) | Trạng Thái Thiết Kế |
 | :--- | :---: | :---: | :---: | :---: |
-| [`/register.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/register.php) | 7 (`WB_AUTH_01` $\rightarrow$ `07`) | **13/13 khối lệnh (100.00%)** | **13/13 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
-| [`/login.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/login.php) | 6 (`WB_AUTH_08` $\rightarrow$ `13`) | **12/12 khối lệnh (100.00%)** | **10/10 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
-| [`/admin_login.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/admin_login.php) | 6 (`WB_AUTH_14` $\rightarrow$ `19`) | **12/12 khối lệnh (100.00%)** | **10/10 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
-| [`/profile.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/profile.php) | 2 (`WB_AUTH_20` $\rightarrow$ `21`) | **8/8 khối lệnh (100.00%)** | **7/7 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
-| [`/edit_profile.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/edit_profile.php) | 5 (`WB_AUTH_22` $\rightarrow$ `26`) | **12/12 khối lệnh (100.00%)** | **14/14 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
-| [`/change_password.php`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/netfix2/change_password.php) | 6 (`WB_AUTH_27` $\rightarrow$ `32`) | **13/13 khối lệnh (100.00%)** | **15/15 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+|  | 7 (`WB_AUTH_01` $\rightarrow$ `07`) | **13/13 khối lệnh (100.00%)** | **13/13 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+|  | 6 (`WB_AUTH_08` $\rightarrow$ `13`) | **12/12 khối lệnh (100.00%)** | **10/10 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+|  | 6 (`WB_AUTH_14` $\rightarrow$ `19`) | **12/12 khối lệnh (100.00%)** | **10/10 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+|  | 2 (`WB_AUTH_20` $\rightarrow$ `21`) | **8/8 khối lệnh (100.00%)** | **7/7 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+|  | 5 (`WB_AUTH_22` $\rightarrow$ `26`) | **12/12 khối lệnh (100.00%)** | **14/14 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+|  | 6 (`WB_AUTH_27` $\rightarrow$ `32`) | **13/13 khối lệnh (100.00%)** | **15/15 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
 | **TỔNG CỘNG PHÂN HỆ `AUTH`** | **32 Test Cases** | **70/70 khối lệnh ($C_0$: 100%)** | **69/69 nhánh ($C_1$: 100%)** | **Hoàn tất thiết kế** |
 
 ---
 
 ### 2. Bảng Đặc tả Chi tiết 32 Test Cases White-Box Phân hệ `AUTH`
 
-Dữ liệu được đồng bộ trực tiếp từ file [`docs/Design/whitebox_testcase_auth.csv`](file:///C:/Users/hntl0/OneDrive/M%C3%A1y%20t%C3%ADnh/QA%20netflix%20fake/docs/Design/whitebox_testcase_auth.csv):
+Dữ liệu được đồng bộ trực tiếp từ file :
 
 | STT | Mã TC | File PHP | Tên Kịch Bản Kiểm Thử | Method | Role | Tham số (Payload) | Nhánh Kích Hoạt ($D_i$) | Khối Lệnh Thực Thi ($S_i$) | Kết Quả Mong Đợi | Trạng Thái |
 | :---: | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- | :--- | :---: |

@@ -16,3 +16,6 @@ exclude:
       - Postman
       - tests
       - backup_before_update
+      - .gemini
+      - .agents
+      - docs

@@ -2,9 +2,9 @@ name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker 
 
 on:
   push:
-    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'testingweek5' ]
+    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox' ]
   pull_request:
-    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'testingweek5' ]
+    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox' ]
 
 jobs:
   # =========================================================================
@@ -98,6 +98,11 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mysqli, pdo, pdo_mysql, mbstring
+
+      - name: Cài đặt MySQL Client trên Runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-mysql-client
 
       - name: Import Database mẫu (database/netfixvn.sql) vào MySQL
         run: |

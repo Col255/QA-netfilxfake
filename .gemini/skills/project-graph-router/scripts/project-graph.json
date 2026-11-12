@@ -1,0 +1,1784 @@
+{
+  "generatedAt": "2026-11-12T14:04:17.694Z",
+  "project": "QA Netflix Fake (Netfix2)",
+  "skillRouter": [
+    {
+      "intent": "White-Box Testing / CFG / Cyclomatic Complexity V(G) / Basis Paths / Nhánh if-else",
+      "recommendedSkill": "php-whitebox-cfg",
+      "command": "node \".gemini/skills/php-whitebox-cfg/scripts/analyze_cfg.js\" <file_or_--summary>"
+    },
+    {
+      "intent": "Phân tích lỗi tĩnh Qodana / Đọc file qodana.sarif.json",
+      "recommendedSkill": "qodana-sarif-digest",
+      "command": "node \".gemini/skills/qodana-sarif-digest/scripts/parse_sarif.js\" <sarif_path>"
+    },
+    {
+      "intent": "Kiểm tra Test Case CSV / Độ phủ (V, X, B, SEC, API) / Báo cáo Pass-Fail",
+      "recommendedSkill": "qa-data-driven-sync",
+      "command": "node \".gemini/skills/qa-data-driven-sync/scripts/audit_coverage.js\""
+    },
+    {
+      "intent": "Tra cứu nhanh file, dòng code cần đọc, biến POST/GET, bảng SQL, liên kết trang",
+      "recommendedSkill": "project-graph-router",
+      "command": "node \".gemini/skills/project-graph-router/scripts/build_graph.js\" --query <keyword>"
+    }
+  ],
+  "testSuites": {
+    "AUTH": {
+      "csvDesign": "docs/Design/design_testcase_auth.csv",
+      "csvReport": "docs/Report/report_run_testcase_auth.csv",
+      "codecept": [
+        "tests/login_test.js"
+      ],
+      "runner": "docs/testrun/test_runner_auth.py"
+    },
+    "MOV": {
+      "csvDesign": "docs/Design/design_testcase_mov.csv",
+      "csvReport": "docs/Report/report_run_testcase_mov.csv",
+      "codecept": [
+        "tests/movies_search_test.js",
+        "tests/search_security_test.js",
+        "tests/streaming_vip_test.js"
+      ],
+      "runner": "docs/testrun/test_runner_mov.py"
+    },
+    "INT": {
+      "csvDesign": "docs/Design/design_testcase_int.csv",
+      "csvReport": "docs/Report/report_run_testcase_int.csv",
+      "codecept": [
+        "tests/Interactions & Engagement.js",
+        "tests/view_counter_test.js"
+      ],
+      "runner": "docs/testrun/test_runner_int.py"
+    },
+    "VIP": {
+      "csvDesign": "docs/Design/design_testcase_vip.csv",
+      "csvReport": "docs/Report/report_run_testcase_vip.csv",
+      "codecept": [
+        "tests/vip_test.js"
+      ],
+      "runner": "docs/testrun/test_runner_vip.py"
+    },
+    "ADM": {
+      "csvDesign": "docs/Design/design_testcase_adm.csv",
+      "csvReport": "docs/Report/report_run_testcase_adm.csv",
+      "codecept": [
+        "tests/admin_management_test.js",
+        "tests/admin_movies_rbac_test.js"
+      ],
+      "runner": "docs/testrun/test_runner_adm.py"
+    },
+    "MASTER": {
+      "csvDesign": "docs/Design/design_testcase_master.csv",
+      "csvReport": "docs/Report/report_run_testcase_master.csv",
+      "codecept": [
+        "tests/master_all_modules_test.js"
+      ],
+      "runner": "docs/testrun/test_runner_master.py"
+    }
+  },
+  "nodes": {
+    "netfix2/about.php": {
+      "path": "netfix2/about.php",
+      "module": "OTHER",
+      "totalLines": 56,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          6
+        ],
+        "htmlTemplateLines": [
+          7,
+          56
+        ],
+        "advice": "Chỉ cần đọc dòng 1-6 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 50 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 0,
+        "vgBranch": 1
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": []
+      }
+    },
+    "netfix2/add_movie.php": {
+      "path": "netfix2/add_movie.php",
+      "module": "ADM",
+      "totalLines": 529,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          109
+        ],
+        "htmlTemplateLines": [
+          110,
+          529
+        ],
+        "advice": "Chỉ cần đọc dòng 1-109 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 420 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 18,
+        "vgBranch": 19
+      },
+      "inputs": {
+        "POST": [
+          "title",
+          "description",
+          "genre",
+          "sub_genre",
+          "year",
+          "duration",
+          "language",
+          "country",
+          "actors",
+          "director",
+          "is_vip",
+          "status",
+          "episode_count",
+          "episode_numbers",
+          "episode_titles",
+          "episode_is_vip"
+        ],
+        "GET": [
+          "added"
+        ],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "toggleEpisodeSection",
+          "params": "",
+          "line": 457
+        },
+        {
+          "name": "addEpisode",
+          "params": "",
+          "line": 478
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php",
+          "add_movie.php?added=1"
+        ],
+        "formSubmitsTo": [
+          "add_movie.php"
+        ],
+        "sqlTables": [
+          "movies",
+          "episodes"
+        ]
+      }
+    },
+    "netfix2/admin_dashboard.php": {
+      "path": "netfix2/admin_dashboard.php",
+      "module": "ADM",
+      "totalLines": 229,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          69
+        ],
+        "htmlTemplateLines": [
+          70,
+          229
+        ],
+        "advice": "Chỉ cần đọc dòng 1-69 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 160 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 1,
+        "vgBranch": 2
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getTop10Movies",
+          "params": "$conn",
+          "line": 12
+        },
+        {
+          "name": "getVipCount",
+          "params": "$conn",
+          "line": 25
+        },
+        {
+          "name": "getTotalCustomers",
+          "params": "$conn",
+          "line": 35
+        },
+        {
+          "name": "getVipRevenue",
+          "params": "$conn",
+          "line": 45
+        },
+        {
+          "name": "getTotalRevenue",
+          "params": "$conn",
+          "line": 55
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies",
+          "users",
+          "vip_orders"
+        ]
+      }
+    },
+    "netfix2/admin_login.php": {
+      "path": "netfix2/admin_login.php",
+      "module": "AUTH",
+      "totalLines": 103,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          44
+        ],
+        "htmlTemplateLines": [
+          45,
+          103
+        ],
+        "advice": "Chỉ cần đọc dòng 1-44 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 59 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 6,
+        "vgBranch": 7
+      },
+      "inputs": {
+        "POST": [
+          "identifier",
+          "password"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [
+          "admin_dashboard.php"
+        ],
+        "formSubmitsTo": [
+          "admin_login.php"
+        ],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/admin_sidebar.php": {
+      "path": "netfix2/admin_sidebar.php",
+      "module": "CORE",
+      "totalLines": 75,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          10
+        ],
+        "htmlTemplateLines": [
+          11,
+          75
+        ],
+        "advice": "Chỉ cần đọc dòng 1-10 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 65 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 0,
+        "vgBranch": 1
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": []
+      }
+    },
+    "netfix2/api/view_counter.php": {
+      "path": "netfix2/api/view_counter.php",
+      "module": "INT",
+      "totalLines": 15,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          15
+        ],
+        "htmlTemplateLines": null,
+        "advice": "Chỉ cần đọc dòng 1-15 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 0 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 1,
+        "vgBranch": 2
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "id"
+        ],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "../db.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies"
+        ]
+      }
+    },
+    "netfix2/change_password.php": {
+      "path": "netfix2/change_password.php",
+      "module": "AUTH",
+      "totalLines": 59,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          59
+        ],
+        "htmlTemplateLines": null,
+        "advice": "Chỉ cần đọc dòng 1-59 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 0 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 8,
+        "vgBranch": 9
+      },
+      "inputs": {
+        "POST": [
+          "current_password",
+          "new_password",
+          "confirm_new_password"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [
+          "login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/checkout.php": {
+      "path": "netfix2/checkout.php",
+      "module": "VIP",
+      "totalLines": 261,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          61
+        ],
+        "htmlTemplateLines": [
+          62,
+          261
+        ],
+        "advice": "Chỉ cần đọc dòng 1-61 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 200 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 4,
+        "vgBranch": 5
+      },
+      "inputs": {
+        "POST": [
+          "package_id"
+        ],
+        "GET": [
+          "package_id"
+        ],
+        "SESSION": [
+          "user_id"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "login.php"
+        ],
+        "formSubmitsTo": [
+          "process_payment.php"
+        ],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/comments.php": {
+      "path": "netfix2/comments.php",
+      "module": "INT",
+      "totalLines": 160,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          66
+        ],
+        "htmlTemplateLines": [
+          67,
+          160
+        ],
+        "advice": "Chỉ cần đọc dòng 1-66 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 94 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 8,
+        "vgBranch": 9
+      },
+      "inputs": {
+        "POST": [
+          "delete_comment_id"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getAllComments",
+          "params": "$conn",
+          "line": 18
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "comments",
+          "movies",
+          "users"
+        ]
+      }
+    },
+    "netfix2/customers.php": {
+      "path": "netfix2/customers.php",
+      "module": "ADM",
+      "totalLines": 218,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          47
+        ],
+        "htmlTemplateLines": [
+          48,
+          218
+        ],
+        "advice": "Chỉ cần đọc dòng 1-47 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 171 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 6,
+        "vgBranch": 7
+      },
+      "inputs": {
+        "POST": [
+          "delete_id"
+        ],
+        "GET": [
+          "message",
+          "msg"
+        ],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getAllCustomers",
+          "params": "$conn",
+          "line": 27
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php",
+          "customers.php?message=success",
+          "customers.php?message=error&msg=Xóa"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/db.php": {
+      "path": "netfix2/db.php",
+      "module": "CORE",
+      "totalLines": 13,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          13
+        ],
+        "htmlTemplateLines": null,
+        "advice": "Chỉ cần đọc dòng 1-13 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 0 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 1,
+        "vgBranch": 2
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": []
+      }
+    },
+    "netfix2/edit_movie.php": {
+      "path": "netfix2/edit_movie.php",
+      "module": "ADM",
+      "totalLines": 615,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          170
+        ],
+        "htmlTemplateLines": [
+          171,
+          615
+        ],
+        "advice": "Chỉ cần đọc dòng 1-170 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 445 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 30,
+        "vgBranch": 31
+      },
+      "inputs": {
+        "POST": [
+          "title",
+          "description",
+          "genre",
+          "sub_genre",
+          "year",
+          "duration",
+          "language",
+          "country",
+          "actors",
+          "director",
+          "is_vip",
+          "status",
+          "episode_count",
+          "episode_numbers",
+          "episode_titles",
+          "episode_ids",
+          "episode_is_vip",
+          "delete_episodes"
+        ],
+        "GET": [
+          "id",
+          "updated"
+        ],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "toggleEpisodeSection",
+          "params": "",
+          "line": 499
+        },
+        {
+          "name": "addEpisode",
+          "params": "",
+          "line": 505
+        },
+        {
+          "name": "markEpisodeForDeletion",
+          "params": "btn, episodeId",
+          "line": 533
+        },
+        {
+          "name": "openVideoModal",
+          "params": "url",
+          "line": 543
+        },
+        {
+          "name": "closeVideoModal",
+          "params": "event",
+          "line": 550
+        },
+        {
+          "name": "openVideoModal",
+          "params": "url",
+          "line": 574
+        },
+        {
+          "name": "closeVideoModal",
+          "params": "",
+          "line": 582
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php",
+          "edit_movie.php?id="
+        ],
+        "formSubmitsTo": [
+          "edit_movie.php?id=<?= $movie_id ?>"
+        ],
+        "sqlTables": [
+          "movies",
+          "episodes"
+        ]
+      }
+    },
+    "netfix2/edit_profile.php": {
+      "path": "netfix2/edit_profile.php",
+      "module": "AUTH",
+      "totalLines": 294,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          113
+        ],
+        "htmlTemplateLines": [
+          114,
+          294
+        ],
+        "advice": "Chỉ cần đọc dòng 1-113 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 181 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 17,
+        "vgBranch": 18
+      },
+      "inputs": {
+        "POST": [
+          "update_profile",
+          "username",
+          "email",
+          "change_password",
+          "current_password",
+          "new_password",
+          "confirm_new_password"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "username",
+          "email"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "user_sidebar.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "login.php"
+        ],
+        "formSubmitsTo": [
+          "edit_profile.php"
+        ],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/footer.php": {
+      "path": "netfix2/footer.php",
+      "module": "CORE",
+      "totalLines": 75,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          12
+        ],
+        "htmlTemplateLines": [
+          13,
+          75
+        ],
+        "advice": "Chỉ cần đọc dòng 1-12 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 63 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 0,
+        "vgBranch": 1
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": []
+      }
+    },
+    "netfix2/header.php": {
+      "path": "netfix2/header.php",
+      "module": "CORE",
+      "totalLines": 233,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          159
+        ],
+        "htmlTemplateLines": [
+          160,
+          233
+        ],
+        "advice": "Chỉ cần đọc dòng 1-159 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 74 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 26,
+        "vgBranch": 27
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "genre",
+          "sub_genre",
+          "country",
+          "query"
+        ],
+        "SESSION": [
+          "user_id"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getSubGenres",
+          "params": "$conn",
+          "line": 10
+        },
+        {
+          "name": "getMoviesByGenre",
+          "params": "$conn, $genre, $limit = 10",
+          "line": 36
+        },
+        {
+          "name": "getMoviesBySubGenre",
+          "params": "$conn, $sub_genre, $limit = 10",
+          "line": 61
+        },
+        {
+          "name": "getMoviesByCountry",
+          "params": "$conn, $country, $limit = 10",
+          "line": 87
+        },
+        {
+          "name": "getCountries",
+          "params": "$conn",
+          "line": 112
+        },
+        {
+          "name": "getImagePath",
+          "params": "$thumbnail",
+          "line": 126
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [
+          "search.php"
+        ],
+        "sqlTables": [
+          "movies"
+        ]
+      }
+    },
+    "netfix2/index.php": {
+      "path": "netfix2/index.php",
+      "module": "MOV",
+      "totalLines": 391,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          127
+        ],
+        "htmlTemplateLines": [
+          128,
+          391
+        ],
+        "advice": "Chỉ cần đọc dòng 1-127 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 264 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 35,
+        "vgBranch": 36
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [
+        {
+          "name": "getPopularSubGenres",
+          "params": "$conn",
+          "line": 11
+        },
+        {
+          "name": "getMovies",
+          "params": "$conn, $genre = null, $limit",
+          "line": 31
+        },
+        {
+          "name": "getTopMovies",
+          "params": "$conn, $limit",
+          "line": 62
+        },
+        {
+          "name": "getCountries",
+          "params": "$conn",
+          "line": 81
+        },
+        {
+          "name": "getImagePath",
+          "params": "$thumbnail",
+          "line": 93
+        },
+        {
+          "name": "assignMovieLabels",
+          "params": "&$movies",
+          "line": 113
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies"
+        ]
+      }
+    },
+    "netfix2/login.php": {
+      "path": "netfix2/login.php",
+      "module": "AUTH",
+      "totalLines": 104,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          44
+        ],
+        "htmlTemplateLines": [
+          45,
+          104
+        ],
+        "advice": "Chỉ cần đọc dòng 1-44 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 60 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 6,
+        "vgBranch": 7
+      },
+      "inputs": {
+        "POST": [
+          "identifier",
+          "password"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [
+          "index.php"
+        ],
+        "formSubmitsTo": [
+          "login.php"
+        ],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/logout.php": {
+      "path": "netfix2/logout.php",
+      "module": "AUTH",
+      "totalLines": 13,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          13
+        ],
+        "htmlTemplateLines": null,
+        "advice": "Chỉ cần đọc dòng 1-13 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 0 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 0,
+        "vgBranch": 1
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [],
+        "redirectsTo": [
+          "login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": []
+      }
+    },
+    "netfix2/manage_movies.php": {
+      "path": "netfix2/manage_movies.php",
+      "module": "ADM",
+      "totalLines": 191,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          37
+        ],
+        "htmlTemplateLines": [
+          38,
+          191
+        ],
+        "advice": "Chỉ cần đọc dòng 1-37 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 154 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 7,
+        "vgBranch": 8
+      },
+      "inputs": {
+        "POST": [
+          "delete_id"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getAllMovies",
+          "params": "$conn",
+          "line": 11
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies"
+        ]
+      }
+    },
+    "netfix2/manage_vip.php": {
+      "path": "netfix2/manage_vip.php",
+      "module": "VIP/ADM",
+      "totalLines": 239,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          46
+        ],
+        "htmlTemplateLines": [
+          47,
+          239
+        ],
+        "advice": "Chỉ cần đọc dòng 1-46 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 193 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 8,
+        "vgBranch": 9
+      },
+      "inputs": {
+        "POST": [
+          "user_id",
+          "action"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getAllUsers",
+          "params": "$conn",
+          "line": 12
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/movies.php": {
+      "path": "netfix2/movies.php",
+      "module": "MOV",
+      "totalLines": 214,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          144
+        ],
+        "htmlTemplateLines": [
+          145,
+          214
+        ],
+        "advice": "Chỉ cần đọc dòng 1-144 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 70 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 18,
+        "vgBranch": 19
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "genre",
+          "sub_genre",
+          "country"
+        ],
+        "SESSION": []
+      },
+      "functions": [
+        {
+          "name": "getSubGenres",
+          "params": "$conn",
+          "line": 11
+        },
+        {
+          "name": "getMoviesByGenre",
+          "params": "$conn, $genre, $limit = 10",
+          "line": 31
+        },
+        {
+          "name": "getMoviesBySubGenre",
+          "params": "$conn, $sub_genre, $limit = 10",
+          "line": 54
+        },
+        {
+          "name": "getMoviesByCountry",
+          "params": "$conn, $country, $limit = 10",
+          "line": 78
+        },
+        {
+          "name": "getCountries",
+          "params": "$conn",
+          "line": 101
+        },
+        {
+          "name": "getImagePath",
+          "params": "$thumbnail",
+          "line": 113
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies"
+        ]
+      }
+    },
+    "netfix2/orders.php": {
+      "path": "netfix2/orders.php",
+      "module": "ADM/VIP",
+      "totalLines": 361,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          140
+        ],
+        "htmlTemplateLines": [
+          141,
+          361
+        ],
+        "advice": "Chỉ cần đọc dòng 1-140 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 221 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 27,
+        "vgBranch": 28
+      },
+      "inputs": {
+        "POST": [
+          "order_id",
+          "action"
+        ],
+        "GET": [
+          "user_id"
+        ],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getAllVipOrders",
+          "params": "$conn, $user_id = null",
+          "line": 115
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "vip_orders",
+          "users"
+        ]
+      }
+    },
+    "netfix2/order_history.php": {
+      "path": "netfix2/order_history.php",
+      "module": "VIP",
+      "totalLines": 248,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          52
+        ],
+        "htmlTemplateLines": [
+          53,
+          248
+        ],
+        "advice": "Chỉ cần đọc dòng 1-52 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 196 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 9,
+        "vgBranch": 10
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "profile_message",
+          "profile_message_type"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "user_sidebar.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "users",
+          "vip_orders"
+        ]
+      }
+    },
+    "netfix2/payment_return.php": {
+      "path": "netfix2/payment_return.php",
+      "module": "VIP",
+      "totalLines": 126,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          60
+        ],
+        "htmlTemplateLines": [
+          61,
+          126
+        ],
+        "advice": "Chỉ cần đọc dòng 1-60 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 66 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 5,
+        "vgBranch": 6
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "resultCode",
+          "message"
+        ],
+        "SESSION": [
+          "user_id",
+          "profile_message",
+          "profile_message_type"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "vip_orders",
+          "users"
+        ]
+      }
+    },
+    "netfix2/pricing.php": {
+      "path": "netfix2/pricing.php",
+      "module": "VIP",
+      "totalLines": 497,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          141
+        ],
+        "htmlTemplateLines": [
+          142,
+          497
+        ],
+        "advice": "Chỉ cần đọc dòng 1-141 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 356 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 18,
+        "vgBranch": 19
+      },
+      "inputs": {
+        "POST": [
+          "cancel_vip",
+          "extend_vip"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "profile_message",
+          "profile_message_type"
+        ]
+      },
+      "functions": [
+        {
+          "name": "showVipBlockAlert",
+          "params": "",
+          "line": 482
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "login.php",
+          "pricing.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "users",
+          "vip_orders"
+        ]
+      }
+    },
+    "netfix2/process_payment.php": {
+      "path": "netfix2/process_payment.php",
+      "module": "VIP",
+      "totalLines": 136,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          136
+        ],
+        "htmlTemplateLines": null,
+        "advice": "Chỉ cần đọc dòng 1-136 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 0 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 6,
+        "vgBranch": 7
+      },
+      "inputs": {
+        "POST": [
+          "package_id",
+          "payment_method",
+          "final_price"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "profile_message",
+          "profile_message_type"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [
+          "login.php",
+          "pricing.php",
+          "profile.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "vip_orders",
+          "users"
+        ]
+      }
+    },
+    "netfix2/profile.php": {
+      "path": "netfix2/profile.php",
+      "module": "AUTH",
+      "totalLines": 334,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          64
+        ],
+        "htmlTemplateLines": [
+          65,
+          334
+        ],
+        "advice": "Chỉ cần đọc dòng 1-64 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 270 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 13,
+        "vgBranch": 14
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": [
+          "user_id",
+          "profile_message",
+          "profile_message_type"
+        ]
+      },
+      "functions": [
+        {
+          "name": "toggleOrderHistory",
+          "params": "event",
+          "line": 308
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "user_sidebar.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "users",
+          "vip_orders"
+        ]
+      }
+    },
+    "netfix2/register.php": {
+      "path": "netfix2/register.php",
+      "module": "AUTH",
+      "totalLines": 123,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          54
+        ],
+        "htmlTemplateLines": [
+          55,
+          123
+        ],
+        "advice": "Chỉ cần đọc dòng 1-54 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 69 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 9,
+        "vgBranch": 10
+      },
+      "inputs": {
+        "POST": [
+          "username",
+          "email",
+          "password",
+          "confirm_password"
+        ],
+        "GET": [],
+        "SESSION": [
+          "user_id"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php"
+        ],
+        "redirectsTo": [
+          "index.php"
+        ],
+        "formSubmitsTo": [
+          "register.php"
+        ],
+        "sqlTables": [
+          "users"
+        ]
+      }
+    },
+    "netfix2/search.php": {
+      "path": "netfix2/search.php",
+      "module": "MOV",
+      "totalLines": 182,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          93
+        ],
+        "htmlTemplateLines": [
+          94,
+          182
+        ],
+        "advice": "Chỉ cần đọc dòng 1-93 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 89 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 14,
+        "vgBranch": 15
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "query",
+          "genre"
+        ],
+        "SESSION": []
+      },
+      "functions": [
+        {
+          "name": "getSubGenres",
+          "params": "$conn",
+          "line": 11
+        },
+        {
+          "name": "getImagePath",
+          "params": "$thumbnail",
+          "line": 31
+        },
+        {
+          "name": "getCountries",
+          "params": "$conn",
+          "line": 40
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies"
+        ]
+      }
+    },
+    "netfix2/statistics.php": {
+      "path": "netfix2/statistics.php",
+      "module": "ADM",
+      "totalLines": 429,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          84
+        ],
+        "htmlTemplateLines": [
+          85,
+          429
+        ],
+        "advice": "Chỉ cần đọc dòng 1-84 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 345 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 7,
+        "vgBranch": 8
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "start_date",
+          "end_date",
+          "package"
+        ],
+        "SESSION": [
+          "user_id",
+          "is_admin"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php",
+          "admin_sidebar.php"
+        ],
+        "redirectsTo": [
+          "admin_login.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "vip_orders",
+          "users",
+          "movies",
+          "watch_history"
+        ]
+      }
+    },
+    "netfix2/user_sidebar.php": {
+      "path": "netfix2/user_sidebar.php",
+      "module": "CORE",
+      "totalLines": 50,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          11
+        ],
+        "htmlTemplateLines": [
+          12,
+          50
+        ],
+        "advice": "Chỉ cần đọc dòng 1-11 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 39 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 0,
+        "vgBranch": 1
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [],
+        "SESSION": []
+      },
+      "functions": [],
+      "edges": {
+        "includes": [],
+        "redirectsTo": [],
+        "formSubmitsTo": [],
+        "sqlTables": []
+      }
+    },
+    "netfix2/watch.php": {
+      "path": "netfix2/watch.php",
+      "module": "MOV/INT",
+      "totalLines": 653,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          201
+        ],
+        "htmlTemplateLines": [
+          202,
+          653
+        ],
+        "advice": "Chỉ cần đọc dòng 1-201 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 452 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 34,
+        "vgBranch": 35
+      },
+      "inputs": {
+        "POST": [
+          "comment_text"
+        ],
+        "GET": [
+          "id",
+          "episode"
+        ],
+        "SESSION": [
+          "user_id"
+        ]
+      },
+      "functions": [
+        {
+          "name": "getSubGenres",
+          "params": "$conn",
+          "line": 11
+        },
+        {
+          "name": "getCountries",
+          "params": "$conn",
+          "line": 31
+        },
+        {
+          "name": "getImagePath",
+          "params": "$thumbnail",
+          "line": 43
+        }
+      ],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "watch.php?id="
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "movies",
+          "users",
+          "watch_history",
+          "episodes",
+          "comments"
+        ]
+      }
+    },
+    "netfix2/watch_history.php": {
+      "path": "netfix2/watch_history.php",
+      "module": "INT",
+      "totalLines": 162,
+      "readHint": {
+        "phpBackendLines": [
+          1,
+          39
+        ],
+        "htmlTemplateLines": [
+          40,
+          162
+        ],
+        "advice": "Chỉ cần đọc dòng 1-39 bằng read_file để lấy toàn bộ logic PHP (tiết kiệm 123 dòng HTML/CSS)."
+      },
+      "whitebox": {
+        "decisionCount": 4,
+        "vgBranch": 5
+      },
+      "inputs": {
+        "POST": [],
+        "GET": [
+          "delete"
+        ],
+        "SESSION": [
+          "user_id"
+        ]
+      },
+      "functions": [],
+      "edges": {
+        "includes": [
+          "db.php",
+          "header.php",
+          "user_sidebar.php",
+          "footer.php"
+        ],
+        "redirectsTo": [
+          "login.php",
+          "watch_history.php"
+        ],
+        "formSubmitsTo": [],
+        "sqlTables": [
+          "watch_history",
+          "movies"
+        ]
+      }
+    }
+  }
+}

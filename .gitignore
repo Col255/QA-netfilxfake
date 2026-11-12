@@ -17,11 +17,10 @@ node_modules/
 output/
 package-lock.json
 
-#.claude và .gemini
+#.claude và .agents (chỉ đẩy .gemini lên nhánh cho nhóm)
 .claude/
-.gemini
 .claude-workspace
-.agents
+.agents/
 
 # Bỏ qua file backup và script build Postman nội bộ
 *.original.json
