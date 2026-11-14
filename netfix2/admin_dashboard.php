@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 // Kiểm tra quyền admin
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
@@ -9,50 +10,62 @@ if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
 }
 
 // === Lấy Top 10 phim có lượt xem cao nhất ===
-function getTop10Movies($conn) {
+function getTop10Movies(mysqli $conn) {
     $stmt = $conn->prepare("SELECT id, title, thumbnail, genre, year, is_vip, view_count 
                             FROM movies 
                             ORDER BY view_count DESC 
                             LIMIT 10");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $movies = $result->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-    return $movies;
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $movies = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+        return $movies;
+    }
+    return [];
 }
 
 // === Thống kê số lượng tài khoản VIP ===
-function getVipCount($conn) {
+function getVipCount(mysqli $conn) {
     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE is_vip = 1");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $count = $result->fetch_assoc()['count'];
-    $stmt->close();
-    return $count;
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result ? $result->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? $row['count'] : 0;
+    }
+    return 0;
 }
 
 // === Tổng số khách hàng ===
-function getTotalCustomers($conn) {
+function getTotalCustomers(mysqli $conn) {
     $stmt = $conn->prepare("SELECT COUNT(*) as count FROM users");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $count = $result->fetch_assoc()['count'];
-    $stmt->close();
-    return $count;
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result ? $result->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? $row['count'] : 0;
+    }
+    return 0;
 }
 
 // === Doanh thu từ gói VIP đã thanh toán ===
-function getVipRevenue($conn) {
+function getVipRevenue(mysqli $conn) {
     $stmt = $conn->prepare("SELECT SUM(price) as total FROM vip_orders WHERE status = 'Completed'");
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $total = $result->fetch_assoc()['total'] ?? 0;
-    $stmt->close();
-    return $total;
+    if ($stmt) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result ? $result->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? ($row['total'] ?? 0) : 0;
+    }
+    return 0;
 }
 
 // === Doanh thu tổng (mặc định bằng doanh thu VIP) ===
-function getTotalRevenue($conn) {
+function getTotalRevenue(mysqli $conn) {
     return getVipRevenue($conn);
 }
 

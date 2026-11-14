@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 // Kiểm tra nếu người dùng chưa đăng nhập hoặc không phải admin
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
@@ -54,52 +55,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Lưu phim vào bảng movies
+      // Lưu phim vào bảng movies
     if (!isset($error_message)) {
         $stmt = $conn->prepare("INSERT INTO movies (title, thumbnail, description, duration, episode_count, genre, sub_genre, year, language, country, actors, director, status, video_path, is_vip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-        $duration = $duration ?? 0;
-        $episode_count = $episode_count ?? 0;
-        $year = $year ?? 0;
+        if ($stmt) {
+            $duration = $duration ?? 0;
+            $episode_count = $episode_count ?? 0;
+            $year = $year ?? 0;
 
-        $stmt->bind_param("ssssisssssssssi", $title, $thumbnail, $description, $duration, $episode_count, $genre, $sub_genre, $year, $language, $country, $actors, $director, $status, $video_path, $is_vip);
+            $stmt->bind_param("ssssisssssssssi", $title, $thumbnail, $description, $duration, $episode_count, $genre, $sub_genre, $year, $language, $country, $actors, $director, $status, $video_path, $is_vip);
 
-        if ($stmt->execute()) {
-            $movie_id = $conn->insert_id;
+            if ($stmt->execute()) {
+                $movie_id = $conn->insert_id;
 
-            // Xử lý các tập cho phim bộ
-            if ($genre === 'Series' && isset($_FILES['episodes']) && is_array($_FILES['episodes']['name'])) {
-                $episode_dir = 'Uploads/videos/';
-                if (!is_dir($episode_dir)) mkdir($episode_dir, 0777, true);
+                // Xử lý các tập cho phim bộ
+                if ($genre === 'Series' && isset($_FILES['episodes']) && is_array($_FILES['episodes']['name'])) {
+                    $episode_dir = 'Uploads/videos/';
+                    if (!is_dir($episode_dir)) mkdir($episode_dir, 0777, true);
 
-                foreach ($_FILES['episodes']['name'] as $key => $name) {
-                    if ($_FILES['episodes']['error'][$key] === UPLOAD_ERR_OK) {
-                        $episode_number = isset($_POST['episode_numbers'][$key]) ? (int)$_POST['episode_numbers'][$key] : ($key + 1);
-                        $episode_title = $_POST['episode_titles'][$key] ?? "Tập $episode_number";
-                        $episode_is_vip = isset($_POST['episode_is_vip'][$key]) ? 1 : 0;
+                    foreach ($_FILES['episodes']['name'] as $key => $name) {
+                        if ($_FILES['episodes']['error'][$key] === UPLOAD_ERR_OK) {
+                            $episode_number = isset($_POST['episode_numbers'][$key]) ? (int)$_POST['episode_numbers'][$key] : ($key + 1);
+                            $episode_title = $_POST['episode_titles'][$key] ?? "Tập $episode_number";
+                            $episode_is_vip = isset($_POST['episode_is_vip'][$key]) ? 1 : 0;
 
-                        $episode_name = time() . '_' . basename($name);
-                        $episode_path = $episode_dir . $episode_name;
+                            $episode_name = time() . '_' . basename($name);
+                            $episode_path = $episode_dir . $episode_name;
 
-                        if (move_uploaded_file($_FILES['episodes']['tmp_name'][$key], $episode_path)) {
-                            $episode_video_path = 'Uploads/videos/' . $episode_name;
+                            if (move_uploaded_file($_FILES['episodes']['tmp_name'][$key], $episode_path)) {
+                                $episode_video_path = 'Uploads/videos/' . $episode_name;
 
-                            $episode_stmt = $conn->prepare("INSERT INTO episodes (movie_id, episode_number, title, video_path, is_vip) VALUES (?, ?, ?, ?, ?)");
-                            $episode_stmt->bind_param("iissi", $movie_id, $episode_number, $episode_title, $episode_video_path, $episode_is_vip);
-                            $episode_stmt->execute();
-                            $episode_stmt->close();
+                                $episode_stmt = $conn->prepare("INSERT INTO episodes (movie_id, episode_number, title, video_path, is_vip) VALUES (?, ?, ?, ?, ?)");
+                                if ($episode_stmt) {
+                                    $episode_stmt->bind_param("iissi", $movie_id, $episode_number, $episode_title, $episode_video_path, $episode_is_vip);
+                                    $episode_stmt->execute();
+                                    $episode_stmt->close();
+                                }
+                            }
                         }
                     }
                 }
+
+                header("Location: add_movie.php?added=1");
+                exit();
+            } else {
+                $error_message = "Lỗi khi thêm phim: " . $stmt->error;
             }
 
-        header("Location: add_movie.php?added=1");
-        exit();
+            $stmt->close();
         } else {
-            $error_message = "Lỗi khi thêm phim: " . $stmt->error;
+            $error_message = "Lỗi chuẩn bị truy vấn: " . $conn->error;
         }
-
-        $stmt->close();
     }
 }
 
