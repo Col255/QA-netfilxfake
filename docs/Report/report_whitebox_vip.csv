@@ -1,0 +1,30 @@
+﻿STT,WB_TC_ID,File_PHP,Ten_Kich_Ban_WhiteBox,Method,Session_Role,Nhanh_Kich_Hoat,Cau_Lenh_Thuc_Thi,HTTP_Status,Time_Ms,Trang_Thai
+1,WB_VIP_01,/pricing.php,"Nhanh D1=True: Khach chua dang nhap truy cap pricing.php -> Redirect login.php",GET,guest,"PRC_D1_T","PRC_S1;PRC_S2",302,2ms,PASS
+2,WB_VIP_02,/pricing.php,"Nhanh D1=F & D2=T & D3=F & D4=F: User thuong truy cap xem bang gia VIP",GET,user,"PRC_D1_F;PRC_D2_T;PRC_D3_F;PRC_D4_F;PRC_D5_F;PRC_D6_F","PRC_S1;PRC_S3;PRC_S5;PRC_S11",200,2ms,PASS
+3,WB_VIP_03,/pricing.php,"Nhanh D1=F & D2=False: User co session user_id nhung tai khoan bi xoa khoi DB ($user null)",GET,user,"PRC_D1_F;PRC_D2_F;PRC_D4_F;PRC_D5_F;PRC_D6_F","PRC_S1;PRC_S3;PRC_S5;PRC_S11",200,2ms,PASS
+4,WB_VIP_04,/pricing.php,"Nhanh D3=True: User VIP da het han truy cap -> Tu dong reset ve 0 va update don expired",GET,user,"PRC_D1_F;PRC_D2_T;PRC_D3_T;PRC_D4_F;PRC_D5_F;PRC_D6_F","PRC_S1;PRC_S3;PRC_S4;PRC_S5;PRC_S11",200,2ms,PASS
+5,WB_VIP_05,/pricing.php,"Nhanh D4=True: User VIP con han truy cap -> Xem thong tin goi hien tai va nut quan ly",GET,vip,"PRC_D1_F;PRC_D2_T;PRC_D3_F;PRC_D4_T;PRC_D5_F;PRC_D6_F","PRC_S1;PRC_S3;PRC_S5;PRC_S6;PRC_S11",200,2ms,PASS
+6,WB_VIP_06,/pricing.php,"Nhanh D5=True: User VIP gui POST yeu cau Huy goi VIP (cancel_vip)",POST,vip,"PRC_D1_F;PRC_D5_T","PRC_S1;PRC_S3;PRC_S7",302,2ms,PASS
+7,WB_VIP_07,/pricing.php,"Nhanh D6=True & D7=False: User thuong gui POST gia han VIP (extend_vip tu thoi diem hien tai)",POST,user,"PRC_D1_F;PRC_D5_F;PRC_D6_T;PRC_D7_F","PRC_S1;PRC_S3;PRC_S8;PRC_S10",200,2ms,PASS
+8,WB_VIP_08,/pricing.php,"Nhanh D6=True & D7=True: User VIP con han gui POST gia han cong don vao han cu",POST,vip,"PRC_D1_F;PRC_D5_F;PRC_D6_T;PRC_D7_T","PRC_S1;PRC_S3;PRC_S8;PRC_S9;PRC_S10",200,2ms,PASS
+9,WB_VIP_09,/checkout.php,"Nhanh D1=True: Khach chua dang nhap truy cap checkout.php -> Redirect login.php",GET,guest,"CHK_D1_T","CHK_S1;CHK_S2",302,2ms,PASS
+10,WB_VIP_10,/checkout.php,"Nhanh D1=F & D2=T & D3=T: User truy cap checkout voi GET package_id hop le",GET,user,"CHK_D1_F;CHK_D2_T;CHK_D3_T","CHK_S1;CHK_S3;CHK_S4;CHK_S5;CHK_S6",200,2ms,PASS
+11,WB_VIP_11,/checkout.php,"Nhanh D1=F & D2=False: User truy cap checkout nhung user_id khong tim thay trong CSDL",GET,user,"CHK_D1_F;CHK_D2_F;CHK_D3_T","CHK_S1;CHK_S3;CHK_S5;CHK_S6",200,2ms,PASS
+12,WB_VIP_12,/checkout.php,"Nhanh D3=True: User gui POST package_id hop le tai checkout",POST,user,"CHK_D1_F;CHK_D2_T;CHK_D3_T","CHK_S1;CHK_S3;CHK_S4;CHK_S5;CHK_S6",200,2ms,PASS
+13,WB_VIP_13,/checkout.php,"Nhanh D3=False: Truy cap checkout voi package_id khong ton tai trong he thong",GET,user,"CHK_D1_F;CHK_D2_T;CHK_D3_F","CHK_S1;CHK_S3;CHK_S4;CHK_S5;CHK_S7",200,2ms,PASS
+14,WB_VIP_14,/process_payment.php,"Nhanh D1=True: Khach chua dang nhap goi request toi process_payment",GET,guest,"PAY_D1_T","PAY_S1;PAY_S2",302,2ms,PASS
+15,WB_VIP_15,/process_payment.php,"Nhanh D1=False & D2=True: User goi GET toi process_payment.php -> Chan redirect pricing",GET,user,"PAY_D1_F;PAY_D2_T","PAY_S1;PAY_S3",302,2ms,PASS
+16,WB_VIP_16,/process_payment.php,"Nhanh D2=False & D3=True: Gui POST voi package_id khong hop le",POST,user,"PAY_D1_F;PAY_D2_F;PAY_D3_T","PAY_S1;PAY_S4;PAY_S5",302,2ms,PASS
+17,WB_VIP_17,/process_payment.php,"Nhanh D4=False & D6=False: Thanh toan Chuyen khoan khi chua co VIP -> Kich hoat moi",POST,user,"PAY_D1_F;PAY_D2_F;PAY_D3_F;PAY_D4_F;PAY_D6_F","PAY_S1;PAY_S4;PAY_S6;PAY_S10;PAY_S12",302,2ms,PASS
+18,WB_VIP_18,/process_payment.php,"Nhanh D4=False & D6=True: Thanh toan Chuyen khoan gia han khi dang co VIP",POST,vip,"PAY_D1_F;PAY_D2_F;PAY_D3_F;PAY_D4_F;PAY_D6_T","PAY_S1;PAY_S4;PAY_S6;PAY_S10;PAY_S11;PAY_S12",302,2ms,PASS
+19,WB_VIP_19,/process_payment.php,"Nhanh D4=True & D5=True: Thanh toan MoMo thanh cong co tra ve payUrl",POST,user,"PAY_D1_F;PAY_D2_F;PAY_D3_F;PAY_D4_T;PAY_D5_T","PAY_S1;PAY_S4;PAY_S6;PAY_S7;PAY_S8",302,2ms,PASS
+20,WB_VIP_20,/process_payment.php,"Nhanh D4=True & D5=False: Thanh toan MoMo bi loi gateway (khong co payUrl)",POST,user,"PAY_D1_F;PAY_D2_F;PAY_D3_F;PAY_D4_T;PAY_D5_F","PAY_S1;PAY_S4;PAY_S6;PAY_S7;PAY_S9",200,2ms,PASS
+21,WB_VIP_21,/payment_return.php,"Nhanh D1=False: Khach chua dang nhap truy cap URL callback MoMo",GET,guest,"RET_D1_F","RET_S1;RET_S8",200,2ms,PASS
+22,WB_VIP_22,/payment_return.php,"Nhanh D1=T & D2=T & D3=T & D4=F: MoMo bao thanh cong (resultCode=0) cho user moi",GET,user,"RET_D1_T;RET_D2_T;RET_D3_T;RET_D4_F","RET_S1;RET_S2;RET_S3;RET_S4;RET_S6;RET_S8",200,2ms,PASS
+23,WB_VIP_23,/payment_return.php,"Nhanh D3=True & D4=True: MoMo bao thanh cong cong don han cho user VIP",GET,vip,"RET_D1_T;RET_D2_T;RET_D3_T;RET_D4_T","RET_S1;RET_S2;RET_S3;RET_S4;RET_S5;RET_S6;RET_S8",200,2ms,PASS
+24,WB_VIP_24,/payment_return.php,"Nhanh D2=True & D3=False: MoMo callback bao that bai (resultCode!=0)",GET,user,"RET_D1_T;RET_D2_T;RET_D3_F","RET_S1;RET_S2;RET_S3;RET_S7;RET_S8",200,2ms,PASS
+25,WB_VIP_25,/payment_return.php,"Nhanh D1=True & D2=False: Callback nhung khong tim thay don trong CSDL",GET,user,"RET_D1_T;RET_D2_F;RET_D3_F","RET_S1;RET_S2;RET_S7;RET_S8",200,2ms,PASS
+26,WB_VIP_26,/order_history.php,"Nhanh D1=True: Khach chua dang nhap truy cap order_history.php -> Redirect login",GET,guest,"ORD_D1_T","ORD_S1;ORD_S2",302,2ms,PASS
+27,WB_VIP_27,/order_history.php,"Nhanh D1=False & D2=True: user_id trong session khong con ton tai trong DB",GET,user,"ORD_D1_F;ORD_D2_T","ORD_S1;ORD_S3;ORD_S4",302,2ms,PASS
+28,WB_VIP_28,/order_history.php,"Nhanh D2=False & D3=False & D4=True: User hop le nhung chua tung mua VIP",GET,user,"ORD_D1_F;ORD_D2_F;ORD_D3_F;ORD_D4_T","ORD_S1;ORD_S3;ORD_S6;ORD_S7",200,2ms,PASS
+29,WB_VIP_29,/order_history.php,"Nhanh D3=True & D4=False: User co don hang VIP va co thong bao session",GET,vip,"ORD_D1_F;ORD_D2_F;ORD_D3_T;ORD_D4_F","ORD_S1;ORD_S3;ORD_S5;ORD_S6;ORD_S8",200,2ms,PASS
