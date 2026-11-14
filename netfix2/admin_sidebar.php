@@ -1,3 +1,4 @@
+<?php $current_page = $current_page ?? basename($_SERVER['PHP_SELF']); ?>
 <div class="sidebar">
         <a href="admin_dashboard.php" class="menu-item <?php echo $current_page == 'admin_dashboard.php' ? 'active' : ''; ?>">Admin</a>
         <a href="statistics.php" class="menu-item <?php echo $current_page == 'statistics.php' ? 'active' : ''; ?>">Thống kê</a>
