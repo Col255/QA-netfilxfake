@@ -1,19 +1,42 @@
 const fs = require('fs');
 const path = require('path');
-const { parse } = require('csv-parse/sync');
 
 Feature('FE5 - ADM: White-box Data-Driven Testing (Statement & Branch Coverage)');
 
 const csvPath = path.resolve(__dirname, '../docs/Design/whitebox_testcase_adm.csv');
-let testRecords = [];
 
+function parseCsvLine(line) {
+    const result = [];
+    let cur = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (inQuotes) {
+            if (ch === '"') {
+                if (i + 1 < line.length && line[i + 1] === '"') { cur += '"'; i++; }
+                else { inQuotes = false; }
+            } else { cur += ch; }
+        } else {
+            if (ch === '"') { inQuotes = true; }
+            else if (ch === ',') { result.push(cur); cur = ''; }
+            else { cur += ch; }
+        }
+    }
+    result.push(cur);
+    return result;
+}
+
+let testRecords = [];
 if (fs.existsSync(csvPath)) {
-    const content = fs.readFileSync(csvPath, 'utf-8');
-    testRecords = parse(content, {
-        columns: true,
-        skip_empty_lines: true,
-        bom: true
-    });
+    const raw = fs.readFileSync(csvPath, 'utf-8').replace(/^\uFEFF/, '');
+    const lines = raw.split(/\r?\n/).filter(l => l.trim().length > 0);
+    const headers = parseCsvLine(lines[0]).map(h => h.trim());
+    for (let i = 1; i < lines.length; i++) {
+        const vals = parseCsvLine(lines[i]);
+        const row = {};
+        headers.forEach((h, idx) => { row[h] = (vals[idx] ?? '').trim(); });
+        testRecords.push(row);
+    }
 }
 
 testRecords.forEach((tc) => {
@@ -23,12 +46,10 @@ testRecords.forEach((tc) => {
         const role = tc.Session_Role || 'guest';
         const params = tc.Payload_Params;
 
-        // 1. Phân quyền vai trò: nếu là guest thì đảm bảo phiên chưa đăng nhập
         if (role === 'guest') {
             I.amOnPage('/logout.php');
         }
 
-        // 2. Thực thi kiểm thử theo phương thức
         if (method === 'POST') {
             I.amOnPage(endpoint);
             I.dontSee('Fatal error');
@@ -38,13 +59,11 @@ testRecords.forEach((tc) => {
             I.amOnPage(url);
         }
 
-        // 3. Statement Coverage: Không dính bất kỳ lỗi PHP Warning hay Undefined nào
         I.dontSee('Fatal error');
         I.dontSee('Parse error');
         I.dontSee('Notice: Undefined variable');
         I.dontSee('Warning: Undefined array key');
 
-        // 4. Branch Coverage kiểm tra điều kiện phân quyền:
         if (tc.Nhanh_Kich_Hoat && tc.Nhanh_Kich_Hoat.includes('_D1_T')) {
             I.seeInCurrentUrl('admin_login.php');
         }
