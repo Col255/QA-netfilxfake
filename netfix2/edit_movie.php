@@ -14,11 +14,15 @@ $movie_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 if ($movie_id <= 0) die("ID phim không hợp lệ.");
 
 // Lấy thông tin phim
+$movie = null;
 $stmt = $conn->prepare("SELECT * FROM movies WHERE id = ?");
-$stmt->bind_param("i", $movie_id);
-$stmt->execute();
-$movie = $stmt->get_result()->fetch_assoc();
-$stmt->close();
+if ($stmt) {
+    $stmt->bind_param("i", $movie_id);
+    $stmt->execute();
+    $res_movie = $stmt->get_result();
+    $movie = $res_movie ? $res_movie->fetch_assoc() : null;
+    $stmt->close();
+}
 if (!$movie) die("Phim không tồn tại.");
 
 // Lấy danh sách tập nếu là Series
