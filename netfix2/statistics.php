@@ -25,9 +25,9 @@ if ($package_filter !== '') {
 $stmt = $conn->prepare($sql);
 $stmt->bind_param($types, ...$params);
 $stmt->execute();
-$result = $stmt->get_result();
 $res_orders = $stmt->get_result();
 $orders = $res_orders ? $res_orders->fetch_all(MYSQLI_ASSOC) : [];
+$stmt->close();
 
 $total_revenue = 0;
 $order_counts = 0;
@@ -45,29 +45,32 @@ foreach ($orders as $order) {
     $package_breakdown[$pkg]++;
 }
 
+// Active VIP
 $stmt = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE is_vip = 1 AND vip_expires_at > NOW()");
 $stmt->execute();
-$active_vip = $stmt->get_result()->fetch_assoc()['count'];
+$res_active = $stmt->get_result();
+$active_vip = $res_active ? ($res_active->fetch_assoc()['count'] ?? 0) : 0;
 $stmt->close();
 
+// Expired VIP
 $stmt = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE vip_expires_at < NOW() AND is_vip = 1");
 $stmt->execute();
-$expired_vip = $stmt->get_result()->fetch_assoc()['count'];
+$res_expired = $stmt->get_result();
+$expired_vip = $res_expired ? ($res_expired->fetch_assoc()['count'] ?? 0) : 0;
 $stmt->close();
 
+// New users
 $stmt = $conn->prepare("SELECT COUNT(*) as count FROM users WHERE DATE(created_at) BETWEEN ? AND ?");
 $stmt->bind_param("ss", $start_date, $end_date);
 $stmt->execute();
-$new_users = $stmt->get_result()->fetch_assoc()['count'];
+$res_new = $stmt->get_result();
+$new_users = $res_new ? ($res_new->fetch_assoc()['count'] ?? 0) : 0;
 $stmt->close();
 
 $current_page = basename($_SERVER['PHP_SELF']);
 $packages = ['Gói VIP 1 Tháng', 'Gói VIP 6 Tháng', 'Gói VIP 1 Năm'];
 
 // Lấy 4 phim có lượt xem cao nhất
-$start_date = $_GET['start_date'] ?? date('Y-m-01');
-$end_date = $_GET['end_date'] ?? date('Y-m-d');
-
 $stmt = $conn->prepare("
     SELECT m.*, COUNT(w.id) AS total_views
     FROM movies m
