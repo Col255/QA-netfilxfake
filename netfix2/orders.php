@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Điều chỉnh đường dẫn đến db.php nếu cần (ví dụ: ../db.php nếu orders.php nằm trong thư mục con admin)
+/** @var mysqli $conn */
 
 // Kiểm tra nếu người dùng chưa đăng nhập hoặc không phải admin
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
@@ -56,12 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id']) && isset(
                     $vip_duration = '1 month'; // Mặc định, sẽ được cập nhật dựa vào tên gói
                     
                     // Xác định thời hạn VIP dựa vào tên gói (phải khớp với pricing.php)
-                    if (strpos($package_name, '1 Tháng') !== false) {
-                        $vip_duration = '1 month';
-                    } elseif (strpos($package_name, '6 Tháng') !== false) {
+                    if (strpos($package_name, '6 Tháng') !== false) {
                         $vip_duration = '6 months';
                     } elseif (strpos($package_name, '1 Năm') !== false) {
                         $vip_duration = '1 year';
+                    } else {
+                        $vip_duration = '1 month'; // Mặc định gói 1 tháng
                     }
 
                     // Lấy thời điểm hiện tại hoặc thời điểm hết hạn VIP cũ nếu có
