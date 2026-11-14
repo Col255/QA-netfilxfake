@@ -113,7 +113,7 @@ $user_filter_id = isset($_GET['user_id']) ? (int)$_GET['user_id'] : null;
 $orders = getAllVipOrders($conn, $user_filter_id);
 
 // Hàm lấy danh sách đơn hàng VIP từ database
-function getAllVipOrders($conn, $user_id = null) {
+function getAllVipOrders(mysqli $conn, $user_id = null) {
     $query = "
         SELECT vo.id, u.username, vo.package_name, vo.price, vo.payment_method, vo.status, vo.order_date
         FROM vip_orders vo
@@ -125,14 +125,17 @@ function getAllVipOrders($conn, $user_id = null) {
     $query .= " ORDER BY vo.order_date DESC";
 
     $stmt = $conn->prepare($query);
-    if ($user_id) {
-        $stmt->bind_param("i", $user_id);
+    if ($stmt) {
+        if ($user_id) {
+            $stmt->bind_param("i", $user_id);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $orders = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+        return $orders;
     }
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $orders = $result->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-    return $orders;
+    return [];
 }
 
 
