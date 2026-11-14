@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
     header("Location: admin_login.php");
@@ -25,7 +26,8 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param($types, ...$params);
 $stmt->execute();
 $result = $stmt->get_result();
-$orders = $result->fetch_all(MYSQLI_ASSOC);
+$res_orders = $stmt->get_result();
+$orders = $res_orders ? $res_orders->fetch_all(MYSQLI_ASSOC) : [];
 
 $total_revenue = 0;
 $order_counts = 0;
@@ -77,7 +79,8 @@ $stmt = $conn->prepare("
 ");
 $stmt->bind_param("ss", $start_date, $end_date);
 $stmt->execute();
-$top_trending = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+$res_trending = $stmt->get_result();
+$top_trending = $res_trending ? $res_trending->fetch_all(MYSQLI_ASSOC) : [];
 $stmt->close();
 
 ?>
