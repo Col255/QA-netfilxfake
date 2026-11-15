@@ -157,12 +157,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text'])) {
     } else {
         $comment = trim($_POST['comment_text']);
         if ($comment !== '') {
-            $stmt = $conn->prepare("INSERT INTO comments (user_id, movie_id, comment_text) VALUES (?, ?, ?)");
-            $stmt->bind_param("iis", $_SESSION['user_id'], $movie_id, $comment);
-            $stmt->execute();
-            $stmt->close();
-            header("Location: watch.php?id=$movie_id");
-            exit();
+            if (mb_strlen($comment) > 500) {
+                $comment_error = "Nội dung bình luận không được vượt quá 500 ký tự.";
+            } else {
+                $stmt = $conn->prepare("INSERT INTO comments (user_id, movie_id, comment_text) VALUES (?, ?, ?)");
+                $stmt->bind_param("iis", $_SESSION['user_id'], $movie_id, $comment);
+                $stmt->execute();
+                $stmt->close();
+                header("Location: watch.php?id=$movie_id");
+                exit();
+            }
         } else {
             $comment_error = "Nội dung bình luận không được để trống.";
         }
