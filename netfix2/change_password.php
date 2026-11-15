@@ -1,6 +1,7 @@
 <?php
 session_start();
-include 'db.php';
+require 'db.php';
+/** @var mysqli $conn */
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -18,11 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Lấy mật khẩu đã hash từ database để xác minh
     $stmt = $conn->prepare("SELECT password FROM users WHERE id = ?");
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $stmt->close();
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+    } else {
+        $user = null;
+    }
 
     if ($user && password_verify($current_password, $user['password'])) {
         // Mật khẩu hiện tại đúng
@@ -34,13 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Hash mật khẩu mới và cập nhật
             $hashed_new_password = password_hash($new_password, PASSWORD_DEFAULT);
             $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
-            $stmt->bind_param("si", $hashed_new_password, $user_id);
-            if ($stmt->execute()) {
-                $success = true;
+            if ($stmt) {
+                $stmt->bind_param("si", $hashed_new_password, $user_id);
+                if ($stmt->execute()) {
+                    $success = true;
+                } else {
+                    $error = "Đổi mật khẩu thất bại: " . $conn->error;
+                }
+                $stmt->close();
             } else {
-                $error = "Đổi mật khẩu thất bại: " . $conn->error;
+                $error = "Lỗi hệ thống: Không thể chuẩn bị câu lệnh cập nhật mật khẩu.";
             }
-            $stmt->close();
         }
     } else {
         $error = "Mật khẩu hiện tại không đúng.";
