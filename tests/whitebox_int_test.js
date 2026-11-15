@@ -64,10 +64,10 @@ testRecords.forEach((tc) => {
         I.dontSee('Notice: Undefined variable');
         I.dontSee('Warning: Undefined array key');
 
-        if (tc.Nhanh_Kich_Hoat && tc.Nhanh_Kich_Hoat.includes('CMT_D1_T')) {
+        if (endpoint === '/comments.php' && tc.Nhanh_Kich_Hoat && tc.Nhanh_Kich_Hoat.includes('CMT_D1_T')) {
             I.seeInCurrentUrl('admin_login.php');
         }
-        if (tc.Nhanh_Kich_Hoat && tc.Nhanh_Kich_Hoat.includes('WH_D1_T')) {
+        if (endpoint === '/watch_history.php' && tc.Nhanh_Kich_Hoat && tc.Nhanh_Kich_Hoat.includes('WH_D1_T')) {
             I.seeInCurrentUrl('login.php');
         }
     });
