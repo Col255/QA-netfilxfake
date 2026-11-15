@@ -28,7 +28,7 @@ function getPopularSubGenres($conn) {
 }
 
 // Hàm lấy phim từ database với các cột cụ thể, có thể lọc theo thể loại
-function getMovies($conn, $genre = null, $limit) {
+function getMovies($conn, $limit, $genre = null) {
     $query = "SELECT id, title, thumbnail, description, duration, genre, year, language, country, actors, director, status, episode_count, video_path AS video_url, view_count, is_vip FROM movies";
     if ($genre) {
         $query .= " WHERE genre = ? ORDER BY view_count DESC LIMIT ?";
@@ -101,12 +101,12 @@ function getImagePath($thumbnail) {
 // Lấy dữ liệu
 $subGenres = getPopularSubGenres($conn);
 $countries = getCountries($conn);
-$heroMovies = getMovies($conn, null, 3);
+$heroMovies = getMovies($conn, 3, null);
 $topMovies = getTopMovies($conn, 10);
-$latestMovies = getMovies($conn, 'Movie', 7);
-$latestSeries = getMovies($conn, 'Series', 7);
-$latestCartoons = getMovies($conn, 'Cartoon', 7);
-$latestCinema = getMovies($conn, 'Cinema', 7);
+$latestMovies = getMovies($conn, 7, 'Movie');
+$latestSeries = getMovies($conn, 7, 'Series');
+$latestCartoons = getMovies($conn, 7, 'Cartoon');
+$latestCinema = getMovies($conn, 7, 'Cinema');
 $recommendedMovie = !empty($topMovies) ? [$topMovies[0]] : [];
 
 // Gán nhãn cho các danh sách
