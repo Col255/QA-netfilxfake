@@ -88,11 +88,10 @@ if ($payment_method === 'Momo') {
         $stmt->close();
 
         header("Location: " . $jsonResult['payUrl']);
-        exit();
     } else {
         echo "<h3 style='color: red'>Không thể kết nối MoMo (ATM): " . htmlspecialchars($jsonResult['message'] ?? 'Lỗi không xác định') . "</h3>";
-        exit();
     }
+    exit();
 
 } else {
     // ========== THANH TOÁN NGAY ==========
