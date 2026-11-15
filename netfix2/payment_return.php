@@ -40,7 +40,11 @@ if ($user_id) {
 
         $new_expiry = new DateTime();
         if ($user && $user['vip_expires_at'] !== null && strtotime($user['vip_expires_at']) > time()) {
-            $new_expiry = new DateTime($user['vip_expires_at']);
+            try {
+                $new_expiry = new DateTime($user['vip_expires_at']);
+            } catch (Exception $e) {
+                $new_expiry = new DateTime();
+            }
         }
         $new_expiry->modify('+1 month');
         $vip_expires_at_str = $new_expiry->format('Y-m-d H:i:s');
