@@ -122,7 +122,9 @@ if ($stmt_orders) {
     text-align: center;
 }
 
-.profile-actions a {
+.profile-actions a,
+.profile-actions button,
+.btn-toggle-history {
     display: inline-block;
     padding: 12px 24px;
     background-color: #e50914;
@@ -131,11 +133,15 @@ if ($stmt_orders) {
     border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
 }
 
-.profile-actions a:hover {
+.profile-actions a:hover,
+.profile-actions button:hover,
+.btn-toggle-history:hover {
     background-color: #b20710;
     box-shadow: 0 6px 18px rgba(229, 9, 20, 0.5);
     transform: translateY(-1px);
@@ -259,7 +265,7 @@ if ($stmt_orders) {
     <!-- Trong <div class="profile-container"> sau phần .profile-info -->
 
         <div class="profile-actions">
-        <a href="#" onclick="toggleOrderHistory(event)">Xem lịch sử đơn hàng VIP</a>
+            <button type="button" class="btn-toggle-history" id="btnToggleHistory">Xem lịch sử đơn hàng VIP</button>
         </div>
         <div class="order-history" id="order-history" style="display: none;">
             <h3>Lịch sử đơn hàng VIP</h3>
@@ -308,18 +314,23 @@ if ($stmt_orders) {
 </div>
 <?php include'footer.php' ?>
 <script>
-function toggleOrderHistory(event) {
-    event.preventDefault();
-    const history = document.getElementById('order-history');
-    const btn = event.target;
-    if (history.style.display === 'none') {
-        history.style.display = 'block';
-        btn.textContent = 'Ẩn lịch sử đơn hàng VIP';
-    } else {
-        history.style.display = 'none';
-        btn.textContent = 'Xem lịch sử đơn hàng VIP';
+document.addEventListener('DOMContentLoaded', function () {
+    const btnToggleHistory = document.getElementById('btnToggleHistory');
+    const orderHistory = document.getElementById('order-history');
+
+    if (btnToggleHistory && orderHistory) {
+        btnToggleHistory.addEventListener('click', function (event) {
+            event.preventDefault();
+            if (orderHistory.style.display === 'none' || orderHistory.style.display === '') {
+                orderHistory.style.display = 'block';
+                btnToggleHistory.textContent = 'Ẩn lịch sử đơn hàng VIP';
+            } else {
+                orderHistory.style.display = 'none';
+                btnToggleHistory.textContent = 'Xem lịch sử đơn hàng VIP';
+            }
+        });
     }
-}
+});
 </script>
 <script>
     // Tự ẩn thông báo sau 4 giây
