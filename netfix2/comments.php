@@ -33,6 +33,7 @@ function getAllComments(mysqli $conn) {
         return [];
     }
     $result = $stmt->get_result();
+    // Kiểm tra $result hợp lệ trước khi gọi fetch_all(MYSQLI_ASSOC)
     $comments = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     $stmt->close();
     return $comments;
