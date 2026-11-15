@@ -1,0 +1,13 @@
+STT,WB_TC_ID,File_PHP,Ten_Kich_Ban_WhiteBox,Method,Session_Role,Payload_Params,Nhanh_Kich_Hoat,Cau_Lenh_Thuc_Thi,Ket_Qua_Mong_Doi,Trang_Thai
+1,WB_MOV_01,/index.php,Khách vãng lai tải trang chủ - Hiển thị danh sách phim,GET,guest,,IDX_D1_F,IDX_S1;IDX_S2;IDX_S3,Hiển thị trang chủ (200 OK),Chua_Thuc_Hien
+2,WB_MOV_02,/index.php,Đã đăng nhập - getMovies không phát sinh Warning tham số,GET,user,,IDX_D1_T,IDX_S1;IDX_S2;IDX_S4,Không có PHP Warning tham số (200 OK),Chua_Thuc_Hien
+3,WB_MOV_03,/movies.php,Không lọc - Hiển thị toàn bộ phim,GET,guest,,MOV_D1_F,MOV_S1;MOV_S2;MOV_S3,Danh sách phim (200 OK),Chua_Thuc_Hien
+4,WB_MOV_04,/movies.php,Lọc theo genre=Movie,GET,guest,genre=Movie,MOV_D1_T,MOV_S1;MOV_S2;MOV_S4,Phim theo thể loại (200 OK),Chua_Thuc_Hien
+5,WB_MOV_05,/search.php,Không có từ khóa tìm kiếm,GET,guest,,SRCH_D1_F,SRCH_S1;SRCH_S2,Form tìm kiếm rỗng (200 OK),Chua_Thuc_Hien
+6,WB_MOV_06,/search.php,Tìm kiếm từ khóa hợp lệ - $searchTerm không dùng braces,GET,guest,query=Avengers,SRCH_D1_T,SRCH_S1;SRCH_S3;SRCH_S4,Kết quả tìm kiếm (200 OK),Chua_Thuc_Hien
+7,WB_MOV_07,/search.php,Tìm kiếm kết hợp genre,GET,guest,"query=Batman&genre=Movie",SRCH_D1_T;SRCH_D2_T,SRCH_S1;SRCH_S3;SRCH_S5,Kết quả lọc genre (200 OK),Chua_Thuc_Hien
+8,WB_MOV_08,/watch.php,ID phim không hợp lệ (<= 0),GET,guest,id=0,WATCH_D1_T,WATCH_S1;WATCH_S2,Lỗi ID không hợp lệ,Chua_Thuc_Hien
+9,WB_MOV_09,/watch.php,Phim không tồn tại trong DB,GET,guest,id=99999,WATCH_D1_F;WATCH_D2_T,WATCH_S1;WATCH_S3;WATCH_S4,Lỗi phim không tồn tại,Chua_Thuc_Hien
+10,WB_MOV_10,/watch.php,Khách vãng lai xem phim thường - user_is_vip=false an toàn,GET,guest,id=1,WATCH_D1_F;WATCH_D2_F;WATCH_D3_F,WATCH_S1;WATCH_S3;WATCH_S5,Player phim (200 OK) không lỗi Undefined variable,Chua_Thuc_Hien
+11,WB_MOV_11,/watch.php,Khách vãng lai xem phim VIP - Chặn truy cập,GET,guest,id=2,WATCH_D3_T,WATCH_S1;WATCH_S3;WATCH_S6,Thông báo yêu cầu VIP,Chua_Thuc_Hien
+12,WB_MOV_12,/watch.php,User VIP xem phim VIP - Truy cập được,GET,user,id=2,WATCH_D4_T,WATCH_S1;WATCH_S3;WATCH_S7,Player phim VIP (200 OK),Chua_Thuc_Hien
