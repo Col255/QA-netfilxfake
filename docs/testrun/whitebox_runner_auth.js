@@ -38,6 +38,10 @@ const AUTH_MODEL = {
   '/change_password.php': {
     totalStatements: 13,
     totalBranches: 15
+  },
+  '/logout.php': {
+    totalStatements: 4,
+    totalBranches: 0
   }
 };
 

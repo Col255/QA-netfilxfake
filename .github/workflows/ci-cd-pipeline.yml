@@ -2,7 +2,7 @@ name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker 
 
 on:
   push:
-    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'ADM_Whitebox']
+    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'ADM_Whitebox', AUTH]
   pull_request:
     branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'ADM_Whitebox' ]
 
@@ -164,7 +164,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Build và Push Docker Image có gắn Version
         uses: docker/build-push-action@v5
         with:

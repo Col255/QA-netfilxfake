@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Đảm bảo đường dẫn đúng đến file kết nối database
+/** @var mysqli $conn */
 
 // Kiểm tra xem người dùng đã đăng nhập chưa
 if (!isset($_SESSION['user_id'])) {
@@ -43,34 +44,38 @@ if (isset($_POST['update_profile'])) {
     } else {
         // Kiểm tra xem username hoặc email mới đã tồn tại cho người dùng khác chưa
         $stmt_check = $conn->prepare("SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ?");
-        $stmt_check->bind_param("ssi", $new_username, $new_email, $user_id);
-        $stmt_check->execute();
-        $result_check = $stmt_check->get_result();
+        if ($stmt_check) {
+            $stmt_check->bind_param("ssi", $new_username, $new_email, $user_id);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
 
-        if ($result_check->num_rows > 0) {
-            $messages[] = ['type' => 'error', 'text' => 'Tên người dùng hoặc email này đã được sử dụng bởi người khác.'];
-        } else {
-            // Cập nhật thông tin người dùng
-            $stmt_update = $conn->prepare("UPDATE users SET username = ?, email = ? WHERE id = ?");
-            if ($stmt_update) {
-                $stmt_update->bind_param("ssi", $new_username, $new_email, $user_id);
-                if ($stmt_update->execute()) {
-                    $messages[] = ['type' => 'success', 'text' => 'Thông tin cá nhân đã được cập nhật thành công!'];
-                    // Cập nhật lại session
-                    $_SESSION['username'] = $new_username;
-                    $_SESSION['email'] = $new_email;
-                    // Cập nhật lại user_info để hiển thị giá trị mới ngay lập tức
-                    $user_info['username'] = $new_username;
-                    $user_info['email'] = $new_email;
-                } else {
-                    $messages[] = ['type' => 'error', 'text' => 'Lỗi khi cập nhật thông tin: ' . $stmt_update->error];
-                }
-                $stmt_update->close();
+            if ($result_check->num_rows > 0) {
+                $messages[] = ['type' => 'error', 'text' => 'Tên người dùng hoặc email này đã được sử dụng bởi người khác.'];
             } else {
-                $messages[] = ['type' => 'error', 'text' => 'Lỗi chuẩn bị câu lệnh cập nhật thông tin.'];
+                // Cập nhật thông tin người dùng
+                $stmt_update = $conn->prepare("UPDATE users SET username = ?, email = ? WHERE id = ?");
+                if ($stmt_update) {
+                    $stmt_update->bind_param("ssi", $new_username, $new_email, $user_id);
+                    if ($stmt_update->execute()) {
+                        $messages[] = ['type' => 'success', 'text' => 'Thông tin cá nhân đã được cập nhật thành công!'];
+                        // Cập nhật lại session
+                        $_SESSION['username'] = $new_username;
+                        $_SESSION['email'] = $new_email;
+                        // Cập nhật lại user_info để hiển thị giá trị mới ngay lập tức
+                        $user_info['username'] = $new_username;
+                        $user_info['email'] = $new_email;
+                    } else {
+                        $messages[] = ['type' => 'error', 'text' => 'Lỗi khi cập nhật thông tin: ' . $stmt_update->error];
+                    }
+                    $stmt_update->close();
+                } else {
+                    $messages[] = ['type' => 'error', 'text' => 'Lỗi chuẩn bị câu lệnh cập nhật thông tin.'];
+                }
             }
+            $stmt_check->close();
+        } else {
+            $messages[] = ['type' => 'error', 'text' => 'Lỗi chuẩn bị câu lệnh kiểm tra thông tin.'];
         }
-        $stmt_check->close();
     }
 }
 
