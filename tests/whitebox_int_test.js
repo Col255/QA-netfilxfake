@@ -43,17 +43,37 @@ testRecords.forEach((tc) => {
     Scenario(`[${tc.WB_TC_ID}] ${tc.Ten_Kich_Ban_WhiteBox}`, async ({ I }) => {
         const endpoint = tc.File_PHP;
         const method = (tc.Method || 'GET').toUpperCase();
-        const role = tc.Session_Role || 'guest';
-        const params = tc.Payload_Params;
+        const role = (tc.Session_Role || 'guest').toLowerCase();
+        const params = tc.Payload_Params || '';
 
-        if (role === 'guest') {
-            I.amOnPage('/logout.php');
-        }
+        // Đảm bảo phiên đăng nhập đúng theo Session_Role (guest / user / admin)
+        await I.ensureBrowserSession(role);
 
         if (method === 'POST') {
-            I.amOnPage(endpoint);
-            I.dontSee('Fatal error');
-            I.dontSee('Parse error');
+            const searchParams = new URLSearchParams(params);
+            let targetUrl = endpoint;
+            if (endpoint === '/watch.php') {
+                const movieId = searchParams.get('id') || '1';
+                targetUrl = `/watch.php?id=${encodeURIComponent(movieId)}`;
+            }
+
+            I.amOnPage(targetUrl);
+            await I.executeScript(({ actionUrl, rawParams }) => {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = actionUrl;
+                const sp = new URLSearchParams(rawParams);
+                for (const [k, v] of sp.entries()) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = k;
+                    input.value = v;
+                    form.appendChild(input);
+                }
+                document.body.appendChild(form);
+                form.submit();
+            }, { actionUrl: targetUrl, rawParams: params });
+            I.wait(0.4);
         } else {
             const url = params ? `${endpoint}?${params}` : endpoint;
             I.amOnPage(url);
@@ -69,6 +89,15 @@ testRecords.forEach((tc) => {
         }
         if (endpoint === '/watch_history.php' && tc.Nhanh_Kich_Hoat && tc.Nhanh_Kich_Hoat.includes('WH_D1_T')) {
             I.seeInCurrentUrl('login.php');
+        }
+        if (tc.WB_TC_ID === 'WB_INT_09') {
+            I.see('Bình luận không tồn tại hoặc đã bị xóa trước đó.');
+        }
+        if (tc.WB_TC_ID === 'WB_INT_15') {
+            I.see('Bạn cần đăng nhập để bình luận.');
+        }
+        if (tc.WB_TC_ID === 'WB_INT_16' || tc.WB_TC_ID === 'WB_INT_17') {
+            I.see('Nội dung bình luận không được để trống.');
         }
     });
 });
