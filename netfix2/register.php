@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Kết nối database
+/** @var mysqli $conn */
 
 // Kiểm tra nếu người dùng đã đăng nhập
 if (isset($_SESSION['user_id'])) {
@@ -27,27 +28,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Kiểm tra username hoặc email đã tồn tại
         $stmt = $conn->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
-        $stmt->bind_param("ss", $username, $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows > 0) {
-            $error_message = "Tên đăng nhập hoặc email đã được sử dụng.";
-        } else {
-            // Mã hóa mật khẩu và lưu vào database (is_admin mặc định là 0)
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            $is_admin = 0; // Người dùng thông thường
-            $stmt = $conn->prepare("INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("sssi", $username, $email, $hashed_password, $is_admin);
+        if ($stmt) {
+            $stmt->bind_param("ss", $username, $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            if ($stmt->execute()) {
-                $success_message = "Đăng ký thành công! Vui lòng đăng nhập.";
-                header("Refresh: 2; url=login.php"); // Chuyển hướng sau 2 giây
+            if ($result->num_rows > 0) {
+                $error_message = "Tên đăng nhập hoặc email đã được sử dụng.";
             } else {
-                $error_message = "Lỗi khi đăng ký: " . $conn->error;
+                // Mã hóa mật khẩu và lưu vào database (is_admin mặc định là 0)
+                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+                $is_admin = 0; // Người dùng thông thường
+                $stmt_insert = $conn->prepare("INSERT INTO users (username, email, password, is_admin) VALUES (?, ?, ?, ?)");
+                if ($stmt_insert) {
+                    $stmt_insert->bind_param("sssi", $username, $email, $hashed_password, $is_admin);
+                    
+                    if ($stmt_insert->execute()) {
+                        $success_message = "Đăng ký thành công! Vui lòng đăng nhập.";
+                        header("Refresh: 2; url=login.php"); // Chuyển hướng sau 2 giây
+                    } else {
+                        $error_message = "Lỗi khi đăng ký: " . $conn->error;
+                    }
+                    $stmt_insert->close();
+                } else {
+                    $error_message = "Lỗi hệ thống: Không thể chuẩn bị câu lệnh lưu dữ liệu.";
+                }
             }
+            $stmt->close();
+        } else {
+            $error_message = "Lỗi hệ thống: Không thể kết nối cơ sở dữ liệu.";
         }
-        $stmt->close();
     }
 }
 ?>

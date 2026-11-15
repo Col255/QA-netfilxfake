@@ -8,7 +8,9 @@
     "skill:graph": "node .gemini/skills/project-graph-router/scripts/build_graph.js",
     "skill:cfg": "node .gemini/skills/php-whitebox-cfg/scripts/analyze_cfg.js",
     "skill:sarif": "node .gemini/skills/qodana-sarif-digest/scripts/parse_sarif.js",
-    "skill:audit": "node .gemini/skills/qa-data-driven-sync/scripts/audit_coverage.js"
+    "skill:audit": "node .gemini/skills/qa-data-driven-sync/scripts/audit_coverage.js",
+    "test:whitebox:auth": "node docs/testrun/whitebox_runner_auth.js",
+    "test:whitebox:vip": "node docs/testrun/whitebox_runner_vip.js"
   },
   "repository": {
     "type": "git",

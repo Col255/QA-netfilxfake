@@ -2,7 +2,7 @@ name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker 
 
 on:
   push:
-    branches: [ main, 'week*', 'testingweek5' ]
+    branches: [ main, 'week*', 'testingweek5', AUTH ]
   pull_request:
     branches: [ main]
 
