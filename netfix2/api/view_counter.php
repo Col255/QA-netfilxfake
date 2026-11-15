@@ -15,4 +15,5 @@ if ($movie_id > 0) {
 } else {
     echo json_encode(['success' => false, 'error' => 'ID không hợp lệ']);
 }
+// Tuân thủ chuẩn PSR-12: Loại bỏ thẻ đóng PHP dư thừa ở cuối file
 
