@@ -57,27 +57,42 @@ $query = isset($_GET['query']) ? trim($_GET['query']) : '';
 $genre = isset($_GET['genre']) ? trim($_GET['genre']) : '';
 $searchResults = [];
 
-if (!empty($query)) {
-    $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
-            FROM movies 
-            WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?)";
-    $searchTerm = "%{$query}%";
-    
-    if (!empty($genre)) {
-        $sql .= " AND genre = ?";
-    }
-    $sql .= " ORDER BY view_count DESC";
-
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        error_log("Prepare failed (search): " . $conn->error);
-        die("Lỗi chuẩn bị truy vấn: " . $conn->error);
-    }
-
-    if (!empty($genre)) {
+if (!empty($query) || !empty($genre)) {
+    if (!empty($query) && !empty($genre)) {
+        $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
+                FROM movies 
+                WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?) AND genre = ? 
+                ORDER BY view_count DESC";
+        $searchTerm = "%{$query}%";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare failed (search): " . $conn->error);
+            die("Lỗi chuẩn bị truy vấn: " . $conn->error);
+        }
         $stmt->bind_param("ssssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $genre);
-    } else {
+    } elseif (!empty($query)) {
+        $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
+                FROM movies 
+                WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?) 
+                ORDER BY view_count DESC";
+        $searchTerm = "%{$query}%";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare failed (search): " . $conn->error);
+            die("Lỗi chuẩn bị truy vấn: " . $conn->error);
+        }
         $stmt->bind_param("sssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
+    } else {
+        $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
+                FROM movies 
+                WHERE genre = ? 
+                ORDER BY view_count DESC";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare failed (search): " . $conn->error);
+            die("Lỗi chuẩn bị truy vấn: " . $conn->error);
+        }
+        $stmt->bind_param("s", $genre);
     }
 
     if (!$stmt->execute()) {
