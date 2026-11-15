@@ -2,9 +2,9 @@ name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker 
 
 on:
   push:
-    branches: [ main, 'week*', AUTH ]
+    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'ADM_Whitebox', AUTH]
   pull_request:
-    branches: [ main, 'week*' ]
+    branches: [ main, 'week*', 'testingweek5', 'AUTH_BLackbox', 'MOV_Blackbox', 'INTERACTIONS-&-ENGAGEMENT_Blackbox', 'VIP-PACKAGES-&-PAYMENT_Blackbox', 'ADM_Blackbox', 'ADM_Whitebox' ]
 
 jobs:
   # =========================================================================
@@ -72,7 +72,7 @@ jobs:
   # =========================================================================
   codeceptjs-dynamic-test:
     name: 2. Dynamic Test - CodeceptJS E2E (PHP + MySQL)
-    needs: [sonarqube-static-scan, qodana-static-scan]
+needs: [sonarqube-static-scan, qodana-static-scan]
     runs-on: ubuntu-latest
 
     services:
@@ -84,7 +84,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
---health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
@@ -98,6 +98,11 @@ jobs:
         with:
           php-version: '8.2'
           extensions: mysqli, pdo, pdo_mysql, mbstring
+
+      - name: Cài đặt MySQL Client trên Runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-mysql-client
 
       - name: Import Database mẫu (database/netfixvn.sql) vào MySQL
         run: |
@@ -159,8 +164,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build và Push Docker Image có gắn Version
+- name: Build và Push Docker Image có gắn Version
         uses: docker/build-push-action@v5
         with:
           context: .
