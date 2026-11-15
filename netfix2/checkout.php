@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 // Kiểm tra đăng nhập
 if (!isset($_SESSION['user_id'])) {

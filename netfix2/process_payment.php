@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 require_once 'vip_helper.php';
 
 if (!isset($_SESSION['user_id'])) {
