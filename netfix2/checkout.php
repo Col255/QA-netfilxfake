@@ -8,17 +8,20 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
-$username = '';
+$user_id = (int)$_SESSION['user_id'];
+// Khởi tạo trước mảng $user_data và biến $username với giá trị mặc định để tránh PHP Warning Undefined Variable
+$user_data = ['username' => 'Khách hàng'];
+$username = 'Khách hàng';
 
-// Lấy username
+// Lấy username an toàn từ database
 $stmt_user = $conn->prepare("SELECT username FROM users WHERE id = ?");
 if ($stmt_user) {
     $stmt_user->bind_param("i", $user_id);
     $stmt_user->execute();
     $result_user = $stmt_user->get_result();
-    if ($user_data = $result_user->fetch_assoc()) {
-        $username = $user_data['username'];
+    if ($result_user && $row = $result_user->fetch_assoc()) {
+        $user_data = $row;
+        $username = $row['username'];
     }
     $stmt_user->close();
 }
