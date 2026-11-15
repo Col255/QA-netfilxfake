@@ -72,7 +72,7 @@ if ($movie_id <= 0) {
         $error_message = "Phim không tồn tại.";
     } else {
         // Kiểm tra quyền VIP
-        $user_is_vip = isset($_SESSION['user_id']) ? false : false;
+        $user_is_vip = false; // Khởi tạo an toàn trước khi vào nhánh kiểm tra session
         if (isset($_SESSION['user_id'])) {
             $user_id = (int)$_SESSION['user_id'];
             $stmt = $conn->prepare("SELECT is_vip FROM users WHERE id = ?");
