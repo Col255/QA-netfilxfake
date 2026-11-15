@@ -10,8 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Xử lý xóa lịch sử nếu có movie_id trên URL
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+// Xử lý xóa lịch sử nếu có movie_id nguyên dương trên URL
+if (isset($_GET['delete']) && is_numeric($_GET['delete']) && (int)$_GET['delete'] > 0) {
     $movie_id = intval($_GET['delete']);
     $stmt = $conn->prepare("DELETE FROM watch_history WHERE user_id = ? AND movie_id = ?");
     if ($stmt) {
@@ -150,7 +150,7 @@ if ($stmt) {
                     <div>
                         <h3><?= htmlspecialchars($item['title']) ?></h3>
                         <p>🕒 Xem lúc: <?= date('d/m/Y H:i', strtotime($item['viewed_at'])) ?></p>
-                        <p>👁 Lượt xem: <?= $item['view_count'] ?></p>
+                        <p>👁 Lượt xem: <?= htmlspecialchars($item['view_count']) ?></p>
                         <div class="actions">
                             <a class="watch-btn" href="watch.php?id=<?= $item['movie_id'] ?>">▶️ Xem tiếp</a>
                             <a class="delete-btn" href="watch_history.php?delete=<?= $item['movie_id'] ?>" onclick="return confirm('Bạn có chắc muốn xóa phim này khỏi lịch sử không?')">🗑 Xóa</a>
