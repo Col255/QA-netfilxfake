@@ -50,10 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment_id']))
     } else {
         $stmt->bind_param("i", $delete_id);
         if ($stmt->execute()) {
-            $message = "<div class='message success'>Bình luận đã được xóa thành công!</div>";
+            if ($stmt->affected_rows > 0) {
+                $message = "<div class='message success'>Bình luận đã được xóa thành công!</div>";
+            } else {
+                $message = "<div class='message error'>Bình luận không tồn tại hoặc đã bị xóa trước đó.</div>";
+            }
         } else {
             error_log("Execute failed (delete comment): " . $stmt->error);
-            $message = "<div class='message error'>Lỗi khi xóa bình luận: " . $stmt->error . "</div>";
+            $message = "<div class='message error'>Đã xảy ra lỗi hệ thống khi xóa bình luận. Vui lòng thử lại sau.</div>";
         }
         $stmt->close();
     }
