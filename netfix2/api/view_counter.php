@@ -22,4 +22,3 @@ if ($movie_id > 0) {
 } else {
     echo json_encode(['success' => false, 'error' => 'ID không hợp lệ']);
 }
-?>
