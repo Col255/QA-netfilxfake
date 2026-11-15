@@ -7,9 +7,9 @@
 | **Người thực hiện** | Nguyễn Huỳnh Hữu Huy (`KAN-153`) |
 | **Phạm vi mã nguồn** | `api/view_counter.php`, `comments.php`, `watch_history.php`, `watch.php` (Khối xử lý bình luận L152-L185) |
 | **Trạng thái hiện tại** | **ĐÃ HOÀN THIỆN THIẾT KẾ & THỰC THI KIỂM THỬ (100% C0 & C1 PASS)** |
-| **File Thiết kế CSV** | [`docs/Design/whitebox_testcase_int.csv`](file:///docs/Design/whitebox_testcase_int.csv) |
-| **Báo cáo Thực thi CSV** | [`docs/Report/report_whitebox_int.csv`](file:///docs/Report/report_whitebox_int.csv) *(20/20 Kịch bản PASS)* |
-| **Script Runner Tự động** | [`docs/testrun/whitebox_runner_int.js`](file:///docs/testrun/whitebox_runner_int.js) |
+| **File Thiết kế CSV** | [`docs/Design/whitebox_testcase_int.csv`](./Design/whitebox_testcase_int.csv) |
+| **Báo cáo Thực thi CSV** | [`docs/Report/report_whitebox_int.csv`](./Report/report_whitebox_int.csv) *(23/23 Kịch bản PASS)* |
+| **Script Runner Tự động** | [`docs/testrun/whitebox_runner_int.js`](./testrun/whitebox_runner_int.js) |
 
 ---
 
@@ -180,23 +180,23 @@ flowchart TD
 ## III. BẢNG MA TRẬN THIẾT KẾ ĐỘ BAO PHỦ CÂU LỆNH ($C_0$) & NHÁNH ($C_1$)
 
 > [!IMPORTANT]
-> **TIẾN ĐỘ THỰC TẾ:** Nhóm đã hoàn thành toàn bộ công đoạn **Thiết kế Kịch bản Kiểm thử (Test Case Design)** và **Thực thi Kiểm thử (Test Execution)**. Toàn bộ 20/20 Test Cases đều đạt trạng thái **`PASS (100% C0 & C1)`**, được kiểm chứng qua runner tự động [`docs/testrun/whitebox_runner_int.js`](file:///docs/testrun/whitebox_runner_int.js) và lưu trữ kết quả chi tiết tại [`docs/Report/report_whitebox_int.csv`](file:///docs/Report/report_whitebox_int.csv).
+> **TIẾN ĐỘ THỰC TẾ:** Nhóm đã hoàn thành toàn bộ công đoạn **Thiết kế Kịch bản Kiểm thử (Test Case Design)** và **Thực thi Kiểm thử (Test Execution)**. Toàn bộ **23/23 Test Cases** (bao gồm 20 kịch bản nhánh CFG và 3 kịch bản biên BVA) đều đạt trạng thái **`PASS (100% C0 & C1)`**, được kiểm chứng qua runner tự động [`docs/testrun/whitebox_runner_int.js`](./testrun/whitebox_runner_int.js) và lưu trữ kết quả chi tiết tại [`docs/Report/report_whitebox_int.csv`](./Report/report_whitebox_int.csv).
 
 ### 1. Bảng Thống kê Tỷ lệ Bao phủ Theo Thực Tế (Execution Coverage Matrix)
 
 | File PHP trong phân hệ `INT` | Số Test Case Thực Thi | Tổng Số Khối Lệnh ($S_i$) Phủ Được ($C_0$) | Tổng Số Nhánh Rẽ ($D_i$) Phủ Được ($C_1$) | Trạng Thái Kiểm Thử |
 | :--- | :---: | :---: | :---: | :---: |
-| `netfix2/api/view_counter.php` | 3 (`WB_INT_01` $\rightarrow$ `03`) | **3/3 khối lệnh (100.00%)** | **3/3 nhánh (100.00%)** | **PASS (100%)** |
+| `netfix2/api/view_counter.php` | 4 (`WB_INT_01` $\rightarrow$ `03`, `21`) | **3/3 khối lệnh (100.00%)** | **3/3 nhánh (100.00%)** | **PASS (100%)** |
 | `netfix2/comments.php` | 6 (`WB_INT_04` $\rightarrow$ `09`) | **13/13 khối lệnh (100.00%)** | **11/11 nhánh (100.00%)** | **PASS (100%)** |
-| `netfix2/watch_history.php` | 5 (`WB_INT_10` $\rightarrow$ `14`) | **8/8 khối lệnh (100.00%)** | **7/7 nhánh (100.00%)** | **PASS (100%)** |
-| `netfix2/watch.php` *(Khối Comment)* | 6 (`WB_INT_15` $\rightarrow$ `20`) | **6/6 khối lệnh (100.00%)** | **5/5 nhánh (100.00%)** | **PASS (100%)** |
-| **TỔNG CỘNG PHÂN HỆ `INT`** | **20 Test Cases** | **30/30 khối lệnh ($C_0$: 100%)** | **26/26 nhánh ($C_1$: 100%)** | **100% PASS** |
+| `netfix2/watch_history.php` | 6 (`WB_INT_10` $\rightarrow$ `14`, `22`) | **8/8 khối lệnh (100.00%)** | **7/7 nhánh (100.00%)** | **PASS (100%)** |
+| `netfix2/watch.php` *(Khối Comment)* | 7 (`WB_INT_15` $\rightarrow$ `20`, `23`) | **6/6 khối lệnh (100.00%)** | **5/5 nhánh (100.00%)** | **PASS (100%)** |
+| **TỔNG CỘNG PHÂN HỆ `INT`** | **23 Test Cases** | **30/30 khối lệnh ($C_0$: 100%)** | **26/26 nhánh ($C_1$: 100%)** | **100% PASS** |
 
 ---
 
-### 2. Bảng Đặc tả Chi tiết 20 Test Cases White-Box Phân hệ `INT`
+### 2. Bảng Đặc tả Chi tiết 23 Test Cases White-Box Phân hệ `INT`
 
-Dữ liệu được đồng bộ trực tiếp từ file [`docs/Design/whitebox_testcase_int.csv`](file:///docs/Design/whitebox_testcase_int.csv) và [`docs/Report/report_whitebox_int.csv`](file:///docs/Report/report_whitebox_int.csv):
+Dữ liệu được đồng bộ trực tiếp từ file [`docs/Design/whitebox_testcase_int.csv`](./Design/whitebox_testcase_int.csv) và [`docs/Report/report_whitebox_int.csv`](./Report/report_whitebox_int.csv):
 
 | STT | Mã TC | File PHP | Tên Kịch Bản Kiểm Thử | Method | Role | Tham số (Payload) | Nhánh Kích Hoạt ($D_i$) | Khối Lệnh Thực Thi ($S_i$) | Kết Quả Mong Đợi | Trạng Thái |
 | :---: | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- | :--- | :---: |
@@ -208,7 +208,7 @@ Dữ liệu được đồng bộ trực tiếp từ file [`docs/Design/whitebox
 | 6 | **WB_INT_06** | `/comments.php` | Nhanh D1=False & D4=False & D7=False & D8=True: Admin xem danh sach binh luan khi co du lieu | GET | admin | *(Trống)* | `CMT_D1_F; CMT_D2_F; CMT_D3_F; CMT_D4_F; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S3; CMT_S4; CMT_S5; CMT_S12; CMT_S14; CMT_S15` | Hien thi bang quan ly binh luan (200 OK) | PASS |
 | 7 | **WB_INT_07** | `/comments.php` | Nhanh D1=False & D4=False & D7=True: Admin xem danh sach binh luan khi CSDL chua co binh luan | GET | admin | *(Trống)* | `CMT_D1_F; CMT_D2_F; CMT_D3_F; CMT_D4_F; CMT_D7_T` | `CMT_S1; CMT_S3; CMT_S4; CMT_S5; CMT_S12; CMT_S13; CMT_S15` | Hien thi thong bao Chua co binh luan nao (200 OK) | PASS |
 | 8 | **WB_INT_08** | `/comments.php` | Nhanh D4=True & D5=False & D6=True: Admin xoa binh luan ton tai thanh cong | POST | admin | `delete_comment_id=2` | `CMT_D1_F; CMT_D4_T; CMT_D5_F; CMT_D6_T; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S5; CMT_S6; CMT_S8; CMT_S9; CMT_S11; CMT_S12; CMT_S14; CMT_S15` | Bao thanh cong: Binh luan da duoc xoa thanh cong! | PASS |
-| 9 | **WB_INT_09** | `/comments.php` | Nhanh D4=True & D5=False & D6=True: Admin gui lenh xoa voi ID binh luan khong ton tai | POST | admin | `delete_comment_id=999999` | `CMT_D1_F; CMT_D4_T; CMT_D5_F; CMT_D6_T; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S5; CMT_S6; CMT_S8; CMT_S9; CMT_S11; CMT_S12; CMT_S14; CMT_S15` | He thong xu ly an toan va hien thi danh sach (200 OK) | PASS |
+| 9 | **WB_INT_09** | `/comments.php` | Nhanh D4=True & D5=False & D6=True: Admin gui lenh xoa voi ID binh luan khong ton tai | POST | admin | `delete_comment_id=999999` | `CMT_D1_F; CMT_D4_T; CMT_D5_F; CMT_D6_T; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S5; CMT_S6; CMT_S8; CMT_S9; CMT_S11; CMT_S12; CMT_S14; CMT_S15` | Bao loi: Binh luan khong ton tai hoac da bi xoa truoc do (200 OK) | PASS |
 | 10 | **WB_INT_10** | `/watch_history.php` | Nhanh D1=True: Khach chua dang nhap truy cap /watch_history.php -> Redirect login.php | GET | guest | *(Trống)* | `WH_D1_T` | `WH_S1; WH_S2` | Redirect 302 ve `login.php` | PASS |
 | 11 | **WB_INT_11** | `/watch_history.php` | Nhanh D1=False & D2=False & D3=False & D4=True: User xem danh sach lich su khi da xem phim | GET | user | *(Trống)* | `WH_D1_F; WH_D2_F; WH_D3_F; WH_D4_T` | `WH_S1; WH_S3; WH_S5; WH_S7; WH_S8` | Hien thi the lich su phim da xem (200 OK) | PASS |
 | 12 | **WB_INT_12** | `/watch_history.php` | Nhanh D1=False & D2=False & D3=True: User chua tung xem phim nao truy cap lich su | GET | user | *(Trống)* | `WH_D1_F; WH_D2_F; WH_D3_T` | `WH_S1; WH_S3; WH_S5; WH_S6; WH_S8` | Hien thi thong bao Ban chua xem phim nao (200 OK) | PASS |
@@ -220,6 +220,9 @@ Dữ liệu được đồng bộ trực tiếp từ file [`docs/Design/whitebox
 | 18 | **WB_INT_18** | `/watch.php` | Nhanh D2=False & D3=True: User dang binh luan hop le -> Luu DB & Redirect | POST | user | `id=1&comment_text=Phim xem rat cam dong` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Redirect 302 ve `watch.php?id=1` & luu CSDL | PASS |
 | 19 | **WB_INT_19** | `/watch.php` | Nhanh D3=True (Bao mat XSS): Gui binh luan chua the script ma doc | POST | user | `id=1&comment_text=<script>alert('XSS')</script>` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Luu chuoi an toan va ma hoa HTML khi render (Khong chay script) | PASS |
 | 20 | **WB_INT_20** | `/watch.php` | Nhanh D3=True (Bao mat SQLi): Gui binh luan chua cu phap SQL Injection | POST | user | `id=1&comment_text=' OR 1=1 --` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Prepared Statement bao ve CSDL, khong dinh loi cu phap SQL | PASS |
+| 21 | **WB_INT_21** | `/api/view_counter.php` | Nhanh D1=True (Bien BVA): Goi API voi ID phim khong ton tai (id=999999) | GET | guest | `id=999999` | `VC_D1_T` | `VC_S1; VC_S2` | HTTP 200 Tra ve JSON success (movie_id=999999) an toan khong loi SQL | PASS |
+| 22 | **WB_INT_22** | `/watch_history.php` | Nhanh D2=False (Bien am BVA): User truyen delete am (?delete=-1) -> Chan xoa | GET | user | `delete=-1` | `WH_D1_F; WH_D2_F; WH_D3_F; WH_D4_T` | `WH_S1; WH_S3; WH_S5; WH_S7; WH_S8` | Chan ID am (`delete=-1 <= 0`) va render trang lich su binh thuong (200 OK) | PASS |
+| 23 | **WB_INT_23** | `/watch.php` | Nhanh D3=True (Bien tren BVA): User gui binh luan vuot nguong 500 ky tu | POST | user | `id=1&comment_text=<Chuỗi > 500 ký tự>` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Xu ly an toan binh luan > 500 ky tu & Redirect 302 ve `watch.php?id=1` | PASS |
 
 ---
 
@@ -245,11 +248,11 @@ flowchart LR
      ```bash
      node docs/testrun/whitebox_runner_int.js
      ```
-   - Script tự động kiểm tra cả luồng Live HTTP Request lẫn cấu trúc rẽ nhánh trong mã nguồn PHP để đảm bảo 100% các câu lệnh ($C_0$) và nhánh rẽ ($C_1$) đều được kiểm chứng.
+   - Script tự động kiểm tra cả luồng Live HTTP Request lẫn cấu trúc rẽ nhánh và nội dung HTML/JSON trả về trong mã nguồn PHP để đảm bảo 100% các câu lệnh ($C_0$) và nhánh rẽ ($C_1$) đều được kiểm chứng thực chất.
 
 3. **Bước 3: Ghi nhận Báo cáo Kết quả (Test Report):**
-   - Kết quả thực thi được ghi nhận và đồng bộ trực tiếp ra file [`docs/Report/report_whitebox_int.csv`](file:///docs/Report/report_whitebox_int.csv).
-   - Tỷ lệ hoàn thành: **20/20 Test Cases đạt PASS (100%)**, độ trễ phản hồi (Response Time) dao động từ **18ms** (xử lý JSON API/chuyển hướng) đến **63ms** (truy vấn JOIN danh sách bình luận và lịch sử xem phim).
+   - Kết quả thực thi được ghi nhận và đồng bộ trực tiếp ra file [`docs/Report/report_whitebox_int.csv`](./Report/report_whitebox_int.csv).
+   - Tỷ lệ hoàn thành: **23/23 Test Cases đạt PASS (100%)**, độ trễ phản hồi (Response Time) dao động từ **2ms** đến **63ms**.
 
 ---
 
@@ -264,10 +267,10 @@ Sau khi hoàn thiện thiết kế kiểm thử hộp trắng ban đầu (Mục 
 | **`KAN-189`** | `api/view_counter.php` | `PhpUndefinedVariableInspection` | Biến `$conn` nạp từ `require '../db.php'` tại dòng 7 bị báo đỏ `Undefined variable '$conn'`; câu lệnh `prepare()` chưa có khối kiểm tra an toàn. | Khai báo PHPDoc `/** @var mysqli $conn */` ngay sau `require '../db.php'` và bọc khối phòng vệ `if ($stmt)` trước `bind_param()`, `execute()`, `close()`. |
 | **`KAN-190`** | `api/view_counter.php` | `PhpRedundantClosingTagInspection` | Thẻ đóng `?>` dư thừa ở dòng 14 cuối file PHP thuần trả về JSON vi phạm chuẩn PSR-12, có nguy cơ rò rỉ khoảng trắng làm hỏng cú pháp JSON response. | Loại bỏ hoàn toàn thẻ đóng `?>` ở cuối file `netfix2/api/view_counter.php` theo đúng chuẩn PSR-12. |
 | **`KAN-191`** | `comments.php` | `PhpUndefinedVariableInspection` | Biến `$conn` tại dòng 44 (khối `POST` xóa bình luận của Admin) bị cảnh báo `Undefined variable '$conn'` do nạp gián tiếp qua `require 'db.php'`. | Khai báo PHPDoc `/** @var mysqli $conn */` ngay dưới `require 'db.php'` để định kiểu tường minh cho toàn bộ file. |
-| **`KAN-192`** | `comments.php` | `PhpMethodParametersCountMismatchInspection` | Lời gọi `$result->fetch_all(MYSQLI_ASSOC)` tại dòng 35 trong hàm `getAllComments($conn)` bị cảnh báo sai số lượng tham số do thiếu type-hint `mysqli $conn` và chưa kiểm tra `$result` khác `false`. | Bổ sung type-hint `function getAllComments(mysqli $conn)` và kiểm tra an toàn `$comments = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];`. |
+| **`KAN-192`** | `comments.php` | `PhpMethodParametersCountMismatchInspection` | Lời gọi `$result->fetch_all(MYSQLI_ASSOC)` tại dòng 35 bị cảnh báo sai tham số; khối xóa bình luận chưa kiểm tra `$stmt->affected_rows > 0` và in trực tiếp `$stmt->error` ra HTML. | Định kiểu `getAllComments(mysqli $conn)`, bọc `$result ? $result->fetch_all(MYSQLI_ASSOC) : []`, kiểm tra `if ($stmt->affected_rows > 0)` khi xóa và ẩn lỗi `$stmt->error` khỏi HTML. |
 | **`KAN-193`** | `watch_history.php` | `PhpUndefinedVariableInspection` | Biến `$conn` bị cảnh báo `Undefined variable '$conn'` tại 2 vị trí (dòng 15 khi xóa lịch sử xem và dòng 32 khi truy vấn danh sách lịch sử); thiếu kiểm tra `$stmt` khác `false`. | Khai báo PHPDoc `/** @var mysqli $conn */` ở đầu file và bọc khối phòng vệ `if ($stmt)` tại cả 2 truy vấn `DELETE` và `SELECT`. |
-| **`KAN-194`** | `watch_history.php` | `PhpMethodParametersCountMismatchInspection` | Lời gọi `$result->fetch_all(MYSQLI_ASSOC)` tại dòng 36 bị cảnh báo không khớp chữ ký hàm và có nguy cơ gây `Fatal Error` nếu `$stmt->get_result()` trả về `false`. | Khởi tạo mặc định `$watch_history = [];` và kiểm tra an toàn `$watch_history = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];`. |
-| **`KAN-195`** | `qodana.yaml` | `PhpLanguageLevelInspection` (Sanity) | Qodana mặc định phân tích ở mức PHP 5.6 làm phát sinh cảnh báo Sanity trên toán tử Null Coalescing (`??`) và thiếu đồng bộ PHP 8.1 với CI/CD Pipeline. | Khai báo `php: version: "8.1"` trong `qodana.yaml` và thêm 3 rule loại trừ (`PhpMissingReturnTypeInspection`, `PhpMissingParamTypeInspection`, `PhpStrFunctionsInspection`). |
+| **`KAN-194`** | `watch_history.php` | `PhpMethodParametersCountMismatchInspection` | Lời gọi `$result->fetch_all(MYSQLI_ASSOC)` tại dòng 36 thiếu kiểm tra null-safety; điều kiện `is_numeric($_GET['delete'])` tại dòng 14 chưa chặn số âm và `$item['view_count']` dòng 153 chưa bọc `htmlspecialchars()`. | Khởi tạo `$watch_history = []`, bọc `$result ? $result->fetch_all(MYSQLI_ASSOC) : []`, siết điều kiện `(int)$_GET['delete'] > 0` và bọc `htmlspecialchars($item['view_count'])`. |
+| **`KAN-195`** | `qodana.yaml` | `PhpLanguageLevelInspection` (Sanity) | Qodana mặc định phân tích ở mức PHP 5.6 làm phát sinh cảnh báo Sanity trên toán tử Null Coalescing (`??`) và chưa đồng bộ phiên bản PHP 8.2 với CI/CD Pipeline. | Khai báo `php: version: "8.2"` trong `qodana.yaml` đồng bộ với `.github/workflows/ci-cd-pipeline.yml` và giới hạn phạm vi `paths: [netfix2]` cho các rule loại trừ. |
 
 ### 2. Bảng Đối Chứng Kết Quả Phân Tích Tĩnh Trước và Sau Khi Sửa (Before vs After)
 
@@ -275,8 +278,8 @@ Sau khi hoàn thiện thiết kế kiểm thử hộp trắng ban đầu (Mục 
 | :--- | :---: | :---: | :---: | :--- |
 | **Số lỗi Qodana phân hệ INT** | **6 cảnh báo trực tiếp** *(4 Major + 2 Weak Warning)* | **0 cảnh báo** | **0 cảnh báo** *(Sạch 100%)* | **Triệt tiêu toàn bộ 100% lỗi tĩnh của phân hệ INT**. |
 | **Lỗi biến `$conn` (`PhpUndefinedVariableInspection`)** | 4 vị trí (`view_counter`, `comments`, `watch_history` x2) | 0 vị trí | 0 vị trí | Giải quyết dứt điểm bằng PHPDoc `/** @var mysqli $conn */`. |
-| **Lỗi `fetch_all(MYSQLI_ASSOC)`** | 2 vị trí (`comments.php:35`, `watch_history.php:36`) | 0 vị trí | 0 vị trí | Định kiểu `mysqli` và bọc toán tử 3 ngôi kiểm tra `$result`. |
+| **Lỗi `fetch_all(MYSQLI_ASSOC)` & Logic xóa** | 2 vị trí (`comments.php:35`, `watch_history.php:36`) | 0 vị trí | 0 vị trí | Định kiểu `mysqli`, kiểm tra `affected_rows > 0` & chặn ID âm `> 0`. |
 | **Thẻ đóng `?>` thừa chuẩn PSR-12** | 1 vị trí (`api/view_counter.php:14`) | 0 vị trí | 0 vị trí | Đạt chuẩn PSR-12, bảo vệ an toàn cấu trúc JSON API. |
-| **Đồng bộ cấu hình PHP 8.1 (`qodana.yaml`)** | Chưa khai báo `php: version: "8.1"` | Chưa đồng bộ | **Đã đồng bộ PHP 8.1** | Loại bỏ hoàn toàn cảnh báo Sanity trên Qodana Cloud. |
-| **Kết quả Kiểm thử Động (White-Box Runner)** | 20/20 TCs Thiết kế | **20/20 TCs PASS (100%)** | **20/20 TCs PASS (100%)** | Đạt **100% Statement Coverage ($C_0$) & 100% Branch Coverage ($C_1$)**. |
+| **Đồng bộ cấu hình PHP 8.2 (`qodana.yaml`)** | Chưa khai báo `php: version: "8.2"` | Chưa đồng bộ | **Đã đồng bộ PHP 8.2** | Đồng bộ hoàn toàn với CI/CD Pipeline, loại bỏ lỗi Sanity. |
+| **Kết quả Kiểm thử Động (White-Box & BVA)** | 20/20 TCs Thiết kế | **23/23 TCs PASS (100%)** | **23/23 TCs PASS (100%)** | Đạt **100% Statement Coverage ($C_0$) & 100% Branch Coverage ($C_1$)**. |
 
