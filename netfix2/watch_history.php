@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -13,9 +14,11 @@ $user_id = $_SESSION['user_id'];
 if (isset($_GET['delete']) && is_numeric($_GET['delete']) && (int)$_GET['delete'] > 0) {
     $movie_id = intval($_GET['delete']);
     $stmt = $conn->prepare("DELETE FROM watch_history WHERE user_id = ? AND movie_id = ?");
-    $stmt->bind_param("ii", $user_id, $movie_id);
-    $stmt->execute();
-    $stmt->close();
+    if ($stmt) {
+        $stmt->bind_param("ii", $user_id, $movie_id);
+        $stmt->execute();
+        $stmt->close();
+    }
     header("Location: watch_history.php");
     exit();
 }
@@ -29,12 +32,15 @@ $sql = "
     ORDER BY wh.viewed_at DESC
 ";
 
+$watch_history = [];
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$watch_history = $result->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
+if ($stmt) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $watch_history = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
