@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Điều chỉnh đường dẫn đến file kết nối database nếu comments.php không nằm trong thư mục con của thư mục gốc
+/** @var mysqli $conn */
 
 // Kiểm tra nếu người dùng chưa đăng nhập hoặc không phải admin
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
@@ -15,7 +16,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || !$_SESSION[
  * @param mysqli $conn Đối tượng kết nối MySQLi.
  * @return array Mảng chứa các bình luận.
  */
-function getAllComments($conn) {
+function getAllComments(mysqli $conn) {
     // JOIN với bảng movies và users để lấy tên phim và tên người dùng
     $stmt = $conn->prepare("SELECT c.id, c.comment_text, c.created_at, m.title AS movie_title, u.username AS user_username
                             FROM comments c
@@ -32,7 +33,7 @@ function getAllComments($conn) {
         return [];
     }
     $result = $stmt->get_result();
-    $comments = $result->fetch_all(MYSQLI_ASSOC);
+    $comments = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     $stmt->close();
     return $comments;
 }
