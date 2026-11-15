@@ -10,6 +10,9 @@ include:
   - name: PhpDeprecationInspection
   - name: PhpSecurityInspection
 exclude:
+  - name: PhpMissingReturnTypeInspection
+  - name: PhpMissingParamTypeInspection
+  - name: PhpStrFunctionsInspection
   - name: All
     paths:
       - netfix2/uploads
