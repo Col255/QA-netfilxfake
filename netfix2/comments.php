@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Điều chỉnh đường dẫn đến file kết nối database nếu comments.php không nằm trong thư mục con của thư mục gốc
-/** @var mysqli $conn */
+/** @var mysqli $conn Đối tượng kết nối CSDL MySQLi từ db.php */
 
 // Kiểm tra nếu người dùng chưa đăng nhập hoặc không phải admin
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
