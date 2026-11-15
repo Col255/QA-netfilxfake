@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+require_once 'vip_helper.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -112,17 +113,7 @@ if ($payment_method === 'Momo') {
     $user = $result->fetch_assoc();
     $stmt->close();
 
-    $new_expiry = new DateTime();
-
-    if ($user && $user['vip_expires_at'] !== null && strtotime($user['vip_expires_at']) > time()) {
-        try {
-            $new_expiry = new DateTime($user['vip_expires_at']);
-        } catch (Exception $e) {
-            $new_expiry = new DateTime();
-        }
-    }
-
-    $new_expiry->modify('+' . $duration);
+    $new_expiry = calculate_vip_expiry($user['vip_expires_at'] ?? null, $duration);
     $vip_expires_at_str = $new_expiry->format('Y-m-d H:i:s');
 
     $stmt = $conn->prepare("UPDATE users SET is_vip = 1, vip_expires_at = ? WHERE id = ?");
