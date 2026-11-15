@@ -1,6 +1,8 @@
 <?php 
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
+require_once 'vip_helper.php';
 
 $user_id = $_SESSION['user_id'] ?? null;
 $resultCode = $_GET['resultCode'] ?? '';
@@ -38,11 +40,7 @@ if ($user_id) {
         $user = $result->fetch_assoc();
         $stmt->close();
 
-        $new_expiry = new DateTime();
-        if ($user && $user['vip_expires_at'] !== null && strtotime($user['vip_expires_at']) > time()) {
-            $new_expiry = new DateTime($user['vip_expires_at']);
-        }
-        $new_expiry->modify('+1 month');
+        $new_expiry = calculate_vip_expiry($user['vip_expires_at'] ?? null, '1 month');
         $vip_expires_at_str = $new_expiry->format('Y-m-d H:i:s');
 
         $stmt = $conn->prepare("UPDATE users SET is_vip = 1, vip_expires_at = ? WHERE id = ?");
