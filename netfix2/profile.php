@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -33,9 +34,11 @@ if ($stmt) {
 if ($user_info['is_vip'] == 1 && strtotime($user_info['vip_expires_at']) < time()) {
     // Cập nhật lại database
     $stmt_update = $conn->prepare("UPDATE users SET is_vip = 0 WHERE id = ?");
-    $stmt_update->bind_param("i", $user_id);
-    $stmt_update->execute();
-    $stmt_update->close();
+    if ($stmt_update) {
+        $stmt_update->bind_param("i", $user_id);
+        $stmt_update->execute();
+        $stmt_update->close();
+    }
 
     // Cập nhật lại thông tin trong biến $user_info để hiển thị đúng
     $user_info['is_vip'] = 0;
