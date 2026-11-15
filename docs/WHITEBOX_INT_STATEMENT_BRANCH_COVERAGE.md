@@ -1,0 +1,249 @@
+# TÀI LIỆU THIẾT KẾ KIỂM THỬ HỘP TRẮNG (WHITE-BOX TESTING) - PHÂN HỆ INT
+## Trọng tâm: Độ Bao Phủ Câu Lệnh (Statement Coverage - $C_0$) & Độ Bao Phủ Nhánh (Branch Coverage - $C_1$)
+
+| Thông tin | Chi tiết |
+| :--- | :--- |
+| **Phân hệ phụ trách** | **FE3 - Interactions & Engagement (`INT`)** |
+| **Người thực hiện** | Nguyễn Huỳnh Hữu Huy (`KAN-153`) |
+| **Phạm vi mã nguồn** | `api/view_counter.php`, `comments.php`, `watch_history.php`, `watch.php` (Khối xử lý bình luận L152-L170) |
+| **Trạng thái hiện tại** | **ĐÃ HOÀN THIỆN THIẾT KẾ TEST CASE (TEST DESIGN) - CHƯA BẮT ĐẦU CHẠY TEST THEO TIẾN ĐỘ BÀI GIẢNG** |
+| **File Thiết kế CSV** | [whitebox_testcase_int.csv](file:///d:/Kiểm%20thử/QA-netfilxfake-testingweek5/QA-netfilxfake-testingweek5/docs/Design/whitebox_testcase_int.csv) |
+| **Script Runner dự phòng** | [whitebox_runner_int.js](file:///d:/Kiểm%20thử/QA-netfilxfake-testingweek5/QA-netfilxfake-testingweek5/docs/testrun/whitebox_runner_int.js) *(Dùng khi lớp bắt đầu thực thi test)* |
+
+---
+
+## I. CƠ SỞ LÝ THUYẾT ÁP DỤNG (THEO BÀI GIẢNG CỦA GIẢNG VIÊN)
+
+Theo tiến độ giảng dạy phương pháp Kiểm thử Hộp trắng (White-Box Testing), nhóm áp dụng chặt chẽ 2 thước đo bao phủ nền tảng:
+
+1. **Độ bao phủ câu lệnh (Statement Coverage - $C_0$):**
+   - Đảm bảo **mọi khối câu lệnh thực thi (Executable Statement Block - $S_i$)** trong mã nguồn PHP của phân hệ `INT` đều được thiết kế kịch bản để chạy qua ít nhất 1 lần:
+   $$\text{Statement Coverage } (C_0) = \frac{\text{Số khối câu lệnh được bao phủ}}{\text{Tổng số khối câu lệnh khả thi}} \times 100\%$$
+
+2. **Độ bao phủ nhánh / quyết định (Branch / Decision Coverage - $C_1$):**
+   - Đảm bảo **mọi nút điều kiện rẽ nhánh ($D_i$: `if`, `elseif`, `foreach`, toán tử 3 ngôi `?:`)** trong mã nguồn đều được kiểm thử qua cả 2 ngả rẽ **`True` ($D_i\_T$)** và **`False` ($D_i\_F$)**:
+   $$\text{Branch Coverage } (C_1) = \frac{\text{Số nhánh (True/False) được bao phủ}}{\text{Tổng số nhánh rẽ khả thi}} \times 100\%$$
+   - *(Quy tắc toán học trong kiểm thử: Khi một bộ test case đạt 100% Branch Coverage $C_1$, nó sẽ mặc nhiên đạt 100% Statement Coverage $C_0$).*
+
+---
+
+## II. PHÂN TÍCH ĐỒ THỊ LUỒNG ĐIỀU KHIỂN (CFG), CÂU LỆNH ($S$) & NHÁNH ($D$) TỪNG FILE
+
+### 1. API Đếm Lượt Xem Phim (`api/view_counter.php`)
+
+#### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$)
+| Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
+| :---: | :---: | :---: | :--- |
+| **`VC_S1`** | L2-L5 | Statement | `require '../db.php'; $movie_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;` |
+| **`VC_D0`** | L5 | Branch (Ternary) | `isset($_GET['id'])` $\rightarrow$ Nhánh `VC_D0_T` (Có tham số ID) / `VC_D0_F` (Khuyết ID gán về 0) |
+| **`VC_D1`** | **L7** | **Branch (`if`)** | **`if ($movie_id > 0)`** $\rightarrow$ Nhánh `VC_D1_T` / `VC_D1_F` |
+| **`VC_S2`** | L8-L11 | Statement | `UPDATE movies SET view_count = view_count + 1 WHERE id = ?`; `echo json_encode(['success' => true, ...]);` *(Khi `VC_D1_T`)* |
+| **`VC_S3`** | L13 | Statement | `echo json_encode(['success' => false, 'error' => 'ID không hợp lệ']);` *(Khi `VC_D1_F`)* |
+
+#### B. Sơ đồ Luồng Điều khiển (CFG) của `api/view_counter.php`
+```mermaid
+flowchart TD
+    S1["VC_S1 (L2-5): require db.php, đọc GET['id']"] --> D0{"VC_D0 (L5): isset($_GET['id'])?"}
+    D0 -- "True (VC_D0_T)" --> D1{"VC_D1 (L7): movie_id > 0?"}
+    D0 -- "False (VC_D0_F)" --> S3["VC_S3 (L13): echo JSON error 'ID không hợp lệ'"]
+    D1 -- "True (VC_D1_T)" --> S2["VC_S2 (L8-11): UPDATE view_count + 1 & echo JSON success"]
+    D1 -- "False (VC_D1_F)" --> S3
+```
+- **Kịch bản thiết kế:** `WB_INT_01` $\rightarrow$ `WB_INT_03` (3 Test Cases bao phủ toàn bộ 3 khối lệnh và 3 nhánh rẽ).
+
+---
+
+### 2. Chức năng Quản Lý Bình Luận Admin (`comments.php`)
+
+#### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của `comments.php`
+| Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
+| :---: | :---: | :---: | :--- |
+| **`CMT_S1`** | L2-L4 | Statement | `session_start(); require 'db.php';` |
+| **`CMT_D1`** | **L7** | **Branch (`if`)** | **`if (!isset($_SESSION['user_id']) \|\| !isset($_SESSION['is_admin']) \|\| !$_SESSION['is_admin'])`** $\rightarrow$ `CMT_D1_T` / `CMT_D1_F` |
+| **`CMT_S2`** | L8-L9 | Statement | `header("Location: admin_login.php"); exit();` *(Khi `CMT_D1_T`)* |
+| **`CMT_S3`** | L19-L25 | Statement | Định nghĩa hàm `getAllComments($conn)`, chuẩn bị SQL JOIN `comments`, `movies`, `users` |
+| **`CMT_D2`** | L26 | Branch (`if`) | `if (!$stmt)` $\rightarrow$ Nhánh `CMT_D2_T` (Prepare lỗi) / `CMT_D2_F` (Prepare thành công) |
+| **`CMT_D3`** | L30 | Branch (`if`) | `if (!$stmt->execute())` $\rightarrow$ Nhánh `CMT_D3_T` (Execute lỗi) / `CMT_D3_F` (Execute thành công) |
+| **`CMT_S4`** | L35-L38 | Statement | `$result = $stmt->get_result(); $comments = $result->fetch_all(MYSQLI_ASSOC); $stmt->close(); return $comments;` |
+| **`CMT_S5`** | L42 | Statement | `$message = '';` |
+| **`CMT_D4`** | **L43** | **Branch (`if`)** | **`if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment_id']))`** $\rightarrow$ `CMT_D4_T` / `CMT_D4_F` |
+| **`CMT_S6`** | L44-L45 | Statement | `$delete_id = intval($_POST['delete_comment_id']); $stmt = $conn->prepare("DELETE FROM comments WHERE id = ?");` |
+| **`CMT_D5`** | L46 | Branch (`if`) | `if (!$stmt)` $\rightarrow$ Nhánh `CMT_D5_T` / `CMT_D5_F` |
+| **`CMT_S7`** | L48 | Statement | `$message = "<div class='message error'>Lỗi hệ thống khi chuẩn bị xóa bình luận.</div>";` *(Khi `CMT_D5_T`)* |
+| **`CMT_S8`** | L50 | Statement | `$stmt->bind_param("i", $delete_id);` *(Khi `CMT_D5_F`)* |
+| **`CMT_D6`** | **L51** | **Branch (`if`)** | **`if ($stmt->execute())`** $\rightarrow$ Nhánh `CMT_D6_T` / `CMT_D6_F` |
+| **`CMT_S9`** | L52 | Statement | `$message = "<div class='message success'>Bình luận đã được xóa thành công!</div>";` *(Khi `CMT_D6_T`)* |
+| **`CMT_S10`** | L55 | Statement | `$message = "<div class='message error'>Lỗi khi xóa bình luận: " . $stmt->error . "</div>";` *(Khi `CMT_D6_F`)* |
+| **`CMT_S11`** | L57 | Statement | `$stmt->close();` |
+| **`CMT_S12`** | L62-L65 | Statement | `$comments = getAllComments($conn); $current_page = basename($_SERVER['PHP_SELF']);` |
+| **`CMT_D7`** | **L134** | **Branch (`if`)** | **`if (empty($comments)):`** $\rightarrow$ `CMT_D7_T` / `CMT_D7_F` |
+| **`CMT_S13`** | L135 | Statement | Render `<tr><td colspan="6">Chưa có bình luận nào.</td></tr>` *(Khi `CMT_D7_T`)* |
+| **`CMT_D8`** | **L137** | **Branch (`foreach`)** | **`foreach ($comments as $comment):`** $\rightarrow$ `CMT_D8_T` / `CMT_D8_F` |
+| **`CMT_S14`** | L139-L153 | Statement | Render hàng dữ liệu bình luận: ID, Tên phim, Người dùng, Nội dung, Nút Xóa form POST |
+| **`CMT_S15`** | L156-L161 | Statement | Đóng bảng HTML và nạp script giao diện |
+
+#### B. Sơ đồ Luồng Điều khiển (CFG) của `comments.php`
+```mermaid
+flowchart TD
+    S1["CMT_S1 (L2-4): session_start, db.php"] --> D1{"CMT_D1 (L7): Chưa login hoặc !is_admin?"}
+    D1 -- "True (CMT_D1_T)" --> S2(["CMT_S2 (L8-9): Redirect admin_login.php & exit"])
+    D1 -- "False (CMT_D1_F)" --> S5["CMT_S5 (L42): message = ''"]
+    S5 --> D4{"CMT_D4 (L43): POST && isset(delete_comment_id)?"}
+    D4 -- "False (CMT_D4_F)" --> S12["CMT_S12 (L62-65): getAllComments & gán current_page"]
+    D4 -- "True (CMT_D4_T)" --> S6["CMT_S6 (L44-45): intval(delete_id) & prepare DELETE"]
+    S6 --> D5{"CMT_D5 (L46): !stmt?"}
+    D5 -- "True (CMT_D5_T)" --> S7["CMT_S7 (L48): Báo lỗi hệ thống"] --> S12
+    D5 -- "False (CMT_D5_F)" --> S8["CMT_S8 (L50): bind_param delete_id"]
+    S8 --> D6{"CMT_D6 (L51): stmt->execute()?"}
+    D6 -- "True (CMT_D6_T)" --> S9["CMT_S9 (L52): Báo 'Bình luận đã được xóa thành công!'"] --> S11["CMT_S11 (L57): stmt->close()"]
+    D6 -- "False (CMT_D6_F)" --> S10["CMT_S10 (L55): Báo lỗi xóa bình luận"] --> S11
+    S11 --> S12
+    S12 --> D7{"CMT_D7 (L134): empty(comments)?"}
+    D7 -- "True (CMT_D7_T)" --> S13["CMT_S13 (L135): Hiển thị 'Chưa có bình luận nào.'"] --> S15(["CMT_S15: Kết thúc giao diện"])
+    D7 -- "False (CMT_D7_F)" --> D8{"CMT_D8 (L137): Duyệt foreach($comments)?"}
+    D8 -- "True (CMT_D8_T)" --> S14["CMT_S14 (L139-153): Render hàng bình luận & Form Xóa"] --> D8
+    D8 -- "False (CMT_D8_F)" --> S15
+```
+- **Kịch bản thiết kế:** `WB_INT_04` $\rightarrow$ `WB_INT_09` (6 Test Cases bao phủ toàn bộ 13 khối lệnh và 11 nhánh rẽ).
+
+---
+
+### 3. Chức năng Lịch Sử Xem Phim Cá Nhân (`watch_history.php`)
+
+#### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của `watch_history.php`
+| Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
+| :---: | :---: | :---: | :--- |
+| **`WH_S1`** | L2-L4 | Statement | `session_start(); require 'db.php';` |
+| **`WH_D1`** | **L6** | **Branch (`if`)** | **`if (!isset($_SESSION['user_id']))`** $\rightarrow$ `WH_D1_T` / `WH_D1_F` |
+| **`WH_S2`** | L7-L8 | Statement | `header("Location: login.php"); exit();` *(Khi `WH_D1_T`)* |
+| **`WH_S3`** | L11 | Statement | `$user_id = $_SESSION['user_id'];` |
+| **`WH_D2`** | **L14** | **Branch (`if`)** | **`if (isset($_GET['delete']) && is_numeric($_GET['delete']))`** $\rightarrow$ `WH_D2_T` / `WH_D2_F` |
+| **`WH_S4`** | L15-L21 | Statement | `$movie_id = intval($_GET['delete']); DELETE FROM watch_history WHERE user_id=? AND movie_id=?; header("Location: watch_history.php"); exit();` *(Khi `WH_D2_T`)* |
+| **`WH_S5`** | L25-L38 | Statement | Chuẩn bị và thực thi SQL SELECT lịch sử xem từ `watch_history` JOIN `movies`; fetch_all & close stmt *(Khi `WH_D2_F`)* |
+| **`WH_D3`** | **L138** | **Branch (`if`)** | **`if (empty($watch_history)):`** $\rightarrow$ `WH_D3_T` / `WH_D3_F` |
+| **`WH_S6`** | L139 | Statement | Render `<p>Bạn chưa xem phim nào.</p>` *(Khi `WH_D3_T`)* |
+| **`WH_D4`** | **L141** | **Branch (`foreach`)** | **`foreach ($watch_history as $item):`** $\rightarrow$ `WH_D4_T` / `WH_D4_F` |
+| **`WH_S7`** | L142-L153 | Statement | Render thẻ phim: Thumbnail, Tiêu đề, Thời gian xem, Lượt xem, Nút Xem tiếp và Nút Xóa |
+| **`WH_S8`** | L156-L162 | Statement | Đóng khối container, include footer.php và kết thúc HTML |
+
+#### B. Sơ đồ Luồng Điều khiển (CFG) của `watch_history.php`
+```mermaid
+flowchart TD
+    S1["WH_S1 (L2-4): session_start, db.php"] --> D1{"WH_D1 (L6): !isset($_SESSION['user_id'])?"}
+    D1 -- "True (WH_D1_T)" --> S2(["WH_S2 (L7-8): Redirect login.php & exit"])
+    D1 -- "False (WH_D1_F)" --> S3["WH_S3 (L11): Lấy user_id"]
+    S3 --> D2{"WH_D2 (L14): isset(delete) && is_numeric(delete)?"}
+    D2 -- "True (WH_D2_T)" --> S4(["WH_S4 (L15-21): DELETE watch_history & Redirect watch_history.php"])
+    D2 -- "False (WH_D2_F)" --> S5["WH_S5 (L25-38): SELECT lịch sử xem từ watch_history"]
+    S5 --> D3{"WH_D3 (L138): empty(watch_history)?"}
+    D3 -- "True (WH_D3_T)" --> S6["WH_S6 (L139): Báo 'Bạn chưa xem phim nào.'"] --> S8(["WH_S8: Render Footer & Exit"])
+    D3 -- "False (WH_D3_F)" --> D4{"WH_D4 (L141): foreach($watch_history)?"}
+    D4 -- "True (WH_D4_T)" --> S7["WH_S7 (L142-153): Render thẻ lịch sử & Nút Xóa"] --> D4
+    D4 -- "False (WH_D4_F)" --> S8
+```
+- **Kịch bản thiết kế:** `WB_INT_10` $\rightarrow$ `WB_INT_14` (5 Test Cases bao phủ toàn bộ 8 khối lệnh và 7 nhánh rẽ).
+
+---
+
+### 4. Chức năng Gửi Bình Luận Người Dùng (`watch.php` - L152-L170)
+
+#### A. Bảng ánh xạ Khối Câu lệnh ($S$) và Nút Nhánh ($D$) của khối Bình luận trong `watch.php`
+| Mã Nút | Dòng code | Loại Nút | Nội dung Câu lệnh / Biểu thức điều kiện PHP |
+| :---: | :---: | :---: | :--- |
+| **`WCMT_S1`** | L153 | Statement | `$comment_error = '';` |
+| **`WCMT_D1`** | **L154** | **Branch (`if`)** | **`if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text']))`** $\rightarrow$ `WCMT_D1_T` / `WCMT_D1_F` |
+| **`WCMT_D2`** | **L155** | **Branch (`if`)** | **`if (!isset($_SESSION['user_id']))`** $\rightarrow$ `WCMT_D2_T` / `WCMT_D2_F` |
+| **`WCMT_S2`** | L156 | Statement | `$comment_error = "Bạn cần đăng nhập để bình luận.";` *(Khi `WCMT_D2_T`)* |
+| **`WCMT_S3`** | L158 | Statement | `$comment = trim($_POST['comment_text']);` *(Khi `WCMT_D2_F`)* |
+| **`WCMT_D3`** | **L159** | **Branch (`if`)** | **`if ($comment !== '')`** $\rightarrow$ `WCMT_D3_T` / `WCMT_D3_F` |
+| **`WCMT_S4`** | L160-L165 | Statement | `INSERT INTO comments (user_id, movie_id, comment_text) VALUES (?, ?, ?); header("Location: watch.php?id=$movie_id"); exit();` *(Khi `WCMT_D3_T`)* |
+| **`WCMT_S5`** | L167 | Statement | `$comment_error = "Nội dung bình luận không được để trống.";` *(Khi `WCMT_D3_F`)* |
+| **`WCMT_S6`** | L173-L184 | Statement | Chuẩn bị câu lệnh SELECT danh sách bình luận đã có của bộ phim để render |
+
+#### B. Sơ đồ Luồng Điều khiển (CFG) của Khối Bình Luận trong `watch.php`
+```mermaid
+flowchart TD
+    S1["WCMT_S1 (L153): comment_error = ''"] --> D1{"WCMT_D1 (L154): POST && isset(comment_text)?"}
+    D1 -- "False (WCMT_D1_F)" --> S6["WCMT_S6 (L173-184): Tải bình luận & render phim"]
+    D1 -- "True (WCMT_D1_T)" --> D2{"WCMT_D2 (L155): !isset($_SESSION['user_id'])?"}
+    D2 -- "True (WCMT_D2_T)" --> S2["WCMT_S2 (L156): Báo 'Bạn cần đăng nhập để bình luận.'"] --> S6
+    D2 -- "False (WCMT_D2_F)" --> S3["WCMT_S3 (L158): comment = trim(POST['comment_text'])"]
+    S3 --> D3{"WCMT_D3 (L159): comment !== ''?"}
+    D3 -- "False (WCMT_D3_F)" --> S5["WCMT_S5 (L167): Báo 'Nội dung bình luận không được để trống.'"] --> S6
+    D3 -- "True (WCMT_D3_T)" --> S4(["WCMT_S4 (L160-165): INSERT comments & Redirect watch.php?id="])
+```
+- **Kịch bản thiết kế:** `WB_INT_15` $\rightarrow$ `WB_INT_20` (6 Test Cases bao phủ toàn bộ 6 khối lệnh và 5 nhánh rẽ).
+
+---
+
+## III. BẢNG MA TRẬN THIẾT KẾ ĐỘ BAO PHỦ CÂU LỆNH ($C_0$) & NHÁNH ($C_1$)
+
+> [!IMPORTANT]
+> **TIẾN ĐỘ THỰC TẾ:** Hiện tại nhóm đã hoàn thành toàn bộ công đoạn **Thiết kế Kịch bản Kiểm thử (Test Case Design)**. Toàn bộ các Test Case đều đang ở trạng thái **`Chưa thực hiện`** (Ready for Execution). Nhóm chưa chạy test thực tế và chưa ghi nhận kết quả PASS/FAIL sớm, bám sát tuyệt đối tiến trình giảng dạy trên lớp của giáo viên.
+
+### 1. Bảng Thống kê Tỷ lệ Bao phủ Theo Thiết kế (Design Coverage Matrix)
+
+| File PHP trong phân hệ `INT` | Số Test Case Thiết Kế | Tổng Số Khối Lệnh ($S_i$) Phủ Được ($C_0$) | Tổng Số Nhánh Rẽ ($D_i$) Phủ Được ($C_1$) | Trạng Thái Thiết Kế |
+| :--- | :---: | :---: | :---: | :---: |
+| `netfix2/api/view_counter.php` | 3 (`WB_INT_01` $\rightarrow$ `03`) | **3/3 khối lệnh (100.00%)** | **3/3 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+| `netfix2/comments.php` | 6 (`WB_INT_04` $\rightarrow$ `09`) | **13/13 khối lệnh (100.00%)** | **11/11 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+| `netfix2/watch_history.php` | 5 (`WB_INT_10` $\rightarrow$ `14`) | **8/8 khối lệnh (100.00%)** | **7/7 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+| `netfix2/watch.php` *(Khối Comment)* | 6 (`WB_INT_15` $\rightarrow$ `20`) | **6/6 khối lệnh (100.00%)** | **5/5 nhánh (100.00%)** | Sẵn sàng (Chưa test) |
+| **TỔNG CỘNG PHÂN HỆ `INT`** | **20 Test Cases** | **30/30 khối lệnh ($C_0$: 100%)** | **26/26 nhánh ($C_1$: 100%)** | **Hoàn tất thiết kế** |
+
+---
+
+### 2. Bảng Đặc tả Chi tiết 20 Test Cases White-Box Phân hệ `INT`
+
+Dữ liệu được đồng bộ trực tiếp từ file [whitebox_testcase_int.csv](file:///d:/Kiểm%20thử/QA-netfilxfake-testingweek5/QA-netfilxfake-testingweek5/docs/Design/whitebox_testcase_int.csv):
+
+| STT | Mã TC | File PHP | Tên Kịch Bản Kiểm Thử | Method | Role | Tham số (Payload) | Nhánh Kích Hoạt ($D_i$) | Khối Lệnh Thực Thi ($S_i$) | Kết Quả Mong Đợi | Trạng Thái |
+| :---: | :--- | :--- | :--- | :---: | :---: | :--- | :--- | :--- | :--- | :---: |
+| 1 | **WB_INT_01** | `/api/view_counter.php` | Nhanh D1=True: Tang luot xem phim thanh cong voi id hop le (id=1) | GET | guest | `id=1` | `VC_D1_T` | `VC_S1; VC_S2` | HTTP 200 Tra ve JSON success (movie_id=1) | Chưa thực hiện |
+| 2 | **WB_INT_02** | `/api/view_counter.php` | Nhanh D1=False: Goi API voi id bang 0 hoac so am (id=0) | GET | guest | `id=0` | `VC_D1_F` | `VC_S1; VC_S3` | HTTP 200 Tra ve JSON bao loi ID khong hop le | Chưa thực hiện |
+| 3 | **WB_INT_03** | `/api/view_counter.php` | Nhanh Ternary=False & D1=False: Goi API khong truyen tham so id | GET | guest | *(Trống)* | `VC_D0_F; VC_D1_F` | `VC_S1; VC_S3` | HTTP 200 Tra ve JSON bao loi ID khong hop le | Chưa thực hiện |
+| 4 | **WB_INT_04** | `/comments.php` | Nhanh D1=True: Khach chua dang nhap truy cap /comments.php -> Redirect admin_login.php | GET | guest | *(Trống)* | `CMT_D1_T` | `CMT_S1; CMT_S2` | Redirect 302 ve `admin_login.php` | Chưa thực hiện |
+| 5 | **WB_INT_05** | `/comments.php` | Nhanh D1=True: User thuong (is_admin=0) truy cap /comments.php -> Redirect admin_login.php | GET | user | *(Trống)* | `CMT_D1_T` | `CMT_S1; CMT_S2` | Redirect 302 ve `admin_login.php` | Chưa thực hiện |
+| 6 | **WB_INT_06** | `/comments.php` | Nhanh D1=False & D4=False & D7=False & D8=True: Admin xem danh sach binh luan khi co du lieu | GET | admin | *(Trống)* | `CMT_D1_F; CMT_D2_F; CMT_D3_F; CMT_D4_F; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S3; CMT_S4; CMT_S5; CMT_S12; CMT_S14; CMT_S15` | Hien thi bang quan ly binh luan (200 OK) | Chưa thực hiện |
+| 7 | **WB_INT_07** | `/comments.php` | Nhanh D1=False & D4=False & D7=True: Admin xem danh sach binh luan khi CSDL chua co binh luan | GET | admin | *(Trống)* | `CMT_D1_F; CMT_D2_F; CMT_D3_F; CMT_D4_F; CMT_D7_T` | `CMT_S1; CMT_S3; CMT_S4; CMT_S5; CMT_S12; CMT_S13; CMT_S15` | Hien thi thong bao Chua co binh luan nao (200 OK) | Chưa thực hiện |
+| 8 | **WB_INT_08** | `/comments.php` | Nhanh D4=True & D5=False & D6=True: Admin xoa binh luan ton tai thanh cong | POST | admin | `delete_comment_id=2` | `CMT_D1_F; CMT_D4_T; CMT_D5_F; CMT_D6_T; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S5; CMT_S6; CMT_S8; CMT_S9; CMT_S11; CMT_S12; CMT_S14; CMT_S15` | Bao thanh cong: Binh luan da duoc xoa thanh cong! | Chưa thực hiện |
+| 9 | **WB_INT_09** | `/comments.php` | Nhanh D4=True & D5=False & D6=True: Admin gui lenh xoa voi ID binh luan khong ton tai | POST | admin | `delete_comment_id=999999` | `CMT_D1_F; CMT_D4_T; CMT_D5_F; CMT_D6_T; CMT_D7_F; CMT_D8_T` | `CMT_S1; CMT_S5; CMT_S6; CMT_S8; CMT_S9; CMT_S11; CMT_S12; CMT_S14; CMT_S15` | He thong xu ly an toan va hien thi danh sach (200 OK) | Chưa thực hiện |
+| 10 | **WB_INT_10** | `/watch_history.php` | Nhanh D1=True: Khach chua dang nhap truy cap /watch_history.php -> Redirect login.php | GET | guest | *(Trống)* | `WH_D1_T` | `WH_S1; WH_S2` | Redirect 302 ve `login.php` | Chưa thực hiện |
+| 11 | **WB_INT_11** | `/watch_history.php` | Nhanh D1=False & D2=False & D3=False & D4=True: User xem danh sach lich su khi da xem phim | GET | user | *(Trống)* | `WH_D1_F; WH_D2_F; WH_D3_F; WH_D4_T` | `WH_S1; WH_S3; WH_S5; WH_S7; WH_S8` | Hien thi the lich su phim da xem (200 OK) | Chưa thực hiện |
+| 12 | **WB_INT_12** | `/watch_history.php` | Nhanh D1=False & D2=False & D3=True: User chua tung xem phim nao truy cap lich su | GET | user | *(Trống)* | `WH_D1_F; WH_D2_F; WH_D3_T` | `WH_S1; WH_S3; WH_S5; WH_S6; WH_S8` | Hien thi thong bao Ban chua xem phim nao (200 OK) | Chưa thực hiện |
+| 13 | **WB_INT_13** | `/watch_history.php` | Nhanh D2=True: User xoa mot muc khoi lich su xem (?delete=52) -> Redirect | GET | user | `delete=52` | `WH_D1_F; WH_D2_T` | `WH_S1; WH_S3; WH_S4` | Redirect 302 ve `watch_history.php` & xoa khoi DB | Chưa thực hiện |
+| 14 | **WB_INT_14** | `/watch_history.php` | Nhanh D2=False: User truyen delete khong phai so (?delete=abc) -> Khong xoa | GET | user | `delete=abc` | `WH_D1_F; WH_D2_F; WH_D3_F; WH_D4_T` | `WH_S1; WH_S3; WH_S5; WH_S7; WH_S8` | Bo qua lenh xoa va render trang lich su binh thuong (200 OK) | Chưa thực hiện |
+| 15 | **WB_INT_15** | `/watch.php` | Nhanh D1=True & D2=True: Khach chua dang nhap gui binh luan phim -> Bao loi | POST | guest | `id=1&comment_text=Phim hay qua` | `WCMT_D1_T; WCMT_D2_T` | `WCMT_S1; WCMT_S2; WCMT_S6` | Bao loi: Ban can dang nhap de binh luan | Chưa thực hiện |
+| 16 | **WB_INT_16** | `/watch.php` | Nhanh D2=False & D3=False: User gui binh luan nhung de trong noi dung -> Bao loi | POST | user | `id=1&comment_text=` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_F` | `WCMT_S1; WCMT_S3; WCMT_S5; WCMT_S6` | Bao loi: Noi dung binh luan khong duoc de trong | Chưa thực hiện |
+| 17 | **WB_INT_17** | `/watch.php` | Nhanh D2=False & D3=False: User gui binh luan chi toan khoang trang (trim() empty) | POST | user | `id=1&comment_text=    ` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_F` | `WCMT_S1; WCMT_S3; WCMT_S5; WCMT_S6` | Bao loi: Noi dung binh luan khong duoc de trong | Chưa thực hiện |
+| 18 | **WB_INT_18** | `/watch.php` | Nhanh D2=False & D3=True: User dang binh luan hop le -> Luu DB & Redirect | POST | user | `id=1&comment_text=Phim xem rat cam dong` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Redirect 302 ve `watch.php?id=1` & luu CSDL | Chưa thực hiện |
+| 19 | **WB_INT_19** | `/watch.php` | Nhanh D3=True (Bao mat XSS): Gui binh luan chua the script ma doc | POST | user | `id=1&comment_text=<script>alert('XSS')</script>` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Luu chuoi an toan va ma hoa HTML khi render (Khong chay script) | Chưa thực hiện |
+| 20 | **WB_INT_20** | `/watch.php` | Nhanh D3=True (Bao mat SQLi): Gui binh luan chua cu phap SQL Injection | POST | user | `id=1&comment_text=' OR 1=1 --` | `WCMT_D1_T; WCMT_D2_F; WCMT_D3_T` | `WCMT_S1; WCMT_S3; WCMT_S4` | Prepared Statement bao ve CSDL, khong dinh loi cu phap SQL | Chưa thực hiện |
+
+---
+
+## IV. QUY TRÌNH THỰC HIỆN KIỂM THỬ TRÊN LỚP (KHI GIÁO VIÊN YÊU CẦU BẮT ĐẦU TEST)
+
+Khi giáo viên giảng xong lý thuyết và yêu cầu cả lớp bắt tay vào thực hiện kiểm thử (Test Execution Phase), bạn và nhóm sẽ thực hiện theo các bước chuẩn sau:
+
+```mermaid
+flowchart LR
+    A["Bước 1: Khởi động XAMPP (Apache + MySQL)"] --> B["Bước 2: Chuẩn bị Dữ liệu mẫu (Seed Data)"]
+    B --> C["Bước 3: Thực thi từng Test Case"]
+    C --> D["Bước 4: Đối chiếu Kết quả Thực tế & Mong đợi"]
+    D --> E["Bước 5: Ghi nhận Báo cáo Test & Bằng chứng"]
+```
+
+1. **Bước 1: Khởi động Môi trường:**
+   - Mở XAMPP Control Panel, Start **Apache** (cổng 80) và **MySQL** (cổng 3306).
+   - Đảm bảo database `netfix2` đã được import và tài khoản test mẫu sẵn sàng (`tuan` / `123456`, `admin` / `admin123`).
+
+2. **Bước 2: Thực thi kiểm thử (Test Execution):**
+   - **Cách 1 (Kiểm thử Thủ công - Manual Testing):** Mở trình duyệt web hoặc Postman, nhập từng bộ tham số trong bảng thiết kế trên, gửi request và quan sát câu lệnh / nhánh được kích hoạt trong mã nguồn PHP.
+   - **Cách 2 (Kiểm thử Tự động hóa - Automation):** Khi cần nghiệm thu nhanh và kiểm tra hồi quy toàn bộ 20 nhánh rẽ, chạy script runner tự động đã chuẩn bị:
+     ```bash
+     node docs/testrun/whitebox_runner_int.js
+     ```
+
+3. **Bước 3: Ghi nhận Báo cáo Kết quả (Test Report):**
+   - Tạo file báo cáo thực tế `docs/Report/report_whitebox_int.csv` ghi nhận: Mã test case, Thời gian phản hồi thực tế, HTTP Status Code thực tế, Trạng thái `PASS`/`FAIL` và chụp màn hình bằng chứng cho từng ca kiểm thử.
