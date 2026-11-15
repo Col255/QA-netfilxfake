@@ -135,4 +135,3 @@ if ($payment_method === 'Momo') {
     header("Location: profile.php");
     exit();
 }
-?>
