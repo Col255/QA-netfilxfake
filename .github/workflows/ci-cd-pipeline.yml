@@ -2,9 +2,9 @@ name: QA Pipeline - Static (SonarQube & Qodana) + Dynamic (CodeceptJS) + Docker 
 
 on:
   push:
-    branches: [ main, 'week*', 'testingweek5', 'AUTH*', 'VIP*' ]
+    branches: [ main, 'week*', AUTH ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, 'week*' ]
 
 jobs:
   # =========================================================================
@@ -57,11 +57,10 @@ jobs:
 
       - name: Qodana Code Quality Scan
         if: env.QODANA_TOKEN != ''
-        continue-on-error: true
         uses: JetBrains/qodana-action@v2026.1
         with:
           pr-mode: false
-          args: --fail-threshold 100
+          args: --fail-threshold,100
 
       - name: Nhắc nhở nếu chưa thêm QODANA_TOKEN
         if: env.QODANA_TOKEN == ''
@@ -84,8 +83,8 @@ jobs:
           MYSQL_DATABASE: netfixvn
         ports:
           - 3306:3306
-options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+        options: >-
+--health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
@@ -100,11 +99,6 @@ options: >-
           php-version: '8.2'
           extensions: mysqli, pdo, pdo_mysql, mbstring
 
-      - name: Cài đặt MySQL Client trên Runner
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y default-mysql-client
-
       - name: Import Database mẫu (database/netfixvn.sql) vào MySQL
         run: |
           mysql -h 127.0.0.1 -P 3306 -uroot -proot netfixvn < database/netfixvn.sql
@@ -117,7 +111,7 @@ options: >-
           DB_USER: root
           DB_PASS: root
         run: |
-          RUNNER_TRACKING_ID="" nohup php -S 127.0.0.1:8000 -t . > php-server.log 2>&1 &
+          php -S 127.0.0.1:8000 -t . > php-server.log 2>&1 &
           sleep 2
           curl -I http://127.0.0.1:8000/netfix2/login.php
 
@@ -173,4 +167,4 @@ options: >-
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:latest
-${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:v1.0.${{ github.run_number }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:v1.0.${{ github.run_number }}
