@@ -95,7 +95,7 @@ function verifyAndDescribeResponse(row, res, isOnline) {
           : `HTTP ${status}: Thieu thong bao kiem tra affected_rows == 0`
       };
     }
-    const ok = status === 200 && body.includes('Quản lý Bình luận');
+    const ok = status === 200 && body.toLowerCase().includes('quản lý bình luận');
     return {
       isPass: ok,
       actualText: body.includes('Chưa có bình luận nào.')
@@ -358,7 +358,7 @@ async function main() {
   const rows = lines.slice(1).map((l) => {
     const vals = parseCsvLine(l);
     const obj = {};
-    headers.forEach((h, i) => (obj[h] = (vals[i] || '').trim()));
+    headers.forEach((h, i) => (obj[h] = h === 'Payload_Params' ? (vals[i] || '') : (vals[i] || '').trim()));
     return obj;
   });
 
@@ -367,7 +367,7 @@ async function main() {
   let adminCookie = '';
   if (isOnline) {
     try {
-      const uRes = await sendHttpRequest('/login.php', 'POST', 'identifier=tuan&password=123456');
+      const uRes = await sendHttpRequest('/login.php', 'POST', 'identifier=tuan@gmail.com&password=123456');
       userCookie = uRes.cookie;
       const aRes = await sendHttpRequest('/admin_login.php', 'POST', 'identifier=admin&password=admin123');
       adminCookie = aRes.cookie;

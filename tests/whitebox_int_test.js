@@ -34,7 +34,9 @@ if (fs.existsSync(csvPath)) {
     for (let i = 1; i < lines.length; i++) {
         const vals = parseCsvLine(lines[i]);
         const row = {};
-        headers.forEach((h, idx) => { row[h] = (vals[idx] ?? '').trim(); });
+        headers.forEach((h, idx) => {
+            row[h] = h === 'Payload_Params' ? (vals[idx] ?? '') : (vals[idx] ?? '').trim();
+        });
         testRecords.push(row);
     }
 }
@@ -53,15 +55,16 @@ testRecords.forEach((tc) => {
             const searchParams = new URLSearchParams(params);
             let targetUrl = endpoint;
             if (endpoint === '/watch.php') {
-                const movieId = searchParams.get('id') || '1';
+                const rawId = searchParams.get('id') || '52';
+                const movieId = rawId === '1' ? '52' : rawId;
                 targetUrl = `/watch.php?id=${encodeURIComponent(movieId)}`;
             }
 
             I.amOnPage(targetUrl);
-            await I.executeScript(({ actionUrl, rawParams }) => {
+            await I.executeScript(({ rawParams }) => {
                 const form = document.createElement('form');
                 form.method = 'POST';
-                form.action = actionUrl;
+                form.action = window.location.href;
                 const sp = new URLSearchParams(rawParams);
                 for (const [k, v] of sp.entries()) {
                     const input = document.createElement('input');
@@ -72,8 +75,8 @@ testRecords.forEach((tc) => {
                 }
                 document.body.appendChild(form);
                 form.submit();
-            }, { actionUrl: targetUrl, rawParams: params });
-            I.wait(0.4);
+            }, { rawParams: params });
+            I.wait(0.5);
         } else {
             const url = params ? `${endpoint}?${params}` : endpoint;
             I.amOnPage(url);
