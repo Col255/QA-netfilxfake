@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'db.php';
-/** @var mysqli $conn */
+/** @var mysqli $conn Đối tượng kết nối CSDL MySQLi từ db.php */
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
