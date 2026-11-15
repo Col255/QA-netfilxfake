@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Điều chỉnh đường dẫn đến db.php nếu cần (ví dụ: ../db.php nếu orders.php nằm trong thư mục con admin)
+/** @var mysqli $conn */
 
 // Kiểm tra nếu người dùng chưa đăng nhập hoặc không phải admin
 if (!isset($_SESSION['user_id']) || !$_SESSION['is_admin']) {
@@ -56,12 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id']) && isset(
                     $vip_duration = '1 month'; // Mặc định, sẽ được cập nhật dựa vào tên gói
                     
                     // Xác định thời hạn VIP dựa vào tên gói (phải khớp với pricing.php)
-                    if (strpos($package_name, '1 Tháng') !== false) {
-                        $vip_duration = '1 month';
-                    } elseif (strpos($package_name, '6 Tháng') !== false) {
+                    if (strpos($package_name, '6 Tháng') !== false) {
                         $vip_duration = '6 months';
                     } elseif (strpos($package_name, '1 Năm') !== false) {
                         $vip_duration = '1 year';
+                    } else {
+                        $vip_duration = '1 month'; // Mặc định gói 1 tháng
                     }
 
                     // Lấy thời điểm hiện tại hoặc thời điểm hết hạn VIP cũ nếu có
@@ -112,7 +113,7 @@ $user_filter_id = isset($_GET['user_id']) ? (int)$_GET['user_id'] : null;
 $orders = getAllVipOrders($conn, $user_filter_id);
 
 // Hàm lấy danh sách đơn hàng VIP từ database
-function getAllVipOrders($conn, $user_id = null) {
+function getAllVipOrders(mysqli $conn, $user_id = null) {
     $query = "
         SELECT vo.id, u.username, vo.package_name, vo.price, vo.payment_method, vo.status, vo.order_date
         FROM vip_orders vo
@@ -124,14 +125,17 @@ function getAllVipOrders($conn, $user_id = null) {
     $query .= " ORDER BY vo.order_date DESC";
 
     $stmt = $conn->prepare($query);
-    if ($user_id) {
-        $stmt->bind_param("i", $user_id);
+    if ($stmt) {
+        if ($user_id) {
+            $stmt->bind_param("i", $user_id);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $orders = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+        return $orders;
     }
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $orders = $result->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
-    return $orders;
+    return [];
 }
 
 
