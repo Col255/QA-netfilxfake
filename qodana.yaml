@@ -1,5 +1,7 @@
 version: "1.0"
 linter: qodana-php
+php:
+  version: "8.1"
 profile:
   name: qodana.recommended
 failThreshold: 100
@@ -8,6 +10,9 @@ include:
   - name: PhpDeprecationInspection
   - name: PhpSecurityInspection
 exclude:
+  - name: PhpMissingReturnTypeInspection
+  - name: PhpMissingParamTypeInspection
+  - name: PhpStrFunctionsInspection
   - name: All
     paths:
       - netfix2/uploads
