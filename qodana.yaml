@@ -1,6 +1,7 @@
 version: "1.0"
 linter: qodana-php
-phpVersion: "8.1"
+php:
+  version: "8.1"
 profile:
   name: qodana.recommended
 failThreshold: 100

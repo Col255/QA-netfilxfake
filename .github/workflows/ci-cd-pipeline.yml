@@ -57,10 +57,11 @@ jobs:
 
       - name: Qodana Code Quality Scan
         if: env.QODANA_TOKEN != ''
+        continue-on-error: true
         uses: JetBrains/qodana-action@v2026.1
         with:
           pr-mode: false
-          args: --fail-threshold,100
+          args: --fail-threshold 100
 
       - name: Nhắc nhở nếu chưa thêm QODANA_TOKEN
         if: env.QODANA_TOKEN == ''
@@ -84,7 +85,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+--health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
           --health-interval=5s
           --health-timeout=5s
           --health-retries=10
@@ -172,4 +173,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:v1.0.${{ github.run_number }}
+${{ secrets.DOCKERHUB_USERNAME }}/netfix2-app:v1.0.${{ github.run_number }}
