@@ -1,0 +1,29 @@
+﻿STT,WB_TC_ID,File_PHP,Ten_Kich_Ban_WhiteBox,Method,Session_Role,Nhanh_Kich_Hoat,Cau_Lenh_Thuc_Thi,HTTP_Status,Time_Ms,Trang_Thai
+1,WB_ADM_01,/admin_dashboard.php,"Nhanh D1=True: Khach chua dang nhap Admin truy cap Dashboard -> Chan va Redirect admin_login.php",GET,guest,"DASH_D1_T","DASH_S1;DASH_S2",302,14ms,PASS
+2,WB_ADM_02,/admin_dashboard.php,"Nhanh D1=False & SBAR_D2=True/False: Admin truy cap Dashboard tai Top 10 phim, doanh thu VIP va active Sidebar",GET,admin,"DASH_D1_F;SBAR_D2_T;SBAR_D2_F","DASH_S1;DASH_S3;DASH_S4",200,38ms,PASS
+3,WB_ADM_03,/add_movie.php,"Nhanh D1=True: Khach vang lai truy cap trang Them phim -> Chan phan quyen",GET,guest,"ADD_D1_T","ADD_S1;ADD_S2",302,20ms,PASS
+4,WB_ADM_04,/add_movie.php,"Nhanh D1=False & D2=False: Admin mo form Them phim moi (GET)",GET,admin,"ADD_D1_F;ADD_D2_F","ADD_S1;ADD_S10",200,52ms,PASS
+5,WB_ADM_05,/add_movie.php,"Nhanh D2=True & D3=False: Gui POST them phim nhung khong chon anh thumbnail",POST,admin,"ADD_D1_F;ADD_D2_T;ADD_D3_F;ADD_D4_F;ADD_D5_F","ADD_S1;ADD_S3;ADD_S5;ADD_S10",200,59ms,PASS
+6,WB_ADM_06,/add_movie.php,"Nhanh D3=True & D4=True & D5=True & D6=True: Them phim moi hop le kem upload thumbnail va video",POST,admin,"ADD_D1_F;ADD_D2_T;ADD_D3_T;ADD_D4_T;ADD_D5_T;ADD_D6_T","ADD_S1;ADD_S3;ADD_S4;ADD_S6;ADD_S7;ADD_S8",302,29ms,PASS
+7,WB_ADM_07,/add_movie.php,"Nhanh D3=True & D4=False & D5=True & D6=False: Xu ly ngoai le khi INSERT phim Series hoac loi CSDL",POST,admin,"ADD_D1_F;ADD_D2_T;ADD_D3_T;ADD_D4_F;ADD_D5_T;ADD_D6_F","ADD_S1;ADD_S3;ADD_S4;ADD_S7;ADD_S9;ADD_S10",200,73ms,PASS
+8,WB_ADM_08,/edit_movie.php,"Nhanh D1=True: Khach chua dang nhap Admin truy cap trang Sua phim -> Redirect admin_login.php",GET,guest,"EDM_D1_T","EDM_S1;EDM_S2",302,16ms,PASS
+9,WB_ADM_09,/edit_movie.php,"Nhanh D1=False & D2=True: Truy cap edit_movie.php voi tham so id <= 0 hoac khong hop le",GET,admin,"EDM_D1_F;EDM_D2_T","EDM_S1;EDM_S3;EDM_S4",200,29ms,PASS
+10,WB_ADM_10,/edit_movie.php,"Nhanh D2=False & D3=True: Truy cap edit_movie.php voi id phim khong ton tai trong CSDL",GET,admin,"EDM_D1_F;EDM_D2_F;EDM_D3_T","EDM_S1;EDM_S3;EDM_S5;EDM_S6",200,36ms,PASS
+11,WB_ADM_11,/edit_movie.php,"Nhanh D3=False & D4=True & D5=False: Admin mo form chinh sua phim va tai danh sach tap phim",GET,admin,"EDM_D1_F;EDM_D2_F;EDM_D3_F;EDM_D4_T;EDM_D5_F","EDM_S1;EDM_S3;EDM_S5;EDM_S7;EDM_S9",200,43ms,PASS
+12,WB_ADM_12,/edit_movie.php,"Nhanh D4=False & D5=True: Admin gui POST cap nhat thong tin phim thanh cong",POST,admin,"EDM_D1_F;EDM_D2_F;EDM_D3_F;EDM_D4_F;EDM_D5_T","EDM_S1;EDM_S3;EDM_S5;EDM_S8",302,28ms,PASS
+13,WB_ADM_13,/manage_movies.php,"Nhanh D1=True: Khach chua dang nhap Admin truy cap danh sach quan ly phim -> Chan",GET,guest,"MM_D1_T","MM_S1;MM_S2",302,12ms,PASS
+14,WB_ADM_14,/manage_movies.php,"Nhanh D1=False & D2=False: Admin xem danh sach toan bo phim trong he thong (GET)",GET,admin,"MM_D1_F;MM_D2_F","MM_S1;MM_S3;MM_S8",200,64ms,PASS
+15,WB_ADM_15,/manage_movies.php,"Nhanh D2=True & D3=True: Admin gui POST xoa phim voi delete_id hop le",POST,admin,"MM_D1_F;MM_D2_T;MM_D3_T","MM_S1;MM_S3;MM_S4;MM_S5;MM_S7;MM_S8",200,71ms,PASS
+16,WB_ADM_16,/manage_movies.php,"Nhanh D2=True & D3=False: Xu ly nhanh bao loi khi cau lenh DELETE phim that bai",POST,admin,"MM_D1_F;MM_D2_T;MM_D3_F","MM_S1;MM_S3;MM_S4;MM_S6;MM_S7;MM_S8",200,78ms,PASS
+17,WB_ADM_17,/manage_vip.php,"Nhanh D1=True: Khach chua dang nhap Admin truy cap trang Quan ly tai khoan VIP -> Chan",GET,guest,"MVIP_D1_T","MVIP_S1;MVIP_S2",302,24ms,PASS
+18,WB_ADM_18,/manage_vip.php,"Nhanh D1=False & D2=False: Admin xem danh sach trang thai VIP cua nguoi dung (GET)",GET,admin,"MVIP_D1_F;MVIP_D2_F","MVIP_S1;MVIP_S3;MVIP_S7",200,34ms,PASS
+19,WB_ADM_19,/manage_vip.php,"Nhanh D2=True & D3=True & D4=True: Admin nang cap tai khoan nguoi dung len VIP (action=upgrade)",POST,admin,"MVIP_D1_F;MVIP_D2_T;MVIP_D3_T;MVIP_D4_T","MVIP_S1;MVIP_S3;MVIP_S4;MVIP_S5;MVIP_S7",200,41ms,PASS
+20,WB_ADM_20,/manage_vip.php,"Nhanh D2=True & D3=False & D4=False: Admin ha cap tai khoan VIP ve Thuong (action=downgrade)",POST,admin,"MVIP_D1_F;MVIP_D2_T;MVIP_D3_F;MVIP_D4_F","MVIP_S1;MVIP_S3;MVIP_S4;MVIP_S6;MVIP_S7",200,48ms,PASS
+21,WB_ADM_21,/orders.php,"Nhanh D1=True: Khach vang lai truy cap trang Duyet don hang VIP -> Chan truy cap",GET,guest,"ORD_D1_T","ORD_S1;ORD_S2",302,17ms,PASS
+22,WB_ADM_22,/orders.php,"Nhanh D1=False & D2=False: Admin mo danh sach don hang VIP (GET)",GET,admin,"ORD_D1_F;ORD_D2_F","ORD_S1;ORD_S3;ORD_S7",200,62ms,PASS
+23,WB_ADM_23,/orders.php,"Nhanh D2=True & D3=True/False & D4=True/False: Admin duyet hoan tat (complete) hoac huy (cancel) don hang VIP trong Transaction",POST,admin,"ORD_D1_F;ORD_D2_T;ORD_D3_T;ORD_D3_F;ORD_D4_T;ORD_D4_F","ORD_S1;ORD_S3;ORD_S4;ORD_S5;ORD_S6;ORD_S7",200,69ms,PASS
+24,WB_ADM_24,/customers.php,"Nhanh D1=True: Khach chua dang nhap Admin truy cap Quan ly khach hang -> Chan",GET,guest,"CUST_D1_T","CUST_S1;CUST_S2",302,26ms,PASS
+25,WB_ADM_25,/customers.php,"Nhanh D1=False & D2=False & D4=True/False: Admin xem danh sach khach hang kem thong bao trang thai",GET,admin,"CUST_D1_F;CUST_D2_F;CUST_D4_T;CUST_D4_F","CUST_S1;CUST_S5;CUST_S6;CUST_S7",200,25ms,PASS
+26,WB_ADM_26,/customers.php,"Nhanh D2=True & D3=True/False: Admin gui POST xoa khach hang theo delete_id",POST,admin,"CUST_D1_F;CUST_D2_T;CUST_D3_T;CUST_D3_F","CUST_S1;CUST_S3;CUST_S4",302,13ms,PASS
+27,WB_ADM_27,/statistics.php,"Nhanh D1=True: Khach chua dang nhap Admin truy cap trang Thong ke doanh thu -> Chan",GET,guest,"STAT_D1_T","STAT_S1;STAT_S2",302,16ms,PASS
+28,WB_ADM_28,/statistics.php,"Nhanh D1=False & D2=True/False: Admin loc bao cao doanh thu theo khoang ngay va goi VIP",GET,admin,"STAT_D1_F;STAT_D2_T;STAT_D2_F","STAT_S1;STAT_S3;STAT_S4;STAT_S5;STAT_S6;STAT_S7",200,46ms,PASS

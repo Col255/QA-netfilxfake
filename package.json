@@ -10,7 +10,8 @@
     "skill:sarif": "node .gemini/skills/qodana-sarif-digest/scripts/parse_sarif.js",
     "skill:audit": "node .gemini/skills/qa-data-driven-sync/scripts/audit_coverage.js",
     "test:whitebox:auth": "node docs/testrun/whitebox_runner_auth.js",
-    "test:whitebox:vip": "node docs/testrun/whitebox_runner_vip.js"
+    "test:whitebox:vip": "node docs/testrun/whitebox_runner_vip.js",
+    "test:whitebox:adm": "node docs/testrun/whitebox_runner_adm.js"
   },
   "repository": {
     "type": "git",
