@@ -72,7 +72,7 @@ jobs:
   # =========================================================================
   codeceptjs-dynamic-test:
     name: 2. Dynamic Test - CodeceptJS E2E (PHP + MySQL)
-needs: [sonarqube-static-scan, qodana-static-scan]
+    needs: [sonarqube-static-scan, qodana-static-scan]
     runs-on: ubuntu-latest
 
     services:
@@ -164,7 +164,7 @@ needs: [sonarqube-static-scan, qodana-static-scan]
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-- name: Build và Push Docker Image có gắn Version
+      - name: Build và Push Docker Image có gắn Version
         uses: docker/build-push-action@v5
         with:
           context: .
