@@ -38,6 +38,7 @@ if ($stmt) {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    // Kiểm tra $result hợp lệ trước khi gọi fetch_all(MYSQLI_ASSOC)
     $watch_history = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     $stmt->close();
 }
