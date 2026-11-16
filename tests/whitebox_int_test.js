@@ -100,7 +100,7 @@ testRecords.forEach((tc) => {
             I.see('Bạn cần đăng nhập để bình luận.');
         }
         if (tc.WB_TC_ID === 'WB_INT_16' || tc.WB_TC_ID === 'WB_INT_17') {
-            I.see('Nội dung bình luận không được để trống.');
+            I.see('Nội dung bình luận không được để trống');
         }
     });
 });

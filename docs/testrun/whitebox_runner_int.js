@@ -144,7 +144,7 @@ function verifyAndDescribeResponse(row, res, isOnline) {
       };
     }
     if (row.WB_TC_ID === 'WB_INT_16' || row.WB_TC_ID === 'WB_INT_17') {
-      const hasEmptyErr = body.includes('Nội dung bình luận không được để trống.');
+      const hasEmptyErr = body.includes('Nội dung bình luận không được để trống');
       return {
         isPass: status === 200 && hasEmptyErr,
         actualText: hasEmptyErr

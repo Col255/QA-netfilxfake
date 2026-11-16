@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['is_admin']) || !$_SESSION[
  * @param mysqli $conn Đối tượng kết nối MySQLi.
  * @return array Mảng chứa các bình luận.
  */
-function getAllComments($conn) {
+function getAllComments(mysqli $conn) {
     // JOIN với bảng movies và users để lấy tên phim và tên người dùng
     $stmt = $conn->prepare("SELECT c.id, c.comment_text, c.created_at, m.title AS movie_title, u.username AS user_username
                             FROM comments c
@@ -33,7 +33,8 @@ function getAllComments($conn) {
         return [];
     }
     $result = $stmt->get_result();
-    $comments = $result->fetch_all(MYSQLI_ASSOC);
+    // Kiểm tra $result hợp lệ trước khi gọi fetch_all(MYSQLI_ASSOC)
+    $comments = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     $stmt->close();
     return $comments;
 }
@@ -49,10 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_comment_id']))
     } else {
         $stmt->bind_param("i", $delete_id);
         if ($stmt->execute()) {
-            $message = "<div class='message success'>Bình luận đã được xóa thành công!</div>";
+            if ($stmt->affected_rows > 0) {
+                $message = "<div class='message success'>Bình luận đã được xóa thành công!</div>";
+            } else {
+                $message = "<div class='message error'>Bình luận không tồn tại hoặc đã bị xóa trước đó.</div>";
+            }
         } else {
             error_log("Execute failed (delete comment): " . $stmt->error);
-            $message = "<div class='message error'>Lỗi khi xóa bình luận: " . $stmt->error . "</div>";
+            $message = "<div class='message error'>Đã xảy ra lỗi hệ thống khi xóa bình luận. Vui lòng thử lại sau.</div>";
         }
         $stmt->close();
     }
