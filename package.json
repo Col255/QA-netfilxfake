@@ -11,7 +11,9 @@
     "skill:audit": "node .gemini/skills/qa-data-driven-sync/scripts/audit_coverage.js",
     "test:whitebox:auth": "node docs/testrun/whitebox_runner_auth.js",
     "test:whitebox:vip": "node docs/testrun/whitebox_runner_vip.js",
-    "test:whitebox:adm": "node docs/testrun/whitebox_runner_adm.js"
+    "test:whitebox:adm": "node docs/testrun/whitebox_runner_adm.js",
+    "test:whitebox:int": "node docs/testrun/whitebox_runner_int.js",
+    "test:whitebox:mov": "node docs/testrun/whitebox_runner_mov.js"
   },
   "repository": {
     "type": "git",
