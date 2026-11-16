@@ -1,6 +1,7 @@
 <?php
 session_start();
 require 'db.php'; // Kết nối database
+/** @var mysqli $conn */
 
 // Kiểm tra nếu người dùng đã đăng nhập
 if (isset($_SESSION['user_id']) && $_SESSION['is_admin']) {
@@ -19,25 +20,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Truy vấn kiểm tra username hoặc email, chỉ cho phép admin
         $stmt = $conn->prepare("SELECT id, username, password, is_admin FROM users WHERE (username = ? OR email = ?) AND is_admin = 1");
-        $stmt->bind_param("ss", $identifier, $identifier);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        
-        if ($result->num_rows === 1) {
-            $user = $result->fetch_assoc();
-            // Kiểm tra mật khẩu
-            if ($password === $user['password']) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['is_admin'] = $user['is_admin'];
-                header("Location: admin_dashboard.php");
-                exit();
+        if ($stmt) {
+            $stmt->bind_param("ss", $identifier, $identifier);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result->num_rows === 1) {
+                $user = $result->fetch_assoc();
+                // Kiểm tra mật khẩu
+                if ($password === $user['password']) {
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['is_admin'] = $user['is_admin'];
+                    $stmt->close();
+                    header("Location: admin_dashboard.php");
+                    exit();
+                } else {
+                    $error_message = "Mật khẩu không đúng.";
+                }
             } else {
-                $error_message = "Mật khẩu không đúng.";
+                $error_message = "Tên đăng nhập hoặc email không tồn tại hoặc tài khoản này không phải admin.";
             }
+            $stmt->close();
         } else {
-            $error_message = "Tên đăng nhập hoặc email không tồn tại hoặc tài khoản này không phải admin.";
+            $error_message = "Lỗi hệ thống: Không thể kết nối cơ sở dữ liệu.";
         }
-        $stmt->close();
     }
 }
 ?>

@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
 
 // Hàm lấy danh sách thể loại phụ từ cột sub_genre
 function getSubGenres($conn) {
@@ -56,38 +57,63 @@ $subGenres = getSubGenres($conn);
 $query = isset($_GET['query']) ? trim($_GET['query']) : '';
 $genre = isset($_GET['genre']) ? trim($_GET['genre']) : '';
 $searchResults = [];
+$search_error = '';
 
-if (!empty($query)) {
-    $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
-            FROM movies 
-            WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?)";
-    $searchTerm = "%{$query}%";
-    
-    if (!empty($genre)) {
-        $sql .= " AND genre = ?";
-    }
-    $sql .= " ORDER BY view_count DESC";
-
-    $stmt = $conn->prepare($sql);
-    if ($stmt === false) {
-        error_log("Prepare failed (search): " . $conn->error);
-        die("Lỗi chuẩn bị truy vấn: " . $conn->error);
-    }
-
-    if (!empty($genre)) {
-        $stmt->bind_param("ssssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $genre);
+if (!empty($query) || !empty($genre)) {
+    if (!empty($query) && !empty($genre)) {
+        $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
+                FROM movies 
+                WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?) AND genre = ? 
+                ORDER BY view_count DESC";
+        $searchTerm = "%{$query}%";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare failed (search): " . $conn->error);
+            $search_error = "Không thể chuẩn bị truy vấn tìm kiếm. Vui lòng thử lại sau.";
+            $searchResults = [];
+        } else {
+            $stmt->bind_param("ssssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $genre);
+        }
+    } elseif (!empty($query)) {
+        $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
+                FROM movies 
+                WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?) 
+                ORDER BY view_count DESC";
+        $searchTerm = "%{$query}%";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare failed (search): " . $conn->error);
+            $search_error = "Không thể chuẩn bị truy vấn tìm kiếm. Vui lòng thử lại sau.";
+            $searchResults = [];
+        } else {
+            $stmt->bind_param("sssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
+        }
     } else {
-        $stmt->bind_param("sssss", $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm);
+        $sql = "SELECT id, title, thumbnail, description, duration, genre, year, episode_count, view_count 
+                FROM movies 
+                WHERE genre = ? 
+                ORDER BY view_count DESC";
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            error_log("Prepare failed (search): " . $conn->error);
+            $search_error = "Không thể chuẩn bị truy vấn tìm kiếm. Vui lòng thử lại sau.";
+            $searchResults = [];
+        } else {
+            $stmt->bind_param("s", $genre);
+        }
     }
 
-    if (!$stmt->execute()) {
-        error_log("Execute failed (search): " . $stmt->error);
+    if ($stmt !== false) {
+        if (!$stmt->execute()) {
+            error_log("Execute failed (search): " . $stmt->error);
+            $search_error = "Lỗi thực thi truy vấn tìm kiếm. Vui lòng thử lại sau.";
+            $searchResults = [];
+        } else {
+            $result = $stmt->get_result();
+            $searchResults = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        }
         $stmt->close();
-        die("Lỗi thực thi truy vấn: " . $stmt->error);
     }
-    $result = $stmt->get_result();
-    $searchResults = $result->fetch_all(MYSQLI_ASSOC);
-    $stmt->close();
 }
 ?>
 
@@ -120,7 +146,9 @@ if (!empty($query)) {
                 Kết quả tìm kiếm cho: "<?php echo htmlspecialchars($query); ?>"
             </div>
             <div class="movies-slide carousel-nav-center owl-carousel">
-                <?php if (empty($searchResults)) { ?>
+                <?php if (!empty($search_error)) { ?>
+                    <div class="no-content"><?php echo htmlspecialchars($search_error); ?></div>
+                <?php } elseif (empty($searchResults)) { ?>
                     <div class="no-content">Không tìm thấy phim phù hợp với "<?php echo htmlspecialchars($query); ?>"</div>
                 <?php } else { ?>
                     <?php foreach ($searchResults as $movie) { ?>

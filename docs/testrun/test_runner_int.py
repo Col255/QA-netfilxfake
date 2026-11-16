@@ -1,4 +1,4 @@
-"""
+﻿"""
 AUTOMATED TEST RUNNER CHO 5 TASK JIRA INT (NETFIX2)
 Đọc test case thiết kế và xuất kết quả kiểm thử ra CSV
 """
@@ -16,8 +16,8 @@ BASE_URL = "http://localhost/netfix2"
 
 def run_int_test_suite():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    input_csv = os.path.join(script_dir, "design_testcase_int.csv")
-    output_csv = os.path.join(script_dir, "report_run_testcase_int.csv")
+    input_csv = os.path.normpath(os.path.join(script_dir, "..", "Design", "design_testcase_int.csv"))
+    output_csv = os.path.normpath(os.path.join(script_dir, "..", "Report", "report_run_testcase_int.csv"))
 
     print("+" + "=" * 90 + "+")
     print("| KHỞI CHẠY KIỂM THỬ TỰ ĐỘNG CHO 5 TASK JIRA INT - MODULE INTERACTIONS & ENGAGEMENT")

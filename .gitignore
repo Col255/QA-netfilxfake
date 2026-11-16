@@ -17,10 +17,12 @@ node_modules/
 output/
 package-lock.json
 
-#.claude và .gemini
+# Bỏ qua thư mục cấu hình AI (.claude, .agents, .gemini)
 .claude/
-.gemini
 .claude-workspace
+.agents/
+.gemini/
+.gemini
 
 # Bỏ qua file backup và script build Postman nội bộ
 *.original.json
@@ -30,5 +32,8 @@ Postman/export_test_case_list.js
 
 # Thư mục backup cấu hình local
 backup_before_update/
+
+# Bỏ qua file báo cáo tĩnh SARIF dung lượng lớn
+*.sarif.json
 
 

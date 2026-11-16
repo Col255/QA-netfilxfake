@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 require 'db.php'; // Kết nối database
+/** @var mysqli $conn */
 
 // Hàm lấy danh sách thể loại phụ từ cột sub_genre
 if (!function_exists('getSubGenres')) {

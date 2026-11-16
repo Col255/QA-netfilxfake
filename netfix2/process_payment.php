@@ -1,6 +1,8 @@
 <?php
 session_start();
 require 'db.php';
+/** @var mysqli $conn */
+require_once 'vip_helper.php';
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -88,11 +90,10 @@ if ($payment_method === 'Momo') {
         $stmt->close();
 
         header("Location: " . $jsonResult['payUrl']);
-        exit();
     } else {
         echo "<h3 style='color: red'>Không thể kết nối MoMo (ATM): " . htmlspecialchars($jsonResult['message'] ?? 'Lỗi không xác định') . "</h3>";
-        exit();
     }
+    exit();
 
 } else {
     // ========== THANH TOÁN NGAY ==========
@@ -113,13 +114,7 @@ if ($payment_method === 'Momo') {
     $user = $result->fetch_assoc();
     $stmt->close();
 
-    $new_expiry = new DateTime();
-
-    if ($user && $user['vip_expires_at'] !== null && strtotime($user['vip_expires_at']) > time()) {
-        $new_expiry = new DateTime($user['vip_expires_at']);
-    }
-
-    $new_expiry->modify('+' . $duration);
+    $new_expiry = calculate_vip_expiry($user['vip_expires_at'] ?? null, $duration);
     $vip_expires_at_str = $new_expiry->format('Y-m-d H:i:s');
 
     $stmt = $conn->prepare("UPDATE users SET is_vip = 1, vip_expires_at = ? WHERE id = ?");
@@ -132,4 +127,3 @@ if ($payment_method === 'Momo') {
     header("Location: profile.php");
     exit();
 }
-?>

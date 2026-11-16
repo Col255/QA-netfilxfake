@@ -10,4 +10,3 @@ session_destroy();
 // Chuyển hướng đến trang đăng nhập của người dùng thông thường
 header("Location: login.php");
 exit();
-?>

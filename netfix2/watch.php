@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 session_start();
 require 'db.php'; // Đảm bảo file db.php chứa kết nối CSDL
+/** @var mysqli $conn */
 
 // Hàm lấy danh sách thể loại phụ từ cột sub_genre
 function getSubGenres($conn) {
@@ -72,7 +73,7 @@ if ($movie_id <= 0) {
         $error_message = "Phim không tồn tại.";
     } else {
         // Kiểm tra quyền VIP
-        $user_is_vip = isset($_SESSION['user_id']) ? false : false;
+        $user_is_vip = false; // Khởi tạo an toàn trước khi vào nhánh kiểm tra session
         if (isset($_SESSION['user_id'])) {
             $user_id = (int)$_SESSION['user_id'];
             $stmt = $conn->prepare("SELECT is_vip FROM users WHERE id = ?");
@@ -155,16 +156,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text'])) {
     if (!isset($_SESSION['user_id'])) {
         $comment_error = "Bạn cần đăng nhập để bình luận.";
     } else {
-        $comment = trim($_POST['comment_text']);
-        if ($comment !== '') {
+        $comment = trim($_POST['comment_text'] ?? '');
+        if ($comment === '') {
+            $comment_error = "Nội dung bình luận không được để trống hoặc chỉ chứa khoảng trắng.";
+        } elseif (mb_strlen($comment) > 500) {
+            $comment_error = "Nội dung bình luận không được vượt quá 500 ký tự.";
+        } else {
             $stmt = $conn->prepare("INSERT INTO comments (user_id, movie_id, comment_text) VALUES (?, ?, ?)");
             $stmt->bind_param("iis", $_SESSION['user_id'], $movie_id, $comment);
             $stmt->execute();
             $stmt->close();
             header("Location: watch.php?id=$movie_id");
             exit();
-        } else {
-            $comment_error = "Nội dung bình luận không được để trống.";
         }
     }
 }
