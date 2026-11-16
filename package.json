@@ -14,7 +14,8 @@
     "test:whitebox:adm": "node docs/testrun/whitebox_runner_adm.js",
     "test:whitebox:int": "node docs/testrun/whitebox_runner_int.js",
     "test:whitebox:mov": "node docs/testrun/whitebox_runner_mov.js",
-    "report:whitebox:html": "node docs/testrun/generate_html_report.js"
+    "report:whitebox:html": "node docs/testrun/generate_html_report.js",
+    "report:clover": "node docs/testrun/generate_clover.js"
   },
   "repository": {
     "type": "git",

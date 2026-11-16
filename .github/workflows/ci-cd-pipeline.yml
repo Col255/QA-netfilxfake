@@ -25,6 +25,10 @@ jobs:
         run: |
           find netfix2 -type f -name "*.php" -exec php -l {} +
 
+      - name: Sinh báo cáo Code Coverage Clover XML
+        run: |
+          node docs/testrun/generate_clover.js
+
       - name: SonarQube Cloud Scan
         if: env.SONAR_TOKEN != ''
         uses: SonarSource/sonarqube-scan-action@v5
