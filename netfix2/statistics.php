@@ -333,8 +333,8 @@ $stmt->close();
         <h2>📊 THỐNG KÊ </h2>
 
         <form method="GET" class="filter-form">
-            <label>Từ: <input type="date" name="start_date" value="<?php echo $start_date; ?>"></label>
-            <label>Đến: <input type="date" name="end_date" value="<?php echo $end_date; ?>"></label>
+            <label>Từ: <input type="date" name="start_date" value="<?php echo htmlspecialchars($start_date, ENT_QUOTES, 'UTF-8'); ?>"></label>
+            <label>Đến: <input type="date" name="end_date" value="<?php echo htmlspecialchars($end_date, ENT_QUOTES, 'UTF-8'); ?>"></label>
             <button type="submit">Lọc</button>
         </form>
 
