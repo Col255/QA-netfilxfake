@@ -270,14 +270,16 @@ Sau khi thiết lập đồ thị luồng điều khiển (Mục II) và ma tr�
 | **`KAN-209`** | Compatibility | [`index.php`](file:///docs/../netfix2/index.php) | `PhpOptionalBeforeRequiredParameterInspection`: Hàm `getMovies($conn, $genre = null, $limit)` đặt tham số mặc định `$genre = null` đứng trước tham số bắt buộc `$limit`, gây cảnh báo Deprecated trên PHP 8.1+. | Đảo chuẩn thứ tự chữ ký hàm thành `getMovies($conn, $limit, $genre = null)` và đồng bộ toàn bộ 5 lời gọi hàm tại trang chủ. |
 | **`KAN-212`** | Security & Reliability | [`search.php`](file:///docs/../netfix2/search.php) | Sử dụng `die("Lỗi chuẩn bị/thực thi truy vấn: " . $conn->error)` trực tiếp giữa trang làm đứt gãy giao diện HTML và có nguy cơ lộ cấu trúc SQL. | Thay thế `die()` bằng biến `$search_error` thân thiện, ghi log chi tiết vào `error_log()` và hiển thị thông báo an toàn trong khung giao diện `.no-content`. |
 | **`KAN-213`** | Logic Refactor | [`search.php`](file:///docs/../netfix2/search.php) | Điều kiện lọc thể loại `genre` bị lồng phụ thuộc bên trong `if (!empty($query))`, khiến người dùng chọn lọc theo `genre` mà không nhập từ khóa sẽ không chạy truy vấn. | Tách thành 3 nhánh độc lập: Kết hợp `(!empty($query) && !empty($genre))`, chỉ từ khóa `(!empty($query))`, và chỉ thể loại `(!empty($genre))`. |
+| **`KAN-215`** | Static Analysis | [`index.php`](file:///docs/../netfix2/index.php)<br>[`movies.php`](file:///docs/../netfix2/movies.php)<br>[`search.php`](file:///docs/../netfix2/search.php)<br>[`watch.php`](file:///docs/../netfix2/watch.php)<br>[`header.php`](file:///docs/../netfix2/header.php) | `PhpUndefinedVariableInspection`: 5 lỗi mức độ cao (`🔴 Failure - Undefined variable '$conn'`) trên Qodana do `$conn` được nạp gián tiếp từ `db.php`. | Bổ sung chú thích PHPDoc `/** @var mysqli $conn */` ngay sau câu lệnh `require 'db.php';` ở cả 5 tệp phân hệ `MOV`. |
 | **`KAN-198`** | Documentation | [`WHITEBOX_MOV_STATEMENT_BRANCH_COVERAGE.md`](file:///docs/WHITEBOX_MOV_STATEMENT_BRANCH_COVERAGE.md) | Đồng bộ hóa tài liệu báo cáo độ bao phủ câu lệnh ($C_0$), độ bao phủ nhánh ($C_1$) và kết quả thực thi của phân hệ `MOV`. | Chuẩn hóa 5 mục tài liệu, bổ sung đầy đủ 4 sơ đồ CFG Mermaid, bảng ánh xạ $S_i/D_i$ và ma trận 20 kịch bản kiểm thử. |
 
 ---
 
 ### 2. Bảng Đối Chứng Kết Quả Phân Tích Tĩnh & Hộp Trắng Trước và Sau Khi Sửa (Before vs After)
 
-| Chỉ tiêu đánh giá / Chỉ số chất lượng | Trước khi sửa (Baseline) | Sau khi Refactor (`KAN-183` $\rightarrow$ `KAN-213`) | Đánh giá & Kết luận |
+| Chỉ tiêu đánh giá / Chỉ số chất lượng | Trước khi sửa (Baseline) | Sau khi Refactor (`KAN-183` $\rightarrow$ `KAN-215`) | Đánh giá & Kết luận |
 | :--- | :---: | :---: | :--- |
+| **Lỗi `🔴 Failure: Undefined variable '$conn'` trên Qodana** | 5 lỗi ở 5 file `MOV` | **0 lỗi (Clean 100%)** | Triệt tiêu hoàn toàn cảnh báo mức độ cao trên Qodana. |
 | **Lỗi nhánh điều kiện chết (`? false : false`) tại `watch.php`** | 1 lỗi (`watch.php:75`) | **0 lỗi** | Khởi tạo `$user_is_vip = false;` tường minh, sạch cảnh báo Qodana. |
 | **Lỗi thứ tự tham số Deprecated PHP 8 (`getMovies`)** | 1 lỗi (`index.php:31`) | **0 lỗi** | Tương thích hoàn toàn với PHP 8.1 / 8.2 trên CI/CD. |
 | **Lỗi dừng trang đột ngột `die()` lộ lỗi SQL tại `search.php`** | 2 vị trí (`search.php:69, 89`) | **0 vị trí (Xử lý qua `$search_error`)** | Đảm bảo an toàn bảo mật và giữ nguyên bố cục HTML khi có lỗi. |

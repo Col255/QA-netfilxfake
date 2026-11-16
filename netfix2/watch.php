@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 session_start();
 require 'db.php'; // Đảm bảo file db.php chứa kết nối CSDL
+/** @var mysqli $conn */
 
 // Hàm lấy danh sách thể loại phụ từ cột sub_genre
 function getSubGenres($conn) {
