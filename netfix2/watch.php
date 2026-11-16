@@ -568,7 +568,8 @@ body {
         <?php endif; ?>
 
         <form method="POST" style="margin-bottom: 20px;">
-            <textarea name="comment_text" rows="4" placeholder="Nhập bình luận của bạn..." style=" color:#000000; width: 100%; padding: 10px; border-radius: 5px;"></textarea>
+            <label for="comment_text" style="display:none;">Nhập bình luận của bạn</label>
+            <textarea id="comment_text" name="comment_text" rows="4" placeholder="Nhập bình luận của bạn..." aria-label="Nhập bình luận của bạn" style=" color:#000000; width: 100%; padding: 10px; border-radius: 5px;"></textarea>
             <button type="submit" style="margin-top: 10px; background-color: #e50914; color: #fff; border: none; padding: 8px 16px; border-radius: 4px;">Gửi</button>
         </form>
 

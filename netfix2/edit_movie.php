@@ -357,13 +357,13 @@ input:checked + .slider:before {
             <?php endif; ?>
             <form action="edit_movie.php?id=<?= $movie_id ?>" method="POST" enctype="multipart/form-data">
 
-                <label>Tên phim</label>
-                <input type="text" name="title" value="<?= htmlspecialchars($movie['title']) ?>" required>
+                <label for="title">Tên phim</label>
+                <input type="text" id="title" name="title" value="<?= htmlspecialchars($movie['title']) ?>" required>
 
-                <label>Mô tả</label>
-                <textarea name="description" rows="5" required><?= htmlspecialchars($movie['description']) ?></textarea>
+                <label for="description">Mô tả</label>
+                <textarea id="description" name="description" rows="5" required><?= htmlspecialchars($movie['description']) ?></textarea>
 
-                <label>Thể loại</label>
+                <label for="genre">Thể loại</label>
                 <select name="genre" id="genre" onchange="toggleEpisodeSection()">
                     <option value="Movie" <?= $movie['genre'] === 'Movie' ? 'selected' : '' ?>>Phim lẻ</option>
                     <option value="Series" <?= $movie['genre'] === 'Series' ? 'selected' : '' ?>>Phim bộ</option>
@@ -372,47 +372,48 @@ input:checked + .slider:before {
                 </select>
 
                 <!-- 4. sub_genre -->
-                <label>Thể loại phụ</label>
-                <input type="text" name="sub_genre" value="<?= htmlspecialchars($movie['sub_genre']) ?>">
+                <label for="sub_genre">Thể loại phụ</label>
+                <input type="text" id="sub_genre" name="sub_genre" value="<?= htmlspecialchars($movie['sub_genre']) ?>">
 
                 <!-- 5. year -->
-                <label>Năm phát hành</label>
-                <input type="number" name="year" value="<?= $movie['year'] ?>">
+                <label for="year">Năm phát hành</label>
+                <input type="number" id="year" name="year" value="<?= $movie['year'] ?>">
 
                 <!-- 6. duration -->
-                <label>Thời lượng (phút)</label>
-                <input type="number" name="duration" value="<?= $movie['duration'] ?>">
+                <label for="duration">Thời lượng (phút)</label>
+                <input type="number" id="duration" name="duration" value="<?= $movie['duration'] ?>">
 
                 <!-- 7. episode_count -->
-                <label>Số tập</label>
+                <label for="episode_count">Số tập</label>
                 <input type="number" name="episode_count" id="episode_count" value="<?= $movie['episode_count'] ?>">
 
                 <!-- 8. language -->
-                <label>Ngôn ngữ</label>
-                <input type="text" name="language" value="<?= htmlspecialchars($movie['language']) ?>">
+                <label for="language">Ngôn ngữ</label>
+                <input type="text" id="language" name="language" value="<?= htmlspecialchars($movie['language']) ?>">
 
                 <!-- 9. country -->
-                <label>Quốc gia</label>
-                <input type="text" name="country" value="<?= htmlspecialchars($movie['country']) ?>">
+                <label for="country">Quốc gia</label>
+                <input type="text" id="country" name="country" value="<?= htmlspecialchars($movie['country']) ?>">
 
                 <!-- 10. actors -->
-                <label>Diễn viên</label>
-                <input type="text" name="actors" value="<?= htmlspecialchars($movie['actors']) ?>">
+                <label for="actors">Diễn viên</label>
+                <input type="text" id="actors" name="actors" value="<?= htmlspecialchars($movie['actors']) ?>">
 
                 <!-- 11. director -->
-                <label>Đạo diễn</label>
-                <input type="text" name="director" value="<?= htmlspecialchars($movie['director']) ?>">
+                <label for="director">Đạo diễn</label>
+                <input type="text" id="director" name="director" value="<?= htmlspecialchars($movie['director']) ?>">
 
                 <!-- 12. status -->
-                <label>Trạng thái</label>
-                <select name="status">
+                <label for="status">Trạng thái</label>
+                <select id="status" name="status">
                     <option value="active" <?= $movie['status'] === 'active' ? 'selected' : '' ?>>Hoạt động</option>
                     <option value="inactive" <?= $movie['status'] === 'inactive' ? 'selected' : '' ?>>Ẩn / Ngưng chiếu</option>
                 </select>
 
                 <div class="toggle-wrapper">
                     <label for="is_vip_toggle">Phim VIP</label>
-                    <label class="switch">
+                    <label class="switch" for="is_vip_toggle">
+                        <span style="display:none;">Bật tắt Phim VIP</span>
                         <input type="checkbox" name="is_vip" id="is_vip_toggle" value="1" <?= $movie['is_vip'] ? 'checked' : '' ?>>
                         <span class="slider round"></span>
                     </label>
@@ -420,7 +421,7 @@ input:checked + .slider:before {
 
 
                 <?php if ($movie['genre'] !== 'Series'): ?>
-                <label>Video hiện tại</label>
+                <div style="color: #fff; display: block; margin: 10px 0 5px; font-weight: bold;">Video hiện tại</div>
                 <?php if (!empty($movie['video_path'])): ?>
                     <p>
                     <button type="button" class="btn-primary" onclick="openVideoModal('<?= htmlspecialchars($movie['video_path']) ?>')">
@@ -431,18 +432,18 @@ input:checked + .slider:before {
                     <p><em>Chưa có video</em></p>
                 <?php endif; ?>
 
-                <label>Tải lên video mới (nếu thay đổi)</label>
-                <input type="file" name="video">
+                <label for="video">Tải lên video mới (nếu thay đổi)</label>
+                <input type="file" id="video" name="video">
                 <small style="color:#999;">(Nếu không chọn, hệ thống sẽ giữ nguyên video hiện tại)</small>
             <?php endif; ?>
 
 
-                <label>Ảnh đại diện hiện tại</label>
+                <div style="color: #fff; display: block; margin: 10px 0 5px; font-weight: bold;">Ảnh đại diện hiện tại</div>
                 <?php if (!empty($movie['thumbnail'])): ?>
                     <img src="<?= $movie['thumbnail'] ?>" alt="thumbnail" style="max-width: 200px; display:block; margin-bottom:10px;">
                 <?php endif; ?>
-                <label>Ảnh đại diện mới (nếu có)</label>
-                <input type="file" name="thumbnail">
+                <label for="thumbnail">Ảnh đại diện mới (nếu có)</label>
+                <input type="file" id="thumbnail" name="thumbnail">
 
                 <div class="episode-section" id="episode-section">
                     <h3>Danh sách tập phim</h3>
@@ -451,11 +452,11 @@ input:checked + .slider:before {
                             <div class="episode-entry">
                                 <input type="hidden" name="episode_ids[]" value="<?= $ep['id'] ?>">
 
-                                <label>Số tập</label>
-                                <input type="number" name="episode_numbers[]" value="<?= $ep['episode_number'] ?>" required>
+                                <label for="episode_number_<?= $index ?>">Số tập</label>
+                                <input type="number" id="episode_number_<?= $index ?>" name="episode_numbers[]" value="<?= $ep['episode_number'] ?>" required>
 
-                                <label>Tiêu đề</label>
-                                <input type="text" name="episode_titles[]" value="<?= htmlspecialchars($ep['title']) ?>">
+                                <label for="episode_title_<?= $index ?>">Tiêu đề</label>
+                                <input type="text" id="episode_title_<?= $index ?>" name="episode_titles[]" value="<?= htmlspecialchars($ep['title']) ?>">
 
                                 <?php if (!empty($ep['video_path'])): ?>
                                     <p><strong>Video hiện tại:</strong><br>
@@ -465,12 +466,13 @@ input:checked + .slider:before {
                                     </p>
                                 <?php endif; ?>
 
-                                <label>Video mới (nếu có)</label>
-                                <input type="file" name="episodes[]">
+                                <label for="episode_video_<?= $index ?>">Video mới (nếu có)</label>
+                                <input type="file" id="episode_video_<?= $index ?>" name="episodes[]">
 
                                 <div class="toggle-wrapper">
                                     <label for="episode_is_vip_<?= $index ?>">Tập VIP</label>
-                                    <label class="switch">
+                                    <label class="switch" for="episode_is_vip_<?= $index ?>">
+                                        <span style="display:none;">Bật tắt Tập VIP</span>
                                         <input type="checkbox" id="episode_is_vip_<?= $index ?>" name="episode_is_vip[<?= $index ?>]" value="1" <?= $ep['is_vip'] ? 'checked' : '' ?>>
                                         <span class="slider round"></span>
                                     </label>
@@ -516,18 +518,19 @@ function addEpisode() {
     const div = document.createElement('div');
     div.className = 'episode-entry';
     div.innerHTML = `
-        <label>Số tập</label>
-        <input type="number" name="episode_numbers[]" value="${index + 1}" required>
+        <label for="new_episode_number_${index}">Số tập</label>
+        <input type="number" id="new_episode_number_${index}" name="episode_numbers[]" value="${index + 1}" required>
 
-        <label>Tiêu đề</label>
-        <input type="text" name="episode_titles[]" placeholder="Tập ${index + 1}">
+        <label for="new_episode_title_${index}">Tiêu đề</label>
+        <input type="text" id="new_episode_title_${index}" name="episode_titles[]" placeholder="Tập ${index + 1}">
 
-        <label>Video</label>
-        <input type="file" name="episodes[]" required>
+        <label for="new_episode_video_${index}">Video</label>
+        <input type="file" id="new_episode_video_${index}" name="episodes[]" required>
 
         <div class="toggle-wrapper">
             <label for="episode_is_vip_new${index}">Tập VIP</label>
-            <label class="switch">
+            <label class="switch" for="episode_is_vip_new${index}">
+                <span style="display:none;">Bật tắt Tập VIP</span>
                 <input type="checkbox" id="episode_is_vip_new${index}" name="episode_is_vip[]" value="1">
                 <span class="slider round"></span>
             </label>

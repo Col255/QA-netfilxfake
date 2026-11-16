@@ -201,7 +201,8 @@ if (isset($_GET['genre'])) {
                 </li>
                 <li class="search-wrapper">
                     <form action="search.php" method="GET" class="search-form">
-                        <input type="text" name="query" placeholder="Tìm kiếm phim..." value="<?php echo isset($_GET['query']) ? htmlspecialchars($_GET['query']) : ''; ?>" required>
+                        <label for="header-search-query" style="display:none;">Tìm kiếm phim</label>
+                        <input type="text" id="header-search-query" name="query" placeholder="Tìm kiếm phim..." aria-label="Tìm kiếm phim" value="<?php echo isset($_GET['query']) ? htmlspecialchars($_GET['query']) : ''; ?>" required>
                         <button type="submit"><i class='bx bx-search'></i></button>
                     </form>
                 </li>

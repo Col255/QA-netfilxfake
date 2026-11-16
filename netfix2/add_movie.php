@@ -421,7 +421,8 @@ input:checked + .slider::before {
                     <input type="text" id="actors" name="actors">
                     <div class="toggle-wrapper">
                         <label for="is_vip_toggle">Phim VIP</label>
-                        <label class="switch">
+                        <label class="switch" for="is_vip_toggle">
+                            <span style="display:none;">Bật tắt Phim VIP</span>
                             <input type="checkbox" id="is_vip_toggle" name="is_vip" value="1" <?= isset($movie['is_vip']) && $movie['is_vip'] ? 'checked' : '' ?>>
                             <span class="slider round"></span>
                         </label>
