@@ -195,17 +195,3 @@ flowchart LR
 
 ---
 
-## 👥 Thành Viên Nhóm & Phân Công Nhiệm Vụ
-
-Dự án được thực hiện bởi nhóm sinh viên chuyên ngành Công nghệ Thông tin / Đảm bảo Chất lượng Phần mềm:
-
-| STT | Họ và Tên | Mã Sinh Viên | Vai Trò & Nhiệm Vụ Đảm Nhiệm |
-| :---: | :--- | :---: | :--- |
-| **1** | **Huỳnh Nguyễn Tiến Lộc** *(Trưởng nhóm)* | **087205000228** | Quản lý dự án Jira, Kiến trúc CI/CD GitHub Actions, Thiết kế & Tự động hóa White-Box C0/C1, Vá lỗi bảo mật SonarCloud (Blocker XSS, Secret, Accessibility), Báo cáo Clover XML & Master E2E Runner. |
-| **2** | **Nguyễn Tuấn Kiệt** | **087205002220** | Kiểm thử Hộp đen & API Phân hệ 1 (AUTH) & Phân hệ 2 (MOV), Thiết kế ma trận Test Case Black-Box, Kịch bản Postman Collection. |
-| **3** | **Huỳnh Hải Đăng** | **087205002434** | Kiểm thử Hộp đen & API Phân hệ 3 (INT) & Phân hệ 4 (VIP), Kịch bản kiểm thử thanh toán MoMo Sandbox, Xây dựng kịch bản CodeceptJS E2E. |
-| **4** | **Phan Vũ Nhật Huy** | **087205001552** | Kiểm thử Hộp đen & API Phân hệ 5 (ADM), Quản trị CMS, Báo cáo thống kê Test Case Excel & Báo cáo tổng kết đồ án. |
-
----
-
-*Dự án hoàn thành phục vụ đánh giá môn học Đảm bảo Chất lượng Phần mềm (QA/QC) — Học kỳ I, Năm học 2026.*
