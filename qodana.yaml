@@ -15,6 +15,7 @@ exclude:
   - name: PhpStrFunctionsInspection
   - name: DuplicatedCode
   - name: PhpDuplicateCodeInspection
+  - name: PhpIfWithCommonPartsInspection
   - name: All
     paths:
       - netfix2/uploads

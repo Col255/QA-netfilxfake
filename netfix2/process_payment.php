@@ -37,6 +37,7 @@ $package_name = $selected_package['name'];
 $duration = $selected_package['duration'];
 $price = (int)($_POST['final_price'] ?? $selected_package['price']);
 
+/** @noinspection PhpIfWithCommonPartsInspection */
 if ($payment_method === 'Momo') {
     // ========== THANH TOÁN MOMO ==========
     $amount = $price;
