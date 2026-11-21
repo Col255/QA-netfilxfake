@@ -54,8 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id']) && isset(
                 if ($order_data && $order_data['user_id']) {
                     $user_id_to_update = $order_data['user_id'];
                     $package_name = $order_data['package_name'];
-                    $vip_duration = '1 month'; // Mặc định, sẽ được cập nhật dựa vào tên gói
-                    
                     // Xác định thời hạn VIP dựa vào tên gói (phải khớp với pricing.php)
                     if (strpos($package_name, '6 Tháng') !== false) {
                         $vip_duration = '6 months';

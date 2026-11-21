@@ -36,10 +36,10 @@ $selected_package = $vip_packages[$package_id];
 $package_name = $selected_package['name'];
 $duration = $selected_package['duration'];
 $price = (int)($_POST['final_price'] ?? $selected_package['price']);
+$amount = $price;
 
 if ($payment_method === 'Momo') {
     // ========== THANH TOÁN MOMO ==========
-    $amount = $price;
     $endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
     $partnerCode = 'MOMO';
     $accessKey = 'F8BBA842ECF85';
@@ -47,7 +47,7 @@ if ($payment_method === 'Momo') {
     $secretKey = getenv('MOMO_SECRET_KEY') ?: $defaultMomoKey;
 
     $orderId = time() . "_" . $user_id;
-    $requestId = time() . "_" . random_int(1000, 9999);
+    $requestId = time() . "_" . mt_rand(1000, 9999);
     $orderInfo = "Thanh toán " . $package_name;
     $redirectUrl = "http://localhost/netfix2/payment_return.php";
     $ipnUrl = "http://localhost/netfix2/payment_notify.php";

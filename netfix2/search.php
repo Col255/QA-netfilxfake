@@ -65,7 +65,7 @@ if (!empty($query) || !empty($genre)) {
                 FROM movies 
                 WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?) AND genre = ? 
                 ORDER BY view_count DESC";
-        $searchTerm = "%{$query}%";
+        $searchTerm = '%' . $query . '%';
         $stmt = $conn->prepare($sql);
         if ($stmt === false) {
             error_log("Prepare failed (search): " . $conn->error);
@@ -79,7 +79,7 @@ if (!empty($query) || !empty($genre)) {
                 FROM movies 
                 WHERE (title LIKE ? OR description LIKE ? OR genre LIKE ? OR actors LIKE ? OR director LIKE ?) 
                 ORDER BY view_count DESC";
-        $searchTerm = "%{$query}%";
+        $searchTerm = '%' . $query . '%';
         $stmt = $conn->prepare($sql);
         if ($stmt === false) {
             error_log("Prepare failed (search): " . $conn->error);
