@@ -1,7 +1,7 @@
 # BẢNG TỔNG HỢP TEST CASE KIỂM THỬ — MODULE INTERACTIONS (INT)
-**Mã dự án:** NETFIX2 | **Mã Task Jira:** KAN-45  
+**Mã dự án:** NETFIX2 | **Mã Task Jira:** KAN-45, KAN-119  
 **Chuẩn kiểm thử:** Postman API Contract & Security/Logic Testing  
-**Người thực hiện:** Huy Nguyễn Huỳnh H...
+**Người thực hiện:** Nguyễn Huỳnh Hữu Huy
 
 | Test Case ID | Module / Endpoint | Tên Test Case (Title) | Điều kiện tiên quyết (Preconditions) | Các bước thực hiện (Test Steps) | Dữ liệu kiểm thử (Test Data) | Kết quả mong đợi (Expected Result) | Mức ưu tiên (Priority) | Loại Test (Type) | Trạng thái (Status) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -20,6 +20,13 @@
 | **INT_TC13** | `/watch_history.php` | Người dùng xem danh sách lịch sử xem phim cá nhân | Tài khoản User đã đăng nhập và có session hoạt động. | 1. Gửi request GET tại /watch_history.php<br>2. Kiểm tra danh sách phim đã xem được kết xuất. | Session: User thường | HTTP 200 OK. Giao diện hiển thị chính xác và đầy đủ danh sách các bộ phim hoặc tập phim mà tài khoản user hiện tại đã từng nhấn vào xem. | P1 (High) | Positive | Ready |
 | **INT_TC14** | `/watch_history.php` | Chặn tài khoản chưa đăng nhập truy cập trang Lịch sử xem phim | Không khởi tạo Session người dùng (Khách vãng lai). | 1. Gửi request GET tại /watch_history.php<br>2. Kiểm tra chuyển hướng. | No Cookie / No Session | Bị chặn truy cập dữ liệu cá nhân, hệ thống trả về mã HTTP 302 Found và điều hướng về trang login.php. | P0 (Critical) | Security / Auth | Ready |
 | **INT_TC15** | `/watch_history.php` | Kiểm tra mốc thời gian (Timestamp) khi ghi nhận lịch sử xem phim | Tài khoản User đã đăng nhập thành công. | 1. Bấm phát một bộ phim bất kỳ.<br>2. Truy cập bảng lịch sử trong DB và đối chiếu thời gian. | Session: User thường | Thời gian ghi nhận tại cột thời gian phải khớp chính xác với giờ Việt Nam (Asia/Ho_Chi_Minh), không lệch sang giờ UTC. | P1 (High) | Logic | Ready |
+
+---
+
+## THIẾT LẬP POSTMAN AUTOMATION & CODECEPTJS (Jira Task: KAN-119)
+- **Người thiết lập:** Nguyễn Huỳnh Hữu Huy (`HuuHuy815002`)
+- **Bộ sưu tập Postman Automation:** `Postman/netfix2_Interactions & Engagement_automatic.postman.collection.json` & `Postman/Netfix2 - Local Environment.json`
+- **Kịch bản E2E CodeceptJS:** `tests/Interactions & Engagement.js` (`INT_TC01` $\rightarrow$ `INT_TC15`)
 
 ---
 

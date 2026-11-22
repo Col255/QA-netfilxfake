@@ -1,6 +1,11 @@
+/**
+ * KAN-119: Setup Postman Automation & Kịch bản CodeceptJS cho phân hệ Interactions & Engagement (INT)
+ * Người thực hiện: Nguyễn Huỳnh Hữu Huy
+ * Phạm vi: 15 Test Cases (INT_TC01 -> INT_TC15) trên /api/view_counter.php, /watch.php, /comments.php, /watch_history.php
+ */
 const assert = require('assert');
 
-Feature('Phân hệ 3: Interactions & Engagement (INT)');
+Feature('Phân hệ 3: Interactions & Engagement (INT) @KAN-119');
 
 // ----------------------------------------------------
 // 1. API VIEW COUNTER (INT_TC01 - INT_TC04)
