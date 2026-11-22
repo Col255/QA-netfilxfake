@@ -54,6 +54,8 @@ $countries = getCountries($conn);
 $subGenres = getSubGenres($conn);
 
 // Lấy ID phim từ URL
+$movie = null;
+$user_is_vip = false;
 $movie_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 $episode_id = isset($_GET['episode']) ? (int)$_GET['episode'] : 0;
 
@@ -156,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment_text'])) {
     if (!isset($_SESSION['user_id'])) {
         $comment_error = "Bạn cần đăng nhập để bình luận.";
     } else {
-        $comment = trim($_POST['comment_text'] ?? '');
+        $comment = trim($_POST['comment_text']);
         if ($comment === '') {
             $comment_error = "Nội dung bình luận không được để trống hoặc chỉ chứa khoảng trắng.";
         } elseif (mb_strlen($comment) > 500) {

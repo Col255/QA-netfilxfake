@@ -37,6 +37,7 @@ $package_name = $selected_package['name'];
 $duration = $selected_package['duration'];
 $price = (int)($_POST['final_price'] ?? $selected_package['price']);
 
+/** @noinspection PhpIfWithCommonPartsInspection */
 if ($payment_method === 'Momo') {
     // ========== THANH TOÁN MOMO ==========
     $amount = $price;
@@ -47,7 +48,11 @@ if ($payment_method === 'Momo') {
     $secretKey = getenv('MOMO_SECRET_KEY') ?: $defaultMomoKey;
 
     $orderId = time() . "_" . $user_id;
-    $requestId = time() . "_" . random_int(1000, 9999);
+    try {
+        $requestId = time() . "_" . random_int(1000, 9999);
+    } catch (Exception) {
+        $requestId = time() . "_" . time();
+    }
     $orderInfo = "Thanh toán " . $package_name;
     $redirectUrl = "http://localhost/netfix2/payment_return.php";
     $ipnUrl = "http://localhost/netfix2/payment_notify.php";

@@ -1,0 +1,178 @@
+{
+  "info": {
+    "_postman_id": "d92a7b10-2026-4dd7-9a11-netfix2ddt-kan-223",
+    "name": "Netfix2 - DDT FE3 INT (KAN-223 - 15 TCs)",
+    "description": "### Bộ Kiểm Thử Tự Động Hướng Dữ Liệu (Data-Driven Testing) — Phân hệ INT\n\n* **Jira Task:** `KAN-223` (Sub-task của `KAN-219` - Bổ sung)\n* **Epic:** `KAN-45`\n* **Kỹ sư phụ trách:** **Nguyễn Huỳnh Hữu Huy**\n* **File CSV nạp vào Runner:** `docs/Design/design_testcase_int.csv` (**15 Test Cases**)\n\n### Hướng dẫn chạy:\n1. Chọn Collection này và bấm **Run collection**.\n2. Tại mục **Iteration data**, bấm chọn file `docs/Design/design_testcase_int.csv` (Postman sẽ tự động nhận **15 Iterations**).\n3. Bỏ tích ô *Stop run if an error occurs* -> Bấm **Start run**.\n4. Hoặc chạy qua Newman CLI:\n   ```bash\n   newman run \"Netfix2_DDT_03_INT.postman_collection.json\" -d \"docs/Design/design_testcase_int.csv\" -e \"Postman/API/Netfix2 - Local Environment.json\"\n   ```",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "[KAN-223] [INT-DDT] Kiểm thử Lượt xem, Bình luận & Lịch sử từ CSV ({{Jira_Task}})",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ============================================================================",
+              "// UNIVERSAL PRE-REQUEST SCRIPT: NẠP DỮ LIỆU ĐỘNG TỪ FILE CSV (DATA-DRIVEN)",
+              "// Hỗ trợ cả 5 file CSV phân hệ (AUTH, MOV, INT, VIP, ADM) & file CSV Master",
+              "// Đã khắc phục triệt để lỗi: Cannot read properties of undefined (reading 'add')",
+              "// ============================================================================",
+              "const stt = pm.iterationData.get('STT') || pm.iterationData.get('\\uFEFFSTT') || (pm.info.iteration + 1);",
+              "const jiraTask = String(pm.iterationData.get('Jira_Task') || 'MANUAL-RUN').trim();",
+              "const tcName = String(pm.iterationData.get('Ten_Test_Case') || 'Kịch bản kiểm thử trực tiếp').trim();",
+              "const endpoint = String(pm.iterationData.get('Endpoint') || '/index.php').trim();",
+              "const method = String(pm.iterationData.get('Method') || 'GET').trim().toUpperCase();",
+              "let payload = String(pm.iterationData.get('Payload_Params') || '').trim();",
+              "",
+              "// 1. Đặc thù Phân hệ AUTH (KAN-80 / TC02): Tự động thêm hậu tố để chạy lại nhiều lần không bị trùng DB",
+              "if (jiraTask === 'KAN-80' && payload.includes('loc_qa01')) {",
+              "    const uniqueSuffix = Date.now().toString().slice(-5);",
+              "    payload = payload.replace(/loc_qa01/g, `loc_qa_${uniqueSuffix}`);",
+              "}",
+              "",
+              "// 2. Hàm tách chuỗi Payload_Params (key1=val1&key2=val2)",
+              "function parsePayloadParams(raw) {",
+              "    if (!raw) return [];",
+              "    return raw.split('&').map(pair => {",
+              "        const idx = pair.indexOf('=');",
+              "        if (idx === -1) return { key: pair.trim(), value: '' };",
+              "        return {",
+              "            key: pair.slice(0, idx).trim(),",
+              "            value: pair.slice(idx + 1).trim()",
+              "        };",
+              "    }).filter(item => item.key !== '');",
+              "}",
+              "",
+              "const paramsList = parsePayloadParams(payload);",
+              "const baseUrl = (pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl') || 'http://localhost/netfix2').replace(/\\/+$/, '');",
+              "pm.request.method = method;",
+              "",
+              "// 3. Xây dựng URL và Body an toàn tuyệt đối (Không gọi pm.request.url.query.add trên String)",
+              "if (method === 'GET') {",
+              "    const queryString = paramsList.map(p => `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`).join('&');",
+              "    pm.request.url = queryString ? `${baseUrl}${endpoint}?${queryString}` : `${baseUrl}${endpoint}`;",
+              "} else if (method === 'POST') {",
+              "    let targetUrl = `${baseUrl}${endpoint}`;",
+              "    // Đặc thù Phân hệ INT (KAN-45): POST bình luận lên /watch.php cần truyền ?id=1 trên URL",
+              "    if (endpoint === '/watch.php') {",
+              "        const idParam = paramsList.find(p => p.key === 'id');",
+              "        if (idParam) {",
+              "            targetUrl += `?id=${encodeURIComponent(idParam.value)}`;",
+              "        }",
+              "    }",
+              "    pm.request.url = targetUrl;",
+              "    pm.request.headers.upsert({",
+              "        key: 'Content-Type',",
+              "        value: 'application/x-www-form-urlencoded'",
+              "    });",
+              "    pm.request.body.update({",
+              "        mode: 'urlencoded',",
+              "        urlencoded: paramsList.map(p => ({ key: p.key, value: p.value, disabled: false }))",
+              "    });",
+              "}",
+              "",
+              "console.log(`[DDT #${stt}] ${jiraTask} | ${tcName} | ${method} ${endpoint} | Params: ${payload}`);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// ============================================================================",
+              "// [KAN-223] DATA-DRIVEN TEST SCRIPT (INT): ĐỐI SOÁT KẾT QUẢ TỰ ĐỘNG VỚI FILE CSV",
+              "// ============================================================================",
+              "const stt = pm.iterationData.get('STT') || pm.iterationData.get('\\uFEFFSTT') || (pm.info.iteration + 1);",
+              "const jiraTask = String(pm.iterationData.get('Jira_Task') || 'INT').trim();",
+              "const tcName = String(pm.iterationData.get('Ten_Test_Case') || 'Kịch bản kiểm thử CSV').trim();",
+              "const expectedRaw = String(pm.iterationData.get('Ket_Qua_Mong_Doi') || 'Hop le (200)').trim();",
+              "const tagRaw = String(pm.iterationData.get('Tag_Bao_Phu') || 'V1').trim();",
+              "",
+              "const statusCode = pm.response.code;",
+              "const responseTime = pm.response.responseTime;",
+              "const bodyText = pm.response.text();",
+              "const prefix = `[KAN-223 | #${stt} | ${jiraTask}] ${tcName}`;",
+              "",
+              "// 1. Kiểm tra HTTP Status Code & Thời gian phản hồi theo cột Ket_Qua_Mong_Doi",
+              "pm.test(`${prefix} -> Mong đợi: \"${expectedRaw}\" (Actual: HTTP ${statusCode}, ${responseTime}ms)`, function () {",
+              "    pm.expect(responseTime, 'Thời gian phản hồi phải < 2000ms').to.be.below(2000);",
+              "    const expLower = expectedRaw.toLowerCase();",
+              "    if (expLower.includes('khong hop le') || expLower.includes('tu choi') || expLower.includes('bao loi') || expLower.includes('loc ma doc')) {",
+              "        pm.expect(statusCode).to.be.oneOf([200, 302, 400, 401, 403, 404, 422]);",
+              "    } else {",
+              "        pm.expect(statusCode).to.be.oneOf([200, 302]);",
+              "    }",
+              "});",
+              "",
+              "// 2. Kiểm tra sự ổn định của Backend PHP (Không phát sinh Fatal / Parse / SQL Exception)",
+              "pm.test(`${prefix} -> [Stability] Không phát sinh lỗi PHP Fatal/Syntax Error (Tags: ${tagRaw})`, function () {",
+              "    pm.expect(bodyText).to.not.include('Fatal error:');",
+              "    pm.expect(bodyText).to.not.include('Parse error:');",
+              "    pm.expect(bodyText).to.not.include('Uncaught mysqli_sql_exception');",
+              "});",
+              "",
+              "// 3. Kiểm tra Bảo mật chuyên sâu khi Tag_Bao_Phu chứa XSS hoặc SQLI",
+              "if (tagRaw.includes('XSS')) {",
+              "    pm.test(`${prefix} -> [Security XSS] Mã độc Script phải được lọc hoặc mã hóa HTML an toàn`, function () {",
+              "        pm.expect(bodyText).to.not.include(\"<script>alert('XSS')</script>\");",
+              "        pm.expect(bodyText).to.not.include('<script>alert(1)</script>');",
+              "    });",
+              "}",
+              "if (tagRaw.includes('SQLI')) {",
+              "    pm.test(`${prefix} -> [Security SQLi] Không rò rỉ lỗi cú pháp truy vấn SQL`, function () {",
+              "        pm.expect(bodyText).to.not.include('You have an error in your SQL syntax');",
+              "    });",
+              "}"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/html,application/xhtml+xml,application/xml,application/json;q=0.9,*/*;q=0.8",
+            "type": "text"
+          },
+          {
+            "key": "User-Agent",
+            "value": "Netfix2-QA-DataDriven-Runner/KAN-223",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}{{Endpoint}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{Endpoint}}"
+          ]
+        },
+        "description": "Request Động (Dynamic Data-Driven Request) cho **KAN-223 (INT)**.\nTự động đọc `Endpoint`, `Method`, `Payload_Params`, `Ket_Qua_Mong_Doi`, `Tag_Bao_Phu` từ file `design_testcase_int.csv` qua `pm.iterationData`."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost/netfix2",
+      "type": "string"
+    },
+    {
+      "key": "Endpoint",
+      "value": "/api/view_counter.php?id=1",
+      "type": "string"
+    },
+    {
+      "key": "Jira_Task",
+      "value": "KAN-223",
+      "type": "string"
+    }
+  ]
+}

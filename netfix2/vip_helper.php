@@ -16,7 +16,7 @@ function calculate_vip_expiry(?string $current_expiry_str, string $duration = '1
     if ($current_expiry_str !== null && strtotime($current_expiry_str) > time()) {
         try {
             $new_expiry = new DateTime($current_expiry_str);
-        } catch (Exception $e) {
+        } catch (Exception) {
             $new_expiry = new DateTime();
         }
     }

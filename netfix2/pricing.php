@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['extend_vip'])) {
     $user = $result->fetch_assoc();
     $stmt->close();
 
-    $new_expiry = calculate_vip_expiry($user['vip_expires_at'] ?? null, '1 month');
+    $new_expiry = calculate_vip_expiry($user['vip_expires_at'] ?? null);
     $vip_expires_at_str = $new_expiry->format('Y-m-d H:i:s');
 
     $stmt = $conn->prepare("UPDATE users SET vip_expires_at = ? WHERE id = ?");

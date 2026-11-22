@@ -102,7 +102,7 @@ function getImagePath($thumbnail) {
 // Lấy dữ liệu
 $subGenres = getPopularSubGenres($conn);
 $countries = getCountries($conn);
-$heroMovies = getMovies($conn, 3, null);
+$heroMovies = getMovies($conn, 3);
 $topMovies = getTopMovies($conn, 10);
 $latestMovies = getMovies($conn, 7, 'Movie');
 $latestSeries = getMovies($conn, 7, 'Series');
