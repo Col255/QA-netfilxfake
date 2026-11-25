@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Nghiệm Thu Kiểm Thử Hộp Trắng & Kết Quả Fix Bug - Netfix2</title>
+  <style>
+    /* Professional Corporate / Formal Report Style */
+    @page {
+      size: A4;
+      margin: 15mm 15mm 15mm 15mm;
+    }
+    :root {
+      --text-main: #1f2937;
+      --text-muted: #4b5563;
+      --border-color: #d1d5db;
+      --border-light: #e5e7eb;
+      --bg-header: #f3f4f6;
+      --bg-subtle: #f9fafb;
+      --primary: #1e40af;
+      --success: #15803d;
+      --danger: #b91c1c;
+      --warning: #b45309;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--text-main);
+      background-color: #ffffff;
+      margin: 0;
+      padding: 30px;
+    }
+    .report-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    /* Header Block */
+    .doc-header {
+      border-bottom: 2px solid #111827;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .doc-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 6px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .doc-header .doc-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+    }
+    /* Meta Table */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      font-size: 13px;
+    }
+    .meta-item {
+      display: flex;
+    }
+    .meta-label {
+      font-weight: 600;
+      width: 150px;
+      color: var(--text-muted);
+    }
+    .meta-value {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+    /* Section Headings */
+    h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 6px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+    /* Executive Summary Table */
+    .kpi-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    .kpi-table th, .kpi-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: center;
+    }
+    .kpi-table th {
+      background-color: var(--bg-header);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .kpi-table td {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+    }
+    .kpi-table td small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    /* Standard Tables */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 13px;
+    }
+    table.data-table th, table.data-table td {
+      border: 1px solid var(--border-color);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    table.data-table th {
+      background-color: var(--bg-header);
+      font-weight: 600;
+      color: #374151;
+      font-size: 12px;
+    }
+    table.data-table tr:nth-child(even) {
+      background-color: var(--bg-subtle);
+    }
+    .text-center { text-align: center !important; }
+    .text-right { text-align: right !important; }
+    /* Code and Badges */
+    code {
+      font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+      font-size: 12px;
+      background-color: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+    .badge-pass {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    .badge-high {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .badge-med {
+      background-color: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+    .badge-low {
+      background-color: #f3f4f6;
+      color: #4b5563;
+      border: 1px solid #e5e7eb;
+    }
+    /* Note box */
+    .note-box {
+      border-left: 3px solid #2563eb;
+      background-color: #eff6ff;
+      padding: 10px 14px;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .note-box strong { color: #1e40af; }
+    /* Signature / Sign-off */
+    .sign-section {
+      margin-top: 36px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border-color);
+      display: flex;
+      justify-content: space-between;
+    }
+    .sign-box {
+      width: 45%;
+      text-align: center;
+    }
+    .sign-box p { margin: 4px 0; }
+    .sign-space { height: 60px; }
+    /* Print Optimization */
+    @media print {
+      body { padding: 0; font-size: 12px; }
+      .meta-grid { background-color: #fff !important; }
+      table.data-table tr:nth-child(even) { background-color: #fbfbfb !important; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+
+    <!-- Header -->
+    <div class="doc-header">
+      <h1>Báo Cáo Nghiệm Thu Kiểm Thử Hộp Trắng & Kết Quả Fix Bug</h1>
+      <p class="doc-subtitle">Phân hệ: FE2 (Movies & Discovery) & FE3 (Interactions & Engagement) — Dự án Netfix2</p>
+    </div>
+
+    <!-- Metadata Block -->
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Dự án:</span>
+        <span class="meta-value">Netfix2 (PHP 8.2 + MySQLi)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Ngày báo cáo:</span>
+        <span class="meta-value">16/11/2026</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Nhánh tích hợp:</span>
+        <span class="meta-value"><code>week6</code> (Đồng bộ với <code>main</code>)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Pull Request:</span>
+        <span class="meta-value"><a href="https://github.com/Col255/QA-netfilxfake/pull/5" target="_blank">PR #5 (Closed / Open)</a></span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Tài khoản thực hiện:</span>
+        <span class="meta-value">Duong204-uth (351806516+Duong204-uth)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Trạng thái tổng thể:</span>
+        <span class="meta-value"><strong>100% Hoàn thành (Đã nghiệm thu)</strong></span>
+      </div>
+    </div>
+
+    <!-- 1. Executive Summary -->
+    <h2>1. Tóm Tắt Kết Quả Nghiệm Thu (Executive Summary)</h2>
+    <table class="kpi-table">
+      <thead>
+        <tr>
+          <th>Tổng Số Test Cases</th>
+          <th>Tỷ Lệ Đạt (Pass Rate)</th>
+          <th>Độ Bao Phủ Câu Lệnh (C0)</th>
+          <th>Độ Bao Phủ Nhánh (C1)</th>
+          <th>Độ Phức Tạp V(G)</th>
+          <th>Số Defect Đã Sửa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>123<small>Ca kiểm thử thực tế</small></td>
+          <td style="color: var(--success);">100%<small>123 PASS / 0 FAIL</small></td>
+          <td style="color: var(--primary);">100%<small>138/138 Khối lệnh</small></td>
+          <td style="color: var(--primary);">100%<small>228/228 Nhánh rẽ</small></td>
+          <td>121 / 121<small>Khớp 100% lý thuyết CFG</small></td>
+          <td style="color: var(--success);">9 / 9<small>100% Khắc phục</small></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box">
+      <strong>Kết luận nghiệm thu:</strong> Toàn bộ 9 lỗi phát hiện từ quá trình phân tích đồ thị dòng điều khiển (CFG) và kiểm thử giá trị biên (BVA) đã được sửa chữa độc lập trên từng nhánh tính năng, kiểm thử đơn vị hồi quy đạt 100% PASS và đã được tích hợp thành công vào nhánh <code>week6</code> thông qua Pull Request #5.
+    </div>
+
+    <!-- 2. Defect Resolution Table -->
+    <h2>2. Bảng Tổng Hợp Kết Quả Khắc Phục 9 Defect (Jira Tasks & Commits)</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="text-center" style="width: 40px;">STT</th>
+          <th style="width: 80px;">Mã Jira</th>
+          <th style="width: 85px;">Mã Defect</th>
+          <th style="width: 65px;">Mức Độ</th>
+          <th style="width: 170px;">Tệp Tin & Dòng Bị Lỗi</th>
+          <th>Nội Dung Khắc Phục (Bug Fix)</th>
+          <th style="width: 80px;" class="text-center">Commit</th>
+          <th style="width: 90px;" class="text-center">Trạng Thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">1</td>
+          <td><strong>KAN-205</strong></td>
+          <td><code>WB-DEF-01</code></td>
+          <td><span class="badge badge-high">High</span></td>
+          <td><code>netfix2/watch.php:75</code></td>
+          <td>Xóa toán tử 3 ngôi gây nhánh chết, gán biến <code>$user_is_vip = false;</code> an toàn trước khi xét Session.</td>
+          <td class="text-center"><code>11f809d</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">2</td>
+          <td><strong>KAN-206</strong></td>
+          <td><code>WB-DEF-02</code></td>
+          <td><span class="badge badge-med">Medium</span></td>
+          <td><code>netfix2/api/view_counter.php:11</code></td>
+          <td>Kiểm tra <code>$stmt->affected_rows > 0</code>, trả về <code>Phim không tồn tại</code> khi ID không có trong CSDL.</td>
+          <td class="text-center"><code>c40e209</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">3</td>
+          <td><strong>KAN-207</strong></td>
+          <td><code>WB-DEF-05</code></td>
+          <td><span class="badge badge-med">Medium</span></td>
+          <td><code>netfix2/watch.php:160</code></td>
+          <td>Ràng buộc độ dài tối đa 500 ký tự (BVA Max) cho bình luận bằng <code>mb_strlen($comment) > 500</code>.</td>
+          <td class="text-center"><code>8091775</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">4</td>
+          <td><strong>KAN-208</strong></td>
+          <td><code>WB-DEF-03</code></td>
+          <td><span class="badge badge-low">Low</span></td>
+          <td><code>netfix2/api/view_counter.php:2</code></td>
+          <td>Bổ sung header chuẩn <code>Content-Type: application/json; charset=utf-8</code> cho REST API.</td>
+          <td class="text-center"><code>1384841</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">5</td>
+          <td><strong>KAN-209</strong></td>
+          <td><code>WB-DEF-04</code></td>
+          <td><span class="badge badge-low">Low</span></td>
+          <td><code>netfix2/index.php:31</code></td>
+          <td>Chuẩn hóa thứ tự tham số <code>getMovies($conn, $limit, $genre = null)</code> triệt tiêu lỗi PHP 8 Deprecated.</td>
+          <td class="text-center"><code>229de04</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">6</td>
+          <td><strong>KAN-210</strong></td>
+          <td><code>WB-DEF-06</code></td>
+          <td><span class="badge badge-low">Low</span></td>
+          <td><code>netfix2/watch.php:158</code></td>
+          <td>Gán thông báo <code>$comment_error</code> khi gửi bình luận rỗng hoặc toàn khoảng trắng.</td>
+          <td class="text-center"><code>6d04c41</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">7</td>
+          <td><strong>KAN-211</strong></td>
+          <td><code>WB-DEF-07</code></td>
+          <td><span class="badge badge-low">Low</span></td>
+          <td><code>netfix2/watch_history.php:13</code></td>
+          <td>Bổ sung ràng buộc số nguyên dương <code>(int)$_GET['delete'] > 0</code> khi xóa lịch sử xem (BVA Min-1).</td>
+          <td class="text-center"><code>38a19af</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">8</td>
+          <td><strong>KAN-212</strong></td>
+          <td><code>WB-DEF-08</code></td>
+          <td><span class="badge badge-med">Medium</span></td>
+          <td><code>netfix2/search.php:75,86</code></td>
+          <td>Thay thế lệnh <code>die()</code> bằng <code>error_log()</code> và thông báo lỗi thân thiện, bảo vệ schema SQL.</td>
+          <td class="text-center"><code>cfdc05f</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td class="text-center">9</td>
+          <td><strong>KAN-213</strong></td>
+          <td><code>WB-DEF-09</code></td>
+          <td><span class="badge badge-low">Low</span></td>
+          <td><code>netfix2/search.php:60,66</code></td>
+          <td>Tách độc lập <code>if (!empty($query) || !empty($genre))</code>, cho phép lọc theo thể loại không cần từ khóa.</td>
+          <td class="text-center"><code>9134067</code></td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 3. Coverage by File Breakdown -->
+    <h2>3. Bảng Đo Lường Độ Bao Phủ Theo Từng Tệp Tin Mã Nguồn</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 70px;">Phân Hệ</th>
+          <th>Tệp Tin Mã Nguồn</th>
+          <th class="text-center" style="width: 120px;">Khối Lệnh (C0)</th>
+          <th class="text-center" style="width: 120px;">Nhánh Rẽ (C1)</th>
+          <th class="text-center" style="width: 90px;">V(G) Lý Thuyết</th>
+          <th class="text-center" style="width: 90px;">V(G) Thực Tế</th>
+          <th class="text-center" style="width: 90px;">Test Cases</th>
+          <th class="text-center" style="width: 90px;">Kết Quả</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FE3</strong></td>
+          <td><code>netfix2/api/view_counter.php</code></td>
+          <td class="text-center">4 / 4 (100%)</td>
+          <td class="text-center">2 / 2 (100%)</td>
+          <td class="text-center">2</td>
+          <td class="text-center">2</td>
+          <td class="text-center">8 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>FE3</strong></td>
+          <td><code>netfix2/comments.php</code></td>
+          <td class="text-center">12 / 12 (100%)</td>
+          <td class="text-center">16 / 16 (100%)</td>
+          <td class="text-center">9</td>
+          <td class="text-center">9</td>
+          <td class="text-center">5 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>FE3</strong></td>
+          <td><code>netfix2/watch_history.php</code></td>
+          <td class="text-center">6 / 6 (100%)</td>
+          <td class="text-center">8 / 8 (100%)</td>
+          <td class="text-center">5</td>
+          <td class="text-center">5</td>
+          <td class="text-center">5 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>FE2</strong></td>
+          <td><code>netfix2/index.php</code></td>
+          <td class="text-center">38 / 38 (100%)</td>
+          <td class="text-center">70 / 70 (100%)</td>
+          <td class="text-center">36</td>
+          <td class="text-center">36</td>
+          <td class="text-center">36 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>FE2</strong></td>
+          <td><code>netfix2/movies.php</code></td>
+          <td class="text-center">20 / 20 (100%)</td>
+          <td class="text-center">36 / 36 (100%)</td>
+          <td class="text-center">19</td>
+          <td class="text-center">19</td>
+          <td class="text-center">19 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>FE2</strong></td>
+          <td><code>netfix2/search.php</code></td>
+          <td class="text-center">16 / 16 (100%)</td>
+          <td class="text-center">28 / 28 (100%)</td>
+          <td class="text-center">15</td>
+          <td class="text-center">15</td>
+          <td class="text-center">15 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+        <tr>
+          <td><strong>FE2</strong></td>
+          <td><code>netfix2/watch.php</code></td>
+          <td class="text-center">42 / 42 (100%)</td>
+          <td class="text-center">68 / 68 (100%)</td>
+          <td class="text-center">35</td>
+          <td class="text-center">35</td>
+          <td class="text-center">35 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">PASS</span></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr style="font-weight: 700; background-color: var(--bg-header);">
+          <td colspan="2">TỔNG CỘNG (FE2 + FE3)</td>
+          <td class="text-center">138 / 138 (100%)</td>
+          <td class="text-center">228 / 228 (100%)</td>
+          <td class="text-center">121</td>
+          <td class="text-center">121</td>
+          <td class="text-center">123 TCs</td>
+          <td class="text-center"><span class="badge badge-pass">100% PASS</span></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- 4. Deliverables & Artifacts -->
+    <h2>4. Danh Mục Tài Liệu Bàn Giao Kèm Theo</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 40px;" class="text-center">STT</th>
+          <th style="width: 250px;">Tên Tài Liệu / Sản Phẩm</th>
+          <th>Đường Dẫn Tệp Tin</th>
+          <th style="width: 120px;">Định Dạng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-center">1</td>
+          <td>Sơ đồ CFG & Phân tích FE2 (MOV)</td>
+          <td><code>docs/testrun/WHITEBOX_CFG_FE2_MOV.md</code></td>
+          <td>Markdown / Mermaid</td>
+        </tr>
+        <tr>
+          <td class="text-center">2</td>
+          <td>Sơ đồ CFG & Phân tích FE3 (INT)</td>
+          <td><code>docs/testrun/WHITEBOX_CFG_FE3_INT.md</code></td>
+          <td>Markdown / Mermaid</td>
+        </tr>
+        <tr>
+          <td class="text-center">3</td>
+          <td>Ma trận Kiểm thử (Test Matrix)</td>
+          <td><code>docs/testrun/TEST_MATRIX.csv</code></td>
+          <td>CSV Table</td>
+        </tr>
+        <tr>
+          <td class="text-center">4</td>
+          <td>Ma trận Truy vết (Traceability Matrix)</td>
+          <td><code>docs/testrun/TRACEABILITY_MATRIX.csv</code></td>
+          <td>CSV Table</td>
+        </tr>
+        <tr>
+          <td class="text-center">5</td>
+          <td>Báo cáo Độ bao phủ chuẩn Clover</td>
+          <td><code>docs/testrun/coverage.xml</code></td>
+          <td>XML (Clover)</td>
+        </tr>
+        <tr>
+          <td class="text-center">6</td>
+          <td>Số liệu tổng hợp độ bao phủ</td>
+          <td><code>docs/testrun/coverage-summary.json</code></td>
+          <td>JSON</td>
+        </tr>
+        <tr>
+          <td class="text-center">7</td>
+          <td>Báo cáo Defect chi tiết</td>
+          <td><code>docs/testrun/DEFECT_REPORT.md</code></td>
+          <td>Markdown</td>
+        </tr>
+        <tr>
+          <td class="text-center">8</td>
+          <td>Cơ sở dữ liệu Fixture thử nghiệm</td>
+          <td><code>docs/testrun/db_fixtures/01_seed_whitebox_accounts.sql</code></td>
+          <td>SQL Script</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Sign-off Block -->
+    <div class="sign-section">
+      <div class="sign-box">
+        <p><strong>NGƯỜI LẬP BÁO CÁO</strong></p>
+        <p><em>(Ký & ghi rõ họ tên)</em></p>
+        <div class="sign-space"></div>
+        <p><strong>Duong204-uth</strong></p>
+        <p style="font-size: 11px; color: var(--text-muted);">QA Automation Engineer</p>
+      </div>
+      <div class="sign-box">
+        <p><strong>NGƯỜI PHÊ DUYỆT / LEAD QA</strong></p>
+        <p><em>(Ký & ghi rõ họ tên)</em></p>
+        <div class="sign-space"></div>
+        <p><strong>Col255</strong></p>
+        <p style="font-size: 11px; color: var(--text-muted);">Project Maintainer / QA Lead</p>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

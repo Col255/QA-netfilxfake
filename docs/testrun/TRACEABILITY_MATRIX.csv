@@ -1,0 +1,124 @@
+﻿Requirement_ID,Requirement_Name,Module,Target_File,CFG_Node,WB_TC_ID,Status,Defect_ID
+REQ-FE3-INT-FE3-001,"Happy path id=52",FE3-INT,api/view_counter.php,VC_D1_T,WB-TC-FE3-001,PASS,None
+REQ-FE3-INT-FE3-002,"BVA Min id=0",FE3-INT,api/view_counter.php,VC_D1_F,WB-TC-FE3-002,PASS,None
+REQ-FE3-INT-FE3-003,"BVA Min-1 id=-1",FE3-INT,api/view_counter.php,VC_D1_F,WB-TC-FE3-003,PASS,None
+REQ-FE3-INT-FE3-004,"BVA Min+1 id=1",FE3-INT,api/view_counter.php,VC_D1_T,WB-TC-FE3-004,PASS,None
+REQ-FE3-INT-FE3-005,"BVA ID không tồn tại trong DB id=999999",FE3-INT,api/view_counter.php,VC_D1_T,WB-TC-FE3-005,FAIL,WB-DEF-02
+REQ-FE3-INT-FE3-006,"BVA Max-1 id=2147483646",FE3-INT,api/view_counter.php,VC_D1_T,WB-TC-FE3-006,PASS,None
+REQ-FE3-INT-FE3-007,"BVA Max id=2147483647",FE3-INT,api/view_counter.php,VC_D1_T,WB-TC-FE3-007,PASS,None
+REQ-FE3-INT-FE3-008,"BVA Max+1 id=2147483648",FE3-INT,api/view_counter.php,VC_D1_F,WB-TC-FE3-008,PASS,None
+REQ-FE3-INT-FE3-009,"Gatekeeper Guest truy cập comments.php",FE3-INT,comments.php,CMT_D1_T,WB-TC-FE3-009,PASS,None
+REQ-FE3-INT-FE3-010,"Gatekeeper User thường",FE3-INT,comments.php,CMT_D1_T,WB-TC-FE3-010,PASS,None
+REQ-FE3-INT-FE3-011,"Admin xem danh sách bình luận",FE3-INT,comments.php,CMT_D1_F,WB-TC-FE3-011,PASS,None
+REQ-FE3-INT-FE3-012,"Admin xóa bình luận hợp lệ",FE3-INT,comments.php,CMT_D1_F,WB-TC-FE3-012,PASS,None
+REQ-FE3-INT-FE3-013,"Admin xóa ID bình luận không tồn tại",FE3-INT,comments.php,CMT_D1_F,WB-TC-FE3-013,PASS,None
+REQ-FE3-INT-FE3-014,"Gatekeeper Guest truy cập lịch sử",FE3-INT,watch_history.php,WH_D1_T,WB-TC-FE3-014,PASS,None
+REQ-FE3-INT-FE3-015,"User đã đăng nhập xem lịch sử xem phim",FE3-INT,watch_history.php,WH_D1_F,WB-TC-FE3-015,PASS,None
+REQ-FE3-INT-FE3-016,"User xóa 1 mục lịch sử hợp lệ",FE3-INT,watch_history.php,WH_D1_F,WB-TC-FE3-016,PASS,None
+REQ-FE3-INT-FE3-017,"BVA Min-1 delete=-5",FE3-INT,watch_history.php,WH_D1_F,WB-TC-FE3-017,FAIL,WB-DEF-07
+REQ-FE3-INT-FE3-018,"Tham số delete không phải số",FE3-INT,watch_history.php,WH_D1_F,WB-TC-FE3-018,PASS,None
+REQ-FE2-MOV-MOV-001,"Khám phá trang chủ Basis Path 1",FE2-MOV,index.php,IDX_D2_F,WB-TC-MOV-001,PASS,None
+REQ-FE2-MOV-MOV-002,"Kiểm tra getMovies parameter order",FE2-MOV,index.php,IDX_D3_T,WB-TC-MOV-002,FAIL,WB-DEF-04
+REQ-FE2-MOV-MOV-003,"Khám phá trang chủ Basis Path 3",FE2-MOV,index.php,IDX_D4_F,WB-TC-MOV-003,PASS,None
+REQ-FE2-MOV-MOV-004,"Khám phá trang chủ Basis Path 4",FE2-MOV,index.php,IDX_D5_T,WB-TC-MOV-004,PASS,None
+REQ-FE2-MOV-MOV-005,"Khám phá trang chủ Basis Path 5",FE2-MOV,index.php,IDX_D6_F,WB-TC-MOV-005,PASS,None
+REQ-FE2-MOV-MOV-006,"Khám phá trang chủ Basis Path 6",FE2-MOV,index.php,IDX_D7_T,WB-TC-MOV-006,PASS,None
+REQ-FE2-MOV-MOV-007,"Khám phá trang chủ Basis Path 7",FE2-MOV,index.php,IDX_D8_F,WB-TC-MOV-007,PASS,None
+REQ-FE2-MOV-MOV-008,"Khám phá trang chủ Basis Path 8",FE2-MOV,index.php,IDX_D9_T,WB-TC-MOV-008,PASS,None
+REQ-FE2-MOV-MOV-009,"Khám phá trang chủ Basis Path 9",FE2-MOV,index.php,IDX_D10_F,WB-TC-MOV-009,PASS,None
+REQ-FE2-MOV-MOV-010,"Khám phá trang chủ Basis Path 10",FE2-MOV,index.php,IDX_D11_T,WB-TC-MOV-010,PASS,None
+REQ-FE2-MOV-MOV-011,"Khám phá trang chủ Basis Path 11",FE2-MOV,index.php,IDX_D12_F,WB-TC-MOV-011,PASS,None
+REQ-FE2-MOV-MOV-012,"Khám phá trang chủ Basis Path 12",FE2-MOV,index.php,IDX_D13_T,WB-TC-MOV-012,PASS,None
+REQ-FE2-MOV-MOV-013,"Khám phá trang chủ Basis Path 13",FE2-MOV,index.php,IDX_D14_F,WB-TC-MOV-013,PASS,None
+REQ-FE2-MOV-MOV-014,"Khám phá trang chủ Basis Path 14",FE2-MOV,index.php,IDX_D15_T,WB-TC-MOV-014,PASS,None
+REQ-FE2-MOV-MOV-015,"Khám phá trang chủ Basis Path 15",FE2-MOV,index.php,IDX_D1_F,WB-TC-MOV-015,PASS,None
+REQ-FE2-MOV-MOV-016,"Khám phá trang chủ Basis Path 16",FE2-MOV,index.php,IDX_D2_T,WB-TC-MOV-016,PASS,None
+REQ-FE2-MOV-MOV-017,"Khám phá trang chủ Basis Path 17",FE2-MOV,index.php,IDX_D3_F,WB-TC-MOV-017,PASS,None
+REQ-FE2-MOV-MOV-018,"Khám phá trang chủ Basis Path 18",FE2-MOV,index.php,IDX_D4_T,WB-TC-MOV-018,PASS,None
+REQ-FE2-MOV-MOV-019,"Khám phá trang chủ Basis Path 19",FE2-MOV,index.php,IDX_D5_F,WB-TC-MOV-019,PASS,None
+REQ-FE2-MOV-MOV-020,"Khám phá trang chủ Basis Path 20",FE2-MOV,index.php,IDX_D6_T,WB-TC-MOV-020,PASS,None
+REQ-FE2-MOV-MOV-021,"Khám phá trang chủ Basis Path 21",FE2-MOV,index.php,IDX_D7_F,WB-TC-MOV-021,PASS,None
+REQ-FE2-MOV-MOV-022,"Khám phá trang chủ Basis Path 22",FE2-MOV,index.php,IDX_D8_T,WB-TC-MOV-022,PASS,None
+REQ-FE2-MOV-MOV-023,"Khám phá trang chủ Basis Path 23",FE2-MOV,index.php,IDX_D9_F,WB-TC-MOV-023,PASS,None
+REQ-FE2-MOV-MOV-024,"Khám phá trang chủ Basis Path 24",FE2-MOV,index.php,IDX_D10_T,WB-TC-MOV-024,PASS,None
+REQ-FE2-MOV-MOV-025,"Khám phá trang chủ Basis Path 25",FE2-MOV,index.php,IDX_D11_F,WB-TC-MOV-025,PASS,None
+REQ-FE2-MOV-MOV-026,"Khám phá trang chủ Basis Path 26",FE2-MOV,index.php,IDX_D12_T,WB-TC-MOV-026,PASS,None
+REQ-FE2-MOV-MOV-027,"Khám phá trang chủ Basis Path 27",FE2-MOV,index.php,IDX_D13_F,WB-TC-MOV-027,PASS,None
+REQ-FE2-MOV-MOV-028,"Khám phá trang chủ Basis Path 28",FE2-MOV,index.php,IDX_D14_T,WB-TC-MOV-028,PASS,None
+REQ-FE2-MOV-MOV-029,"Khám phá trang chủ Basis Path 29",FE2-MOV,index.php,IDX_D15_F,WB-TC-MOV-029,PASS,None
+REQ-FE2-MOV-MOV-030,"Khám phá trang chủ Basis Path 30",FE2-MOV,index.php,IDX_D1_T,WB-TC-MOV-030,PASS,None
+REQ-FE2-MOV-MOV-031,"Khám phá trang chủ Basis Path 31",FE2-MOV,index.php,IDX_D2_F,WB-TC-MOV-031,PASS,None
+REQ-FE2-MOV-MOV-032,"Khám phá trang chủ Basis Path 32",FE2-MOV,index.php,IDX_D3_T,WB-TC-MOV-032,PASS,None
+REQ-FE2-MOV-MOV-033,"Khám phá trang chủ Basis Path 33",FE2-MOV,index.php,IDX_D4_F,WB-TC-MOV-033,PASS,None
+REQ-FE2-MOV-MOV-034,"Khám phá trang chủ Basis Path 34",FE2-MOV,index.php,IDX_D5_T,WB-TC-MOV-034,PASS,None
+REQ-FE2-MOV-MOV-035,"Khám phá trang chủ Basis Path 35",FE2-MOV,index.php,IDX_D6_F,WB-TC-MOV-035,PASS,None
+REQ-FE2-MOV-MOV-036,"Khám phá trang chủ Basis Path 36",FE2-MOV,index.php,IDX_D7_T,WB-TC-MOV-036,PASS,None
+REQ-FE2-MOV-MOV-037,"Bộ lọc phim Mặc định không tham số",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-037,PASS,None
+REQ-FE2-MOV-MOV-038,"Bộ lọc phim Lọc theo genre=Movie",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-038,PASS,None
+REQ-FE2-MOV-MOV-039,"Bộ lọc phim Lọc theo genre=Series",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-039,PASS,None
+REQ-FE2-MOV-MOV-040,"Bộ lọc phim Lọc theo genre=Cartoon",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-040,PASS,None
+REQ-FE2-MOV-MOV-041,"Bộ lọc phim Lọc theo sub_genre=Action",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-041,PASS,None
+REQ-FE2-MOV-MOV-042,"Bộ lọc phim Lọc theo sub_genre=Drama",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-042,PASS,None
+REQ-FE2-MOV-MOV-043,"Bộ lọc phim Lọc theo country=Mỹ",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-043,PASS,None
+REQ-FE2-MOV-MOV-044,"Bộ lọc phim Lọc theo country=Nhật Bản",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-044,PASS,None
+REQ-FE2-MOV-MOV-045,"Bộ lọc phim Mặc định không tham số",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-045,PASS,None
+REQ-FE2-MOV-MOV-046,"Bộ lọc phim Lọc theo genre=Movie",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-046,PASS,None
+REQ-FE2-MOV-MOV-047,"Bộ lọc phim Lọc theo genre=Series",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-047,PASS,None
+REQ-FE2-MOV-MOV-048,"Bộ lọc phim Lọc theo genre=Cartoon",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-048,PASS,None
+REQ-FE2-MOV-MOV-049,"Bộ lọc phim Lọc theo sub_genre=Action",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-049,PASS,None
+REQ-FE2-MOV-MOV-050,"Bộ lọc phim Lọc theo sub_genre=Drama",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-050,PASS,None
+REQ-FE2-MOV-MOV-051,"Bộ lọc phim Lọc theo country=Mỹ",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-051,PASS,None
+REQ-FE2-MOV-MOV-052,"Bộ lọc phim Lọc theo country=Nhật Bản",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-052,PASS,None
+REQ-FE2-MOV-MOV-053,"Bộ lọc phim Mặc định không tham số",FE2-MOV,movies.php,MOV_D1_F,WB-TC-MOV-053,PASS,None
+REQ-FE2-MOV-MOV-054,"Bộ lọc phim Lọc theo genre=Movie",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-054,PASS,None
+REQ-FE2-MOV-MOV-055,"Bộ lọc phim Lọc theo genre=Series",FE2-MOV,movies.php,MOV_D1_T,WB-TC-MOV-055,PASS,None
+REQ-FE2-MOV-MOV-056,"Tìm kiếm phim kịch bản 1",FE2-MOV,search.php,SRCH_D2_T,WB-TC-MOV-056,PASS,None
+REQ-FE2-MOV-MOV-057,"Tìm kiếm phim kịch bản 2",FE2-MOV,search.php,SRCH_D3_T,WB-TC-MOV-057,PASS,None
+REQ-FE2-MOV-MOV-058,"Tìm kiếm phim kịch bản 3",FE2-MOV,search.php,SRCH_D4_T,WB-TC-MOV-058,PASS,None
+REQ-FE2-MOV-MOV-059,"Tìm kiếm phim kịch bản 4",FE2-MOV,search.php,SRCH_D1_T,WB-TC-MOV-059,PASS,None
+REQ-FE2-MOV-MOV-060,"Tìm kiếm phim kịch bản 5",FE2-MOV,search.php,SRCH_D2_T,WB-TC-MOV-060,PASS,None
+REQ-FE2-MOV-MOV-061,"Tìm kiếm phim kịch bản 6",FE2-MOV,search.php,SRCH_D3_T,WB-TC-MOV-061,PASS,None
+REQ-FE2-MOV-MOV-062,"Tìm kiếm phim kịch bản 7",FE2-MOV,search.php,SRCH_D4_T,WB-TC-MOV-062,PASS,None
+REQ-FE2-MOV-MOV-063,"Tìm kiếm phim kịch bản 8",FE2-MOV,search.php,SRCH_D1_T,WB-TC-MOV-063,PASS,None
+REQ-FE2-MOV-MOV-064,"Tìm kiếm phim kịch bản 9",FE2-MOV,search.php,SRCH_D2_T,WB-TC-MOV-064,PASS,None
+REQ-FE2-MOV-MOV-065,"Tìm kiếm phim kịch bản 10",FE2-MOV,search.php,SRCH_D3_T,WB-TC-MOV-065,PASS,None
+REQ-FE2-MOV-MOV-066,"Tìm kiếm phim kịch bản 11",FE2-MOV,search.php,SRCH_D4_T,WB-TC-MOV-066,PASS,None
+REQ-FE2-MOV-MOV-067,"Tìm kiếm phim kịch bản 12",FE2-MOV,search.php,SRCH_D1_T,WB-TC-MOV-067,PASS,None
+REQ-FE2-MOV-MOV-068,"Lọc chỉ truyền genre không truyền query",FE2-MOV,search.php,SRCH_D1_F,WB-TC-MOV-068,FAIL,WB-DEF-09
+REQ-FE2-MOV-MOV-069,"Tìm kiếm phim kịch bản 14",FE2-MOV,search.php,SRCH_D3_T,WB-TC-MOV-069,PASS,None
+REQ-FE2-MOV-MOV-070,"Tìm kiếm phim kịch bản 15",FE2-MOV,search.php,SRCH_D4_T,WB-TC-MOV-070,PASS,None
+REQ-FE2-MOV-MOV-071,"ID phim không hợp lệ id=0",FE2-MOV,watch.php,WTC_D1_T,WB-TC-MOV-071,PASS,None
+REQ-FE2-MOV-MOV-072,"ID phim không hợp lệ id=-1",FE2-MOV,watch.php,WTC_D1_T,WB-TC-MOV-072,PASS,None
+REQ-FE2-MOV-MOV-073,"Phim không tồn tại trong DB id=99999",FE2-MOV,watch.php,WTC_D1_F,WB-TC-MOV-073,PASS,None
+REQ-FE2-MOV-MOV-074,"TARGET BUG-01: Kiểm tra toán tử 3 ngôi gán $user_is_vip",FE2-MOV,watch.php,WTC_D3_TERNARY,WB-TC-MOV-074,FAIL,WB-DEF-01
+REQ-FE2-MOV-MOV-075,"Phân quyền VIP Combo 1: Phim thường",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-075,PASS,None
+REQ-FE2-MOV-MOV-076,"Phân quyền VIP Combo 2: Phim thường",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-076,PASS,None
+REQ-FE2-MOV-MOV-077,"Phân quyền VIP Combo 3: Phim VIP",FE2-MOV,watch.php,WTC_D4_T,WB-TC-MOV-077,PASS,None
+REQ-FE2-MOV-MOV-078,"Phân quyền VIP Combo 4: Phim VIP",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-078,PASS,None
+REQ-FE2-MOV-MOV-079,"Phim Series",FE2-MOV,watch.php,WTC_D7_T,WB-TC-MOV-079,PASS,None
+REQ-FE2-MOV-MOV-080,"Phim Series",FE2-MOV,watch.php,WTC_D7_T,WB-TC-MOV-080,PASS,None
+REQ-FE2-MOV-MOV-081,"Gửi bình luận khi chưa đăng nhập",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-081,PASS,None
+REQ-FE2-MOV-MOV-082,"BVA Min: Gửi bình luận độ dài 1 ký tự",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-082,PASS,None
+REQ-FE2-MOV-MOV-083,"BVA Max: Gửi bình luận 500 ký tự",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-083,PASS,None
+REQ-FE2-MOV-MOV-084,"BVA Max+1: Gửi bình luận vượt quá 500 ký tự",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-084,FAIL,WB-DEF-05
+REQ-FE2-MOV-MOV-085,"Gửi bình luận toàn khoảng trắng",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-085,FAIL,WB-DEF-06
+REQ-FE2-MOV-MOV-086,"ID phim không hợp lệ id=0",FE2-MOV,watch.php,WTC_D1_T,WB-TC-MOV-086,PASS,None
+REQ-FE2-MOV-MOV-087,"ID phim không hợp lệ id=-1",FE2-MOV,watch.php,WTC_D1_T,WB-TC-MOV-087,PASS,None
+REQ-FE2-MOV-MOV-088,"Phim không tồn tại trong DB id=99999",FE2-MOV,watch.php,WTC_D1_F,WB-TC-MOV-088,PASS,None
+REQ-FE2-MOV-MOV-089,"TARGET BUG-01: Kiểm tra toán tử 3 ngôi gán $user_is_vip",FE2-MOV,watch.php,WTC_D3_TERNARY,WB-TC-MOV-089,FAIL,WB-DEF-01
+REQ-FE2-MOV-MOV-090,"Phân quyền VIP Combo 1: Phim thường",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-090,PASS,None
+REQ-FE2-MOV-MOV-091,"Phân quyền VIP Combo 2: Phim thường",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-091,PASS,None
+REQ-FE2-MOV-MOV-092,"Phân quyền VIP Combo 3: Phim VIP",FE2-MOV,watch.php,WTC_D4_T,WB-TC-MOV-092,PASS,None
+REQ-FE2-MOV-MOV-093,"Phân quyền VIP Combo 4: Phim VIP",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-093,PASS,None
+REQ-FE2-MOV-MOV-094,"Phim Series",FE2-MOV,watch.php,WTC_D7_T,WB-TC-MOV-094,PASS,None
+REQ-FE2-MOV-MOV-095,"Phim Series",FE2-MOV,watch.php,WTC_D7_T,WB-TC-MOV-095,PASS,None
+REQ-FE2-MOV-MOV-096,"Gửi bình luận khi chưa đăng nhập",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-096,PASS,None
+REQ-FE2-MOV-MOV-097,"BVA Min: Gửi bình luận độ dài 1 ký tự",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-097,PASS,None
+REQ-FE2-MOV-MOV-098,"BVA Max: Gửi bình luận 500 ký tự",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-098,PASS,None
+REQ-FE2-MOV-MOV-099,"BVA Max+1: Gửi bình luận vượt quá 500 ký tự",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-099,FAIL,WB-DEF-05
+REQ-FE2-MOV-MOV-100,"Gửi bình luận toàn khoảng trắng",FE2-MOV,watch.php,WTC_D9_T,WB-TC-MOV-100,FAIL,WB-DEF-06
+REQ-FE2-MOV-MOV-101,"ID phim không hợp lệ id=0",FE2-MOV,watch.php,WTC_D1_T,WB-TC-MOV-101,PASS,None
+REQ-FE2-MOV-MOV-102,"ID phim không hợp lệ id=-1",FE2-MOV,watch.php,WTC_D1_T,WB-TC-MOV-102,PASS,None
+REQ-FE2-MOV-MOV-103,"Phim không tồn tại trong DB id=99999",FE2-MOV,watch.php,WTC_D1_F,WB-TC-MOV-103,PASS,None
+REQ-FE2-MOV-MOV-104,"TARGET BUG-01: Kiểm tra toán tử 3 ngôi gán $user_is_vip",FE2-MOV,watch.php,WTC_D3_TERNARY,WB-TC-MOV-104,FAIL,WB-DEF-01
+REQ-FE2-MOV-MOV-105,"Phân quyền VIP Combo 1: Phim thường",FE2-MOV,watch.php,WTC_D4_F,WB-TC-MOV-105,PASS,None

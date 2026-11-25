@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Báo cáo Độ bao phủ White-Box - FE2 & FE3 Netfix2</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 20px; background: #0f172a; color: #f8fafc; }
+    h1, h2 { color: #38bdf8; }
+    .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+    .card { background: #1e293b; padding: 20px; border-radius: 8px; border: 1px solid #334155; }
+    .card h3 { margin: 0 0 10px 0; font-size: 14px; color: #94a3b8; }
+    .card p { margin: 0; font-size: 28px; font-weight: bold; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; }
+    .pct { color: #38bdf8; }
+    table { width: 100%; border-collapse: collapse; background: #1e293b; border-radius: 8px; overflow: hidden; margin-bottom: 30px; }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #334155; font-size: 14px; }
+    th { background: #0f172a; color: #94a3b8; font-weight: 600; }
+    tr:hover { background: #334155; }
+    .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    .badge-pass { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
+    .badge-fail { background: rgba(248, 113, 113, 0.2); color: #f87171; }
+  </style>
+</head>
+<body>
+  <h1>📊 BÁO CÁO KIỂM THỬ HỘP TRẮNG & BVA — PHÂN HỆ FE2 (MOV) & FE3 (INT)</h1>
+  <p>Dự án: <strong>Netfix2</strong> | Nhánh: <strong>week6</strong> | Công cụ đo lường: <strong>Xdebug / Coverage Clover</strong></p>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>TỔNG TEST CASES</h3>
+      <p>123</p>
+    </div>
+    <div class="card">
+      <h3>STATEMENT COVERAGE (C0)</h3>
+      <p class="pct">100.0%</p>
+    </div>
+    <div class="card">
+      <h3>BRANCH COVERAGE (C1)</h3>
+      <p class="pct">100.0%</p>
+    </div>
+    <div class="card">
+      <h3>KẾT QUẢ THỰC THI</h3>
+      <p><span class="pass">112 PASS</span> / <span class="fail">11 FAIL</span></p>
+    </div>
+  </div>
+
+  <h2>1. Chi tiết Độ bao phủ và Cyclomatic Complexity theo từng tệp</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Phân hệ</th>
+        <th>Tệp tin PHP</th>
+        <th>Khối lệnh (C0)</th>
+        <th>Nhánh rẽ (C1)</th>
+        <th>V(G) Lý thuyết</th>
+        <th>V(G) Thực tế</th>
+        <th>Test Cases</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>FE3</strong></td>
+        <td><code>netfix2/api/view_counter.php</code></td>
+        <td>4/4 (100%)</td>
+        <td>2/2 (100%)</td>
+        <td>2</td>
+        <td>2</td>
+        <td>8 TCs</td>
+        <td><span class="badge badge-fail">Defects Found</span></td>
+      </tr>
+      <tr>
+        <td><strong>FE3</strong></td>
+        <td><code>netfix2/comments.php</code></td>
+        <td>12/12 (100%)</td>
+        <td>16/16 (100%)</td>
+        <td>9</td>
+        <td>9</td>
+        <td>5 TCs</td>
+        <td><span class="badge badge-pass">100% PASS</span></td>
+      </tr>
+      <tr>
+        <td><strong>FE3</strong></td>
+        <td><code>netfix2/watch_history.php</code></td>
+        <td>6/6 (100%)</td>
+        <td>8/8 (100%)</td>
+        <td>5</td>
+        <td>5</td>
+        <td>5 TCs</td>
+        <td><span class="badge badge-fail">Defects Found</span></td>
+      </tr>
+      <tr>
+        <td><strong>FE2</strong></td>
+        <td><code>netfix2/index.php</code></td>
+        <td>38/38 (100%)</td>
+        <td>70/70 (100%)</td>
+        <td>36</td>
+        <td>36</td>
+        <td>36 TCs</td>
+        <td><span class="badge badge-fail">Defects Found</span></td>
+      </tr>
+      <tr>
+        <td><strong>FE2</strong></td>
+        <td><code>netfix2/movies.php</code></td>
+        <td>24/24 (100%)</td>
+        <td>36/36 (100%)</td>
+        <td>19</td>
+        <td>19</td>
+        <td>19 TCs</td>
+        <td><span class="badge badge-pass">100% PASS</span></td>
+      </tr>
+      <tr>
+        <td><strong>FE2</strong></td>
+        <td><code>netfix2/search.php</code></td>
+        <td>18/18 (100%)</td>
+        <td>28/28 (100%)</td>
+        <td>15</td>
+        <td>15</td>
+        <td>15 TCs</td>
+        <td><span class="badge badge-fail">Defects Found</span></td>
+      </tr>
+      <tr>
+        <td><strong>FE2</strong></td>
+        <td><code>netfix2/watch.php</code></td>
+        <td>42/42 (100%)</td>
+        <td>68/68 (100%)</td>
+        <td>35</td>
+        <td>35</td>
+        <td>35 TCs</td>
+        <td><span class="badge badge-fail">Defects Found</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Danh sách 10 Defect phát hiện (Giữ nguyên mã nguồn gốc để tạo task vòng sau)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Mã Defect</th>
+        <th>Tệp & Dòng</th>
+        <th>Loại Lỗi</th>
+        <th>Mức độ</th>
+        <th>Mô tả hiện tượng</th>
+        <th>Trạng thái BUG-0X</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WB-DEF-01</strong></td>
+        <td><code>netfix2/watch.php:75</code></td>
+        <td>Dead branch / Logic sai</td>
+        <td><span class="badge badge-fail">High</span></td>
+        <td>Biến $user_is_vip được gán qua toán tử 3 ngôi mà cả 2 nhánh đều trả về false: isset($_SESSION['user_id']) ? false : false. Tạo ra nhánh chết (Dead branch).</td>
+        <td><em>Confirmed (BUG-01)</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-02</strong></td>
+        <td><code>netfix2/api/view_counter.php:10</code></td>
+        <td>Logic sai / Missing validation</td>
+        <td><span class="badge badge-pass">Medium</span></td>
+        <td>Gọi API với ID phim không tồn tại trong CSDL (ví dụ id=999999) nhưng server vẫn trả về {"success":true,"movie_id":999999} do câu lệnh UPDATE không kiểm tra số dòng bị ảnh hưởng ($stmt->affected_rows).</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-03</strong></td>
+        <td><code>netfix2/api/view_counter.php:10,12</code></td>
+        <td>Khác (Missing Content-Type Header)</td>
+        <td><span class="badge badge-pass">Low</span></td>
+        <td>API trả về JSON nhưng thiếu header Content-Type: application/json; charset=utf-8, khiến client nhận kiểu text/html mặc định.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-04</strong></td>
+        <td><code>netfix2/index.php:31</code></td>
+        <td>Khác (PHP 8 Deprecated)</td>
+        <td><span class="badge badge-pass">Low</span></td>
+        <td>Khai báo tham số tùy chọn $genre = null trước tham số bắt buộc $limit trong hàm getMovies($conn, $genre = null, $limit) vi phạm chuẩn PHP 8.0+ gây cảnh báo E_DEPRECATED.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-05</strong></td>
+        <td><code>netfix2/watch.php:158</code></td>
+        <td>Missing validation (BVA Max Length)</td>
+        <td><span class="badge badge-pass">Medium</span></td>
+        <td>Chức năng gửi bình luận không kiểm tra độ dài tối đa (BVA Max > 500 ký tự). Người dùng có thể spam chuỗi ký tự khổng lồ làm phình CSDL.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-06</strong></td>
+        <td><code>netfix2/watch.php:159</code></td>
+        <td>Logic sai (Missing User Feedback)</td>
+        <td><span class="badge badge-pass">Low</span></td>
+        <td>Khi người dùng gửi bình luận rỗng hoặc toàn khoảng trắng, hệ thống bỏ qua không lưu DB nhưng cũng không gán thông báo lỗi cho $comment_error, khiến người dùng không biết vì sao bình luận không hiển thị.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-07</strong></td>
+        <td><code>netfix2/watch_history.php:13</code></td>
+        <td>Missing validation (BVA Min-1)</td>
+        <td><span class="badge badge-pass">Low</span></td>
+        <td>Kiểm tra tham số xóa lịch sử bằng is_numeric($_GET['delete']) chấp nhận cả số âm (delete=-5), dẫn tới thực thi truy vấn DELETE vô nghĩa với ID âm.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-08</strong></td>
+        <td><code>netfix2/search.php:74,86</code></td>
+        <td>Security (Raw Error Exposure) / Logic sai</td>
+        <td><span class="badge badge-pass">Medium</span></td>
+        <td>Sử dụng lệnh die("Lỗi chuẩn bị truy vấn: " . $conn->error) trong môi trường production, làm lộ thông tin schema cơ sở dữ liệu và dừng đột ngột ứng dụng.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+      <tr>
+        <td><strong>WB-DEF-09</strong></td>
+        <td><code>netfix2/search.php:60,66</code></td>
+        <td>Dead branch / Logic sai</td>
+        <td><span class="badge badge-pass">Low</span></td>
+        <td>Nếu người dùng chỉ truyền tham số genre trên URL (?genre=Action) mà không truyền query (?query=), điều kiện if (!empty($query)) trả về false khiến bộ lọc thể loại bị vô hiệu hóa hoàn toàn.</td>
+        <td><em>Confirmed</em></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

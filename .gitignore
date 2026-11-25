@@ -37,3 +37,4 @@ backup_before_update/
 *.sarif.json
 
 
+bun.lock

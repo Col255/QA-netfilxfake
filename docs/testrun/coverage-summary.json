@@ -1,0 +1,165 @@
+{
+  "generatedAt": "2026-11-18T08:19:48.865Z",
+  "scope": "FE3 (INT) & FE2 (MOV) - 7 Target PHP Files",
+  "overall": {
+    "totalFiles": 7,
+    "totalStatements": 144,
+    "coveredStatements": 144,
+    "statementCoveragePct": 100,
+    "totalBranches": 228,
+    "coveredBranches": 228,
+    "branchCoveragePct": 100,
+    "totalTestCases": 123,
+    "passedCount": 112,
+    "failedCount": 11
+  },
+  "files": {
+    "api/view_counter.php": {
+      "module": "FE3",
+      "statements": {
+        "total": 4,
+        "covered": 4,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 2,
+        "actualVg": 2,
+        "discrepancy": 0
+      },
+      "testCasesCount": 8,
+      "passedCount": 7,
+      "failedCount": 1
+    },
+    "comments.php": {
+      "module": "FE3",
+      "statements": {
+        "total": 12,
+        "covered": 12,
+        "pct": 100
+      },
+      "branches": {
+        "total": 16,
+        "covered": 16,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 9,
+        "actualVg": 9,
+        "discrepancy": 0
+      },
+      "testCasesCount": 5,
+      "passedCount": 5,
+      "failedCount": 0
+    },
+    "watch_history.php": {
+      "module": "FE3",
+      "statements": {
+        "total": 6,
+        "covered": 6,
+        "pct": 100
+      },
+      "branches": {
+        "total": 8,
+        "covered": 8,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 5,
+        "actualVg": 5,
+        "discrepancy": 0
+      },
+      "testCasesCount": 5,
+      "passedCount": 4,
+      "failedCount": 1
+    },
+    "index.php": {
+      "module": "FE2",
+      "statements": {
+        "total": 38,
+        "covered": 38,
+        "pct": 100
+      },
+      "branches": {
+        "total": 70,
+        "covered": 70,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 36,
+        "actualVg": 36,
+        "discrepancy": 0
+      },
+      "testCasesCount": 36,
+      "passedCount": 35,
+      "failedCount": 1
+    },
+    "movies.php": {
+      "module": "FE2",
+      "statements": {
+        "total": 24,
+        "covered": 24,
+        "pct": 100
+      },
+      "branches": {
+        "total": 36,
+        "covered": 36,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 19,
+        "actualVg": 19,
+        "discrepancy": 0
+      },
+      "testCasesCount": 19,
+      "passedCount": 19,
+      "failedCount": 0
+    },
+    "search.php": {
+      "module": "FE2",
+      "statements": {
+        "total": 18,
+        "covered": 18,
+        "pct": 100
+      },
+      "branches": {
+        "total": 28,
+        "covered": 28,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 15,
+        "actualVg": 15,
+        "discrepancy": 0
+      },
+      "testCasesCount": 15,
+      "passedCount": 14,
+      "failedCount": 1
+    },
+    "watch.php": {
+      "module": "FE2",
+      "statements": {
+        "total": 42,
+        "covered": 42,
+        "pct": 100
+      },
+      "branches": {
+        "total": 68,
+        "covered": 68,
+        "pct": 100
+      },
+      "cyclomaticComplexity": {
+        "theoreticalVg": 35,
+        "actualVg": 35,
+        "discrepancy": 0
+      },
+      "testCasesCount": 35,
+      "passedCount": 28,
+      "failedCount": 7
+    }
+  }
+}
